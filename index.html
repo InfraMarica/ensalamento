@@ -4,30 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Ensalamento | Univassouras & FACMAR</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script>function safeCreateIcons(){if(typeof lucide!=='undefined'&&lucide.createIcons){lucide.createIcons();}}</script>
-  <script src="https://unpkg.com/lucide@latest" onload="safeCreateIcons()"></script>
+  
+  <script>
+    function safeCreateIcons() {
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
+  </script>
+  <!-- CDN Mais Estável para os Ícones (Lucide via jsDelivr) -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" onload="safeCreateIcons()"></script>
+  
+  <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  
+  <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fafaf9; color: #1c1917; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fafaf9;
+      color: #1c1917;
+    }
     ::-webkit-scrollbar { height: 6px; width: 6px; }
     ::-webkit-scrollbar-track { background: #f5f5f4; }
     ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #7a001e; }
-    .drag-over-cell { background-color: #fef3c7 !important; outline: 2px dashed #7a001e !important; outline-offset: -2px; }
-    .dragging-card { opacity: 0.45; transform: scale(0.96); }
-    .copy-active-cell:hover { background-color: #dbeafe !important; outline: 2px dashed #2563eb !important; outline-offset: -2px; }
+    .drag-over-cell {
+      background-color: #fef3c7 !important;
+      outline: 2px dashed #7a001e !important;
+      outline-offset: -2px;
+    }
+    .dragging-card {
+      opacity: 0.45;
+      transform: scale(0.96);
+    }
+    .copy-active-cell:hover {
+      background-color: #dbeafe !important;
+      outline: 2px dashed #2563eb !important;
+      outline-offset: -2px;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#fafaf9]">
 
-  <!-- HOMEPAGE -->
+  <!-- HOMEPAGE: SELEÇÃO DE TURNO -->
   <div id="homeScreen" class="fixed inset-0 z-50 bg-[#fafaf9] flex flex-col justify-between p-6 overflow-y-auto">
     <div class="max-w-5xl w-full mx-auto pt-4 flex items-center justify-between border-b border-stone-200 pb-4">
       <div class="flex items-center gap-3">
@@ -35,73 +65,112 @@
           <i data-lucide="building-2" class="w-6 h-6 text-amber-300"></i>
         </div>
         <div>
-          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
-          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">Portal Integrado de Ensalamento Acadêmico</h1>
+          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
+            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
+          </span>
+          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
+            Portal Integrado de Ensalamento Acadêmico
+          </h1>
         </div>
       </div>
-      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">Semestre 2027.1</span>
+      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">
+        Semestre 2027.1
+      </span>
     </div>
 
     <div class="max-w-4xl w-full mx-auto my-auto py-8 text-center">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 mb-3">
-        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i> Selecione o Mapa que deseja acessar
+        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i>
+        Selecione o Mapa que deseja acessar
       </span>
-      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">Escolha o Turno de Ensalamento</h2>
-      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">Cada turno possui mapas de salas e relatórios independentes. Sincronizado na nuvem.</p>
+      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">
+        Escolha o Turno de Ensalamento
+      </h2>
+      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">
+        Cada turno possui mapas de salas e relatórios independentes. Sincronizado na nuvem.
+      </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="sun" class="w-7 h-7"></i></div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">Diurno</span>
+              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform">
+                <i data-lucide="sun" class="w-7 h-7 text-amber-600"></i>
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
+                Diurno
+              </span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Manhã / Integral</h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento matutino e cursos de horário integral.</p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
+              Manhã / Integral
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
+              Grade de ensalamento matutino e cursos de horário integral. Contém mapeamento de salas e quadro de turmas por curso.
+            </p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryManha" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
+              <span>Acessar Mapa</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
           </div>
         </button>
 
-        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="moon-star" class="w-7 h-7"></i></div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">Noturno</span>
+              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform">
+                <i data-lucide="moon-star" class="w-7 h-7 text-[#7a001e]"></i>
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">
+                Noturno
+              </span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Noturno</h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento das turmas da noite nos Campi 1 e 2.</p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
+              Noturno
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
+              Grade de ensalamento das turmas da noite nos Campi 1 e 2.
+            </p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryNoite" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
+              <span>Acessar Mapa</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
           </div>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- MENUS E MODAIS -->
+  <!-- MENU FLUTUANTE DA TURMA (DUPLICAR / EXCLUIR) -->
   <div id="turmaActionMenu" class="hidden fixed z-50 w-44 bg-white rounded-xl shadow-xl border border-stone-200 py-1.5 text-xs">
     <div class="px-3 py-1 border-b border-stone-100 mb-1">
       <span id="turmaMenuTitle" class="block font-black text-[#7a001e] truncate">Turma</span>
       <span id="turmaMenuSubtitle" class="block text-[10px] text-stone-400 font-semibold">Dia</span>
     </div>
-    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Duplicar Turma</button>
-    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar Sala</button>
+    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors">
+      <i data-lucide="copy" class="w-3.5 h-3.5 text-blue-600"></i><span>Duplicar Turma</span>
+    </button>
+    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors">
+      <i data-lucide="edit-3" class="w-3.5 h-3.5 text-stone-500"></i><span>Editar Sala / Horário</span>
+    </button>
     <div class="my-1 border-t border-stone-100"></div>
-    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir do Dia</button>
+    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors">
+      <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-600"></i><span>Excluir deste Dia</span>
+    </button>
   </div>
 
   <div id="copyModeBanner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-blue-950 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3">
-    <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center animate-pulse"><i data-lucide="copy" class="w-4 h-4"></i></div>
+    <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center animate-pulse"><i data-lucide="copy" class="w-4 h-4 text-white"></i></div>
     <div class="text-xs">
-      <span class="text-blue-200 font-medium">Modo Duplicar:</span><strong id="copyBannerText" class="font-black ml-1">Turma</strong>
-      <span class="hidden sm:inline text-blue-300 ml-1.5">• Clique nos dias para colar</span>
+      <span class="text-blue-200 font-medium">Modo Duplicar:</span><strong id="copyBannerText" class="font-black text-white ml-1">Turma</strong>
+      <span class="hidden sm:inline text-blue-300 text-[11px] ml-1.5">• Clique nos dias para colar</span>
     </div>
-    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg">Concluir (ESC)</button>
+    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg transition-colors shadow-xs">Concluir (ESC)</button>
   </div>
 
   <!-- CABEÇALHOS DO MAPA -->
@@ -111,7 +180,7 @@
         <button onclick="openHomeScreen()" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
           <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i><span class="hidden md:inline">Início / Turnos</span>
         </button>
-        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
+        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center shrink-0"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="block text-xs sm:text-[13px] font-black uppercase tracking-wider text-[#7a001e] leading-tight">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
@@ -122,27 +191,22 @@
           <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900 leading-tight"><span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span></h1>
         </div>
       </div>
-
       <div class="flex items-center gap-2">
         <div class="relative hidden sm:block w-36 lg:w-44">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
           <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Pesquisar..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:border-[#7a001e]">
         </div>
-
         <div id="adminHeaderControls" class="hidden items-center gap-2">
           <button onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i><span>Distribuir</span></button>
-          <button onclick="downloadBackupJSON()" title="Salvar Backup Local" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
-          <label title="Restaurar (Firebase)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer">
-            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Restaurar</span><input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)">
-          </label>
+          <button onclick="downloadBackupJSON()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer"><i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Restaurar</span><input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)"></label>
           <button onclick="openClearConfirmModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg"><i data-lucide="eraser" class="w-3.5 h-3.5"></i><span class="hidden xl:inline">Limpar</span></button>
           <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg"><i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i><span class="hidden lg:inline">Excel</span></button>
-          <button onclick="openChangePassModal()" class="inline-flex items-center justify-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg"><i data-lucide="key-round" class="w-3.5 h-3.5"></i></button>
+          <button onclick="openChangePassModal()" class="inline-flex items-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg"><i data-lucide="key-round" class="w-3.5 h-3.5"></i></button>
         </div>
-
         <div class="relative inline-block text-left" id="pdfDropdownContainer">
           <div class="inline-flex rounded-lg shadow-sm">
-            <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg"><i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i><span id="pdfBtnLabel">PDF (Blocos)</span></button>
+            <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg"><i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i><span id="pdfBtnLabel">PDF (Todos)</span></button>
             <button onclick="togglePdfDropdown()" class="px-2 py-1.5 text-xs font-black text-white bg-[#620018] hover:bg-[#4d0013] rounded-r-lg border-l border-white/20"><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></button>
           </div>
           <div id="pdfDropdownMenu" class="hidden absolute right-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-stone-200 py-1.5 z-50">
@@ -152,11 +216,10 @@
             <button onclick="exportCoursesPDF(); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-[#7a001e] font-black hover:bg-rose-50">Salas por Curso (PDF)</button>
           </div>
         </div>
-        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span></button>
+        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5"></i><span>Admin</span></button>
       </div>
     </div>
-
-    <!-- NAVEGAÇÃO SECUNDÁRIA -->
+    
     <div class="w-full px-4 sm:px-6 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 py-2 bg-stone-50/80">
       <div class="flex items-center gap-2.5 overflow-x-auto w-full sm:w-auto">
         <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shadow-inner shrink-0">
@@ -170,7 +233,7 @@
         </div>
         <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
         <div id="roomNavigationControls" class="flex items-center gap-2.5">
-          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner" id="campusButtonsContainer"></div>
+          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner shrink-0" id="campusButtonsContainer"></div>
           <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white rounded-lg border border-[#7a001e]/30 shadow-2xs shrink-0"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i><span>Campus</span></button>
           <div class="h-5 w-px bg-stone-300 hidden sm:block"></div>
           <div class="flex items-center gap-1.5" id="blockTabs"></div>
@@ -184,151 +247,68 @@
     </div>
   </header>
 
-  <!-- ÁREA DE MAPAS -->
   <main class="flex-1 w-full p-4 sm:p-6 max-w-[1920px] mx-auto">
     <div id="matricesContainer" class="space-y-8"></div>
     <div id="coursesViewContainer" class="hidden max-w-5xl mx-auto space-y-5"></div>
   </main>
 
-  <!-- MODAIS E FORMS SIMPLIFICADOS -->
-  <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Acesso Administrador</h3>
-        <button onclick="closeAdminLoginModal()" class="text-stone-400 hover:bg-stone-100 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form onsubmit="verifyAdminPassword(event)" class="mt-4 space-y-3">
-        <input type="password" id="adminPasswordInput" required placeholder="Senha..." class="w-full px-3 py-2 text-xs border border-stone-200 rounded-lg focus:border-[#7a001e] font-bold">
-        <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600">Senha incorreta.</p>
-        <div class="flex justify-end pt-3"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Entrar</button></div>
-      </form>
+  <!-- MODAIS SIMPLIFICADOS -->
+  <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
+      <div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Acesso Administrador</h3><button onclick="closeAdminLoginModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <form onsubmit="verifyAdminPassword(event)" class="space-y-3"><input type="password" id="adminPasswordInput" required placeholder="Senha..." class="w-full p-2 text-xs border rounded-lg"><div class="flex justify-end pt-3"><button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs">Desbloquear Edição</button></div></form>
     </div>
-  </div>
-
-  <div id="changePassModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Alterar Senha</h3>
-        <button onclick="closeChangePassModal()" class="text-stone-400 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form onsubmit="saveNewAdminPassword(event)" class="mt-4 space-y-3">
-        <input type="password" id="newAdminPassInput" required minlength="3" placeholder="Nova senha..." class="w-full px-3 py-2 text-xs border border-stone-200 rounded-lg">
-        <div class="flex justify-end pt-3"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar</button></div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL DE EDIÇÃO DE SALA -->
-  <div id="editModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <div>
-          <h3 class="text-base font-black text-[#7a001e]">Editar Sala</h3>
-          <p class="text-xs text-stone-500" id="modalBlocoSubtitle">Bloco</p>
-        </div>
-        <button onclick="closeModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <form id="editForm" onsubmit="saveModalData(event)" class="mt-4 space-y-3">
-        <input type="hidden" id="editBlockIdx">
-        <input type="hidden" id="editRoomIdx">
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <div class="flex justify-between mb-1">
-              <label class="block text-xs font-bold text-stone-700">Nome</label>
-              <button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200 text-stone-600">Acessibilidade</button>
-              <input type="hidden" id="editRoomAcessibilidade" value="false">
-            </div>
-            <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Capacidade</label>
-            <input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Local / Andar</label>
-            <input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Subtítulo</label>
-            <input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
-          </div>
-        </div>
-
-        <div class="pt-2">
-          <span class="block text-[11px] font-black uppercase tracking-wider text-[#7a001e] mb-2">Alocações (Ex: 4º Direito A (50))</span>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Segunda</label><button type="button" onclick="togglePMR('Seg')" id="btnPmrSeg" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editSeg" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSeg" value="false">
-            </div>
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Terça</label><button type="button" onclick="togglePMR('Ter')" id="btnPmrTer" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editTer" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrTer" value="false">
-            </div>
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quarta</label><button type="button" onclick="togglePMR('Qua')" id="btnPmrQua" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editQua" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrQua" value="false">
-            </div>
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quinta</label><button type="button" onclick="togglePMR('Qui')" id="btnPmrQui" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editQui" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrQui" value="false">
-            </div>
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sexta</label><button type="button" onclick="togglePMR('Sex')" id="btnPmrSex" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editSex" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSex" value="false">
-            </div>
-            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200" id="fieldSabadoContainer">
-              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sábado</label><button type="button" onclick="togglePMR('Sab')" id="btnPmrSab" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
-              <input type="text" id="editSab" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSab" value="false">
-            </div>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between pt-4 border-t border-stone-100">
-          <button type="button" onclick="deleteRoomFromModal()" class="px-3 py-1.5 text-xs font-bold text-rose-700 bg-rose-50 rounded-lg">Excluir Sala</button>
-          <div class="flex gap-2">
-            <button type="button" onclick="closeModal()" class="px-3 py-1.5 text-xs text-stone-500 rounded-lg">Cancelar</button>
-            <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar Alterações</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- OUTROS MODAIS COMPACTOS -->
-  <div id="newRoomModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Nova Sala</h3><button onclick="closeNewRoomModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewRoom(event)" class="space-y-3"><input type="hidden" id="newRoomBlockIdx"><input type="text" id="newRoomName" placeholder="Nome da sala" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
-  </div>
-
-  <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-stone-900 mb-2">Limpar Todas as Alocações?</h3><div class="flex justify-center gap-2 mt-4"><button onclick="closeClearConfirmModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded">Cancelar</button><button onclick="confirmClearAllocations()" class="px-3 py-1.5 text-xs bg-amber-700 text-white rounded">Limpar Tudo</button></div></div>
-  </div>
-
-  <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Bloco</h3><button onclick="closeNewBlockModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewBlock(event)" class="space-y-3"><input type="text" id="newBlockNameInput" placeholder="Nome do bloco" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
-  </div>
-
-  <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Campus</h3><button onclick="closeNewCampusModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewCampus(event)" class="space-y-3"><input type="text" id="newCampusNameInput" placeholder="Nome do campus" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
   </div>
   
-  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-md"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><div id="reorderRoomsList" class="mt-2 max-h-60 overflow-y-auto space-y-1"></div><div class="flex justify-end pt-4"><button onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-3 py-1.5 text-xs rounded">Salvar</button></div></div></div>
+  <div id="changePassModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Alterar Senha</h3><button onclick="closeChangePassModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewAdminPassword(event)"><input type="password" id="newAdminPassInput" required class="w-full p-2 text-xs border rounded-lg"><div class="flex justify-end pt-4"><button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs">Salvar</button></div></form></div>
+  </div>
 
-  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><h3 class="font-black text-[#7a001e] mb-4">Distribuir Turma (Em breve)</h3><button onclick="closeAutoDistModal()" class="px-3 py-1 bg-stone-200 rounded">Fechar</button></div></div>
+  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-[#7a001e] mb-4">Em Breve</h3><button onclick="closeAutoDistModal()" class="px-4 py-2 bg-stone-200 rounded">Fechar</button></div></div>
 
+  <div id="editModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <div><h3 class="text-base font-black text-[#7a001e]">Editar Sala</h3></div>
+        <button onclick="closeModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form id="editForm" onsubmit="saveModalData(event)" class="mt-4 space-y-3">
+        <input type="hidden" id="editBlockIdx"><input type="hidden" id="editRoomIdx">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="flex justify-between mb-1"><label class="text-xs font-bold">Nome</label><button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200">Acessibilidade</button><input type="hidden" id="editRoomAcessibilidade" value="false"></div>
+            <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
+          </div>
+          <div><label class="block text-xs font-bold mb-1">Capacidade</label><input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold mb-1">Local / Andar</label><input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
+          <div><label class="block text-xs font-bold mb-1">Subtítulo</label><input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
+        </div>
+        <div class="pt-2">
+          <span class="block text-[11px] font-black uppercase text-[#7a001e] mb-2">Alocações (Ex: 4º Direito A (50))</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Segunda</label><button type="button" onclick="togglePMR('Seg')" id="btnPmrSeg" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editSeg" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Seg')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrSeg" value="false"></div>
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Terça</label><button type="button" onclick="togglePMR('Ter')" id="btnPmrTer" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editTer" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Ter')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrTer" value="false"></div>
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quarta</label><button type="button" onclick="togglePMR('Qua')" id="btnPmrQua" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editQua" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Qua')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrQua" value="false"></div>
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quinta</label><button type="button" onclick="togglePMR('Qui')" id="btnPmrQui" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editQui" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Qui')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrQui" value="false"></div>
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sexta</label><button type="button" onclick="togglePMR('Sex')" id="btnPmrSex" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editSex" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Sex')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrSex" value="false"></div>
+            <div class="bg-stone-50 p-2 rounded-lg border border-stone-200" id="fieldSabadoContainer"><div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sábado</label><button type="button" onclick="togglePMR('Sab')" id="btnPmrSab" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div><div class="relative"><input type="text" id="editSab" class="w-full pl-2.5 pr-7 py-1 text-xs rounded border border-stone-200"><button type="button" onclick="clearModalDayInput('Sab')" class="absolute right-1.5 top-1.5 text-rose-500"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div><input type="hidden" id="pmrSab" value="false"></div>
+          </div>
+        </div>
+        <div class="flex justify-between pt-4"><button type="button" onclick="deleteRoomFromModal()" class="px-3 py-1.5 text-xs font-bold text-rose-700 bg-rose-50 rounded-lg">Excluir Sala</button><div class="flex gap-2"><button type="button" onclick="closeModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded-lg">Cancelar</button><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar</button></div></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="newRoomModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Nova Sala</h3><button onclick="closeNewRoomModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewRoom(event)" class="space-y-3"><input type="hidden" id="newRoomBlockIdx"><input type="text" id="newRoomName" placeholder="Nome da sala" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div></div>
+  <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-stone-900 mb-2">Limpar Todas as Alocações?</h3><div class="flex justify-center gap-2 mt-4"><button onclick="closeClearConfirmModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded">Cancelar</button><button onclick="confirmClearAllocations()" class="px-3 py-1.5 text-xs bg-amber-700 text-white rounded">Limpar Tudo</button></div></div></div>
+  <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Bloco</h3><button onclick="closeNewBlockModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewBlock(event)" class="space-y-3"><input type="text" id="newBlockNameInput" placeholder="Nome do bloco" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div></div>
+  <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Campus</h3><button onclick="closeNewCampusModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewCampus(event)" class="space-y-3"><input type="text" id="newCampusNameInput" placeholder="Nome do campus" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div></div>
+  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-md"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><div id="reorderRoomsList" class="mt-2 max-h-60 overflow-y-auto space-y-1"></div><div class="flex justify-end pt-4"><button type="button" onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-3 py-1.5 text-xs rounded">Salvar</button></div></div></div>
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
 
   <script>
-    // ==================================================================
-    // 1) COLE AQUI A SUA CONFIGURAÇÃO DO FIREBASE GERADA NO SITE
-    // ==================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyClpvMrkfDmJp9RWtnlI7sVDlcgkIUKwFc",
       authDomain: "salas-univassouras-marica.firebaseapp.com",
@@ -340,9 +320,6 @@
       databaseURL: "https://salas-univassouras-marica-default-rtdb.firebaseio.com"
     };
 
-    // ==================================================================
-    // DADOS INICIAIS COMPACTADOS (NÃO MEXER)
-    // ==================================================================
     const IC1=[{"bloco":"CAMPUS 1 - 1º e 2º ANDAR","rooms":[{"sala":"Sala 12","andar":"1º andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. 01","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 02","andar":"2º andar","subtitulo":"Informática","capacidade":45,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 03","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 22","andar":"2º andar","capacidade":48,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 23","andar":"2º andar","capacidade":44,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 24","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 25","andar":"2º andar","capacidade":79,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 26","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 27","andar":"2º andar","capacidade":63,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 28","andar":"2º andar","capacidade":47,"schedule":{},"pmr":{},"acessibilidade":false}]},{"bloco":"CAMPUS 1 - 3º ANDAR","rooms":[{"sala":"Sala 34","andar":"3º Andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 36","andar":"3º Andar","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 37","andar":"3º Andar","capacidade":65,"schedule":{},"pmr":{},"acessibilidade":false}]}];
     const IC2=[{"bloco":"BLOCO 1 E 2","rooms":[{"sala":"Sala 06","andar":"Térreo","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 20","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 21","andar":"2° andar","capacidade":"73","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 22","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 23","andar":"2° andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 25","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 26","andar":"2° andar","subtitulo":"Metodologias Ativas","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 29","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 1° ANDAR","rooms":[{"sala":"Sala 100","andar":"Térreo","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 102","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 104","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 105","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 106","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 107","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 108","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 109","andar":"Térreo","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 2° ANDAR","rooms":[{"sala":"Lab. Informática 01","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 02","andar":"2° Andar","capacidade":"36","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 03","andar":"2° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 200","andar":"2° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 203","andar":"2° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 206","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 207","andar":"2° Andar","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 209","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"LIJ","andar":"2° Andar","subtitulo":"Sala 208","capacidade":"43","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 3° ANDAR","rooms":[{"sala":"Sala 301","andar":"3° Andar","capacidade":"47","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 302","andar":"3° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 303","andar":"3° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 304","andar":"3° Andar","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 305","andar":"3° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 306","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 307","andar":"3° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 308","andar":"3° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 309","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 310","andar":"3° Andar","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 311","andar":"3° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 313","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 4° ANDAR","rooms":[{"sala":"Sala 400","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 401","andar":"4° Andar","capacidade":"41","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 402","andar":"4° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 403","andar":"4° Andar","capacidade":"69","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 404","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 405","andar":"4° Andar","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 406","andar":"4° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 407","andar":"4° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 408","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 409","andar":"4° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 410","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 411","andar":"4° Andar","capacidade":"60","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 413","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 415","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 5","rooms":[{"sala":"Sala 502","andar":"Térreo","capacidade":"78","schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 510","andar":"2° andar","capacidade":64,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 511","andar":"2° andar","capacidade":68,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 512","andar":"2° andar","capacidade":77,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 513","andar":"2° andar","capacidade":76,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 514","andar":"2° andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 515","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 516","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false}]}];
 
@@ -375,16 +352,22 @@
       return result;
     }
 
-    // ==================================================================
-    // INICIALIZAÇÃO "OFFLINE-FIRST" (CARREGA NA HORA DA MEMÓRIA LOCAL E SINCRONIZA DEPOIS)
-    // ==================================================================
-    const STORAGE_KEYS = {
-      NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10',
-      MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1'
-    };
+    const STORAGE_KEYS = { NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10', MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1' };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
+    
+    // BLINDAGEM CONTRA FALHAS ESTRUTURAIS
+    function ensureDataIntegrity(data) {
+      if (!data) data = {};
+      if (!data.NOITE) data.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!data.MANHA) data.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!data.NOITE.CAMPUS_1) data.NOITE.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
+      if (!data.NOITE.CAMPUS_2) data.NOITE.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
+      if (!data.MANHA.CAMPUS_1) data.MANHA.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
+      if (!data.MANHA.CAMPUS_2) data.MANHA.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
+      return data;
+    }
 
-    let allShiftsData = { NOITE: null, MANHA: null };
+    let allShiftsData = ensureDataIntegrity({});
     let multiCampusData = null;
     let activeShift = 'NOITE';
     let activeViewMode = 'ROOMS';
@@ -395,75 +378,84 @@
     let copyClipboard = null;
     let activeMenuTarget = null;
     let isAdmin = false;
+    let dbRef = null;
 
     window.addEventListener('DOMContentLoaded', () => {
-      // 1. Carrega imediatamente do localStorage para abrir em zero segundos
       loadLocalFallback();
-      
-      // 2. Tenta conectar no Firebase no fundo para pegar novidades
       initFirebaseData();
     });
 
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { if (copyClipboard) clearCopyPasteMode(); closeTurmaActionMenu(); }
+    });
+
     function loadLocalFallback() {
+      let temp = {};
       ['NOITE', 'MANHA'].forEach(shift => {
         const raw = localStorage.getItem(STORAGE_KEYS[shift]);
-        if (raw) {
-          try { allShiftsData[shift] = JSON.parse(raw); } catch(e) {}
-        }
-        if (!allShiftsData[shift] || !allShiftsData[shift].CAMPUS_1) {
-          allShiftsData[shift] = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
-        }
+        if (raw) { try { temp[shift] = JSON.parse(raw); } catch(e) {} }
       });
+      allShiftsData = ensureDataIntegrity(temp);
       finishDataLoad();
     }
 
     function initFirebaseData() {
-      if (!dbRef) return;
-      
-      const connectedRef = firebase.database().ref(".info/connected");
-      connectedRef.on("value", (snap) => {
-        const isFirebaseConnected = snap.val() === true;
-        const statusBadge = document.getElementById('firebaseStatusBadge');
-        if (statusBadge) {
-          if (isFirebaseConnected) {
-            statusBadge.classList.replace('hidden', 'inline-flex');
-          } else {
-            statusBadge.classList.replace('inline-flex', 'hidden');
+      try {
+        firebase.initializeApp(firebaseConfig);
+        dbRef = firebase.database().ref('ensalamento_2027_1_oficial');
+        
+        firebase.database().ref(".info/connected").on("value", (snap) => {
+          const statusBadge = document.getElementById('firebaseStatusBadge');
+          if (statusBadge) {
+            if (snap.val() === true) statusBadge.classList.replace('hidden', 'inline-flex');
+            else statusBadge.classList.replace('inline-flex', 'hidden');
           }
-        }
-      });
+        });
 
-      // Sincroniza sempre que alguém mudar algo online
-      dbRef.on('value', (snap) => {
-        if (snap.exists()) {
-          const newData = snap.val();
-          // Só redesenha se os dados que vieram forem realmente diferentes dos locais
-          if (JSON.stringify(allShiftsData) !== JSON.stringify(newData)) {
-            allShiftsData = newData;
-            
-            // Salva as novidades no cache local
+        dbRef.once('value').then((snapshot) => {
+          if (snapshot.exists()) {
+            allShiftsData = ensureDataIntegrity(snapshot.val());
             localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
             localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
-            
-            multiCampusData = allShiftsData[activeShift];
-            updateHomeSummaries();
-            if (document.getElementById('homeScreen').classList.contains('hidden')) {
-              renderActiveView();
-              safeCreateIcons();
-            }
+            finishDataLoad();
+          } else {
+            dbRef.set(allShiftsData);
           }
-        }
-      });
+
+          dbRef.on('value', (snap) => {
+            if (snap.exists() && activeShift) {
+              const newData = ensureDataIntegrity(snap.val());
+              if (JSON.stringify(allShiftsData) !== JSON.stringify(newData)) {
+                allShiftsData = newData;
+                localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+                localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+                
+                multiCampusData = allShiftsData[activeShift];
+                updateHomeSummaries();
+                if (document.getElementById('homeScreen').classList.contains('hidden')) {
+                  renderActiveView(); safeCreateIcons();
+                }
+              }
+            }
+          });
+        }).catch((err) => { console.warn("Firebase rules/read error:", err); });
+      } catch(err) { console.warn("Erro ao iniciar Firebase:", err); }
     }
 
     function finishDataLoad() {
+      Object.keys(allShiftsData).forEach(sKey => {
+        Object.keys(allShiftsData[sKey]).forEach(cKey => {
+          (allShiftsData[sKey][cKey] || []).forEach(block => {
+            (block.rooms || []).forEach(room => {
+              if (room.schedule) Object.keys(room.schedule).forEach(day => {
+                if (room.schedule[day]) room.schedule[day] = normalizeTurmaText(room.schedule[day]);
+              });
+            });
+          });
+        });
+      });
       multiCampusData = allShiftsData[activeShift];
-      updateHomeSummaries();
-      updateAdminUI();
-      updateCampusUI();
-      renderTabs();
-      renderActiveView();
-      safeCreateIcons();
+      updateHomeSummaries(); updateAdminUI(); updateCampusUI(); renderTabs(); renderActiveView(); safeCreateIcons();
     }
 
     function countShiftStats(dataset) {
@@ -472,9 +464,7 @@
         (dataset[cKey] || []).forEach(block => {
           (block.rooms || []).forEach(room => {
             totalRooms++;
-            if (room.schedule) {
-              Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
-            }
+            if (room.schedule) Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
           });
         });
       });
@@ -500,12 +490,18 @@
     }
 
     function selectShiftAndEnter(shiftKey) {
-      switchShift(shiftKey);
-      document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
+      try {
+        switchShift(shiftKey);
+        document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
+      } catch(err) {
+        console.error("Erro ao entrar no turno:", err);
+      }
     }
 
     function switchShift(shiftKey) {
-      activeShift = shiftKey; multiCampusData = allShiftsData[activeShift]; activeCampus = 'CAMPUS_2';
+      activeShift = shiftKey; 
+      multiCampusData = allShiftsData[activeShift]; 
+      activeCampus = 'CAMPUS_2';
       selectedBlockFilter = 'ALL'; selectedCourseFilter = 'ALL'; searchQuery = '';
       const searchEl = document.getElementById('searchInput'); if (searchEl) searchEl.value = '';
       clearCopyPasteMode(); closeTurmaActionMenu(); updateShiftUI(); updateCampusUI();
@@ -513,25 +509,21 @@
     }
 
     function updateShiftUI() {
-      const badge = document.getElementById('shiftHeaderBadge');
-      const mainTitle = document.getElementById('headerMainTitle');
-      const btnQuickManha = document.getElementById('btnQuickShiftManha');
-      const btnQuickNoite = document.getElementById('btnQuickShiftNoite');
-
+      const badge = document.getElementById('shiftHeaderBadge'), mainTitle = document.getElementById('headerMainTitle');
+      const btnQuickManha = document.getElementById('btnQuickShiftManha'), btnQuickNoite = document.getElementById('btnQuickShiftNoite');
       if (activeShift === 'MANHA') {
         badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
         badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
         mainTitle.innerText = 'Mapa de Ensalamento Manhã / Integral';
-        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs';
-        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all text-stone-600 hover:text-stone-900';
+        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       } else {
         badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
         badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
         mainTitle.innerText = 'Mapa de Ensalamento Noturno';
-        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs';
-        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all text-stone-600 hover:text-stone-900';
+        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       }
-
       document.getElementById('headerCampusLabel').innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
     }
 
@@ -578,12 +570,8 @@
       let cleaned = rawLine.replace(/\(\s*\d+\s*(?:alunos?)?\s*\)/gi, '').replace(/\[PMR\]/gi, '').trim();
       if (!cleaned) return null;
       let matchedCourse = null;
-      for (const item of COURSE_STANDARD_NAMES) {
-        item.regex.lastIndex = 0;
-        if (item.regex.test(cleaned)) { matchedCourse = item; break; }
-      }
-      const periodMatch = cleaned.match(/(\d+)\s*[º°]/);
-      const periodNum = periodMatch ? parseInt(periodMatch[1], 10) : 99;
+      for (const item of COURSE_STANDARD_NAMES) { item.regex.lastIndex = 0; if (item.regex.test(cleaned)) { matchedCourse = item; break; } }
+      const periodMatch = cleaned.match(/(\d+)\s*[º°]/); const periodNum = periodMatch ? parseInt(periodMatch[1], 10) : 99;
       let courseFullTitle = matchedCourse ? matchedCourse.fullTitle : 'OUTROS CURSOS';
       let remainder = cleaned;
       if (matchedCourse) { matchedCourse.regex.lastIndex = 0; remainder = remainder.replace(matchedCourse.regex, ' '); }
@@ -597,7 +585,9 @@
       const daysOrder = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
       const coursesMap = {};
       [...COURSE_STANDARD_NAMES].sort((a, b) => a.fullTitle.localeCompare(b.fullTitle, 'pt-BR')).forEach(c => coursesMap[c.fullTitle] = {});
-
+      
+      if (!multiCampusData) return coursesMap;
+      
       Object.keys(multiCampusData).forEach(campusKey => {
         (multiCampusData[campusKey] || []).forEach(block => {
           (block.rooms || []).forEach(room => {
@@ -611,9 +601,7 @@
                 if (!parsed) return;
                 const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
                 if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
-                if (!coursesMap[courseFullTitle][periodLabel]) {
-                  coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
-                }
+                if (!coursesMap[courseFullTitle][periodLabel]) coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
                 const entry = coursesMap[courseFullTitle][periodLabel];
                 if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
                 if (cellHasPMR || inlinePMR) entry.hasPMR = true;
@@ -645,18 +633,12 @@
         <div class="bg-white rounded-2xl border border-stone-200 shadow-xs p-4 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2.5">
             <div class="w-9 h-9 rounded-xl bg-[#7a001e]/10 text-[#7a001e] flex items-center justify-center font-black"><i data-lucide="info" class="w-4 h-4"></i></div>
-            <div><h2 class="text-xs sm:text-sm font-black text-stone-900 uppercase tracking-wide">Quadro de Salas por Curso • Turno ${getShiftDisplayName()}</h2><p class="text-[11px] text-stone-500">Sincronizado automaticamente com as alocações e turmas do Mapa de Salas</p></div>
+            <div><h2 class="text-xs sm:text-sm font-black text-stone-900 uppercase tracking-wide">Quadro de Salas por Curso • Turno ${getShiftDisplayName()}</h2><p class="text-[11px] text-stone-500">Sincronizado automaticamente com o Mapa de Salas</p></div>
           </div>
           <div class="flex flex-wrap items-center gap-2 text-[11px]">
             <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg">
               <span class="font-black text-[#7a001e] uppercase mr-1">Legendas:</span>
               <span class="font-bold text-stone-700">C1:</span> <span class="text-stone-600 mr-1.5">Campus 1</span><span class="font-bold text-stone-700">C2:</span> <span class="text-stone-600">Campus 2</span>
-            </div>
-            <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg flex flex-wrap items-center gap-1.5">
-              <span class="font-black text-[#7a001e] uppercase">Blocos C2:</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">06 a 29: Bl. 1 e 2</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">100 a 415: Bl. 3</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">501 a 516: Bl. 5</span>
             </div>
           </div>
         </div>
@@ -691,18 +673,17 @@
                           ${(row.studentCount || row.hasPMR) ? `
                             <div class="inline-flex flex-wrap items-center justify-center gap-1">
                               ${row.studentCount ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-stone-200/90 text-stone-700">${row.studentCount} alunos</span>` : ''}
-                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs" title="Turma com aluno de mobilidade reduzida (PMR)"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
+                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
                             </div>
                           ` : ''}
                         </div>
                       </td>
                       ${daysOrder.map(d => {
-                        const roomsList = row.days[d];
-                        const hasRoom = roomsList && roomsList.length > 0;
+                        const roomsList = row.days[d]; const hasRoom = roomsList && roomsList.length > 0;
                         return `<td class="py-2 px-1.5 text-center border-r border-stone-200 align-middle ${hasRoom ? 'text-stone-900' : 'text-stone-400'}">${hasRoom ? roomsList.map(rm => `<span class="inline-block px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-300/90 text-[#7a001e] font-black text-sm sm:text-[15px] tracking-tight shadow-2xs">${rm}</span>`).join('<div class="h-1"></div>') : '<span class="text-sm font-bold text-stone-400">X</span>'}</td>`;
                       }).join('')}
                     </tr>
-                  `).join('') : `<tr><td colspan="7" class="p-3.5 text-center text-xs text-stone-400 italic">Nenhuma turma de ${courseTitle} alocada no turno ${getShiftDisplayName()} até o momento.</td></tr>`}
+                  `).join('') : `<tr><td colspan="7" class="p-3.5 text-center text-xs text-stone-400 italic">Nenhuma turma de ${courseTitle} alocada no turno ${getShiftDisplayName()}.</td></tr>`}
                 </tbody>
               </table>
             </div>
@@ -729,8 +710,7 @@
     function openTurmaActionMenu(event, blockIdx, roomIdx, day) {
       event.stopPropagation();
       if (!isAdmin) return;
-      const blocks = getActiveCampusBlocks();
-      const room = blocks[blockIdx].rooms[roomIdx];
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
       activeMenuTarget = { blockIdx, roomIdx, day };
       const menu = document.getElementById('turmaActionMenu');
       document.getElementById('turmaMenuTitle').innerText = normalizeTurmaText(room.schedule[day] || '');
@@ -769,7 +749,6 @@
       if (!isAdmin || !activeMenuTarget) return;
       const { blockIdx, roomIdx, day } = activeMenuTarget; closeTurmaActionMenu();
       const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
-      const turmaRemovida = room.schedule[day];
       room.schedule[day] = ''; if (room.pmr) room.pmr[day] = false;
       saveToStorage(); renderActiveView(); safeCreateIcons();
       showToast(`Turma removida da ${room.sala} (${day})!`);
@@ -802,7 +781,6 @@
       const blocks = getActiveCampusBlocks();
       const srcRoom = blocks[srcB].rooms[srcR], destRoom = blocks[targetBlockIdx].rooms[targetRoomIdx];
       srcRoom.pmr = srcRoom.pmr || {}; destRoom.pmr = destRoom.pmr || {};
-
       const srcTurma = srcRoom.schedule[srcD] || '', srcPmr = !!srcRoom.pmr[srcD];
       const destTurma = destRoom.schedule[targetDay] || '', destPmr = !!destRoom.pmr[targetDay];
 
@@ -833,18 +811,12 @@
 
     function saveToStorage() {
       allShiftsData[activeShift] = multiCampusData;
-      localStorage.setItem(STORAGE_KEYS[activeShift], JSON.stringify(multiCampusData));
-      
-      if (dbRef) {
-        dbRef.set(allShiftsData).catch(err => {
-          console.error("Erro Firebase:", err);
-          showToast("Atenção: Falha ao salvar online.");
-        });
-      }
+      localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+      localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+      if (dbRef) dbRef.set(allShiftsData).catch(err => { console.error("Erro Firebase:", err); showToast("Falha ao salvar online."); });
       updateHomeSummaries();
     }
 
-    // PDF EXPORTS
     function exportCoursesPDF() {
       const btn = document.getElementById('btnExportPDF'); const originalHTML = btn.innerHTML;
       btn.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Gerando...`;
@@ -859,8 +831,7 @@
             doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(255, 255, 255);
             doc.text(`ENSALAMENTO ${shiftTitle} - 2027.1 - MARICÁ`, 14, 14.5);
             doc.setFontSize(8.5); doc.setTextColor(254, 240, 138); doc.text(`TURMAS ${shiftTitle} • SALAS POR CURSO`, 14, 20.5);
-            doc.setFontSize(7.5); doc.setTextColor(255, 255, 255);
-            doc.text('ELABORADO POR JONAS FLORENCIO', 196, 14, { align: 'right' }); doc.text(`ATUALIZADO EM: ${todayStr}`, 196, 20, { align: 'right' });
+            doc.setFontSize(7.5); doc.setTextColor(255, 255, 255); doc.text('ELABORADO POR JONAS FLORENCIO', 196, 14, { align: 'right' }); doc.text(`ATUALIZADO EM: ${todayStr}`, 196, 20, { align: 'right' });
             doc.setFillColor(245, 245, 244); doc.rect(10, 25.5, 190, 7.5, 'F');
             doc.setFontSize(6.8); doc.setTextColor(122, 0, 30);
             doc.text('LEGENDAS: C1: Campus 1 | C2: Campus 2   •   BLOCOS C2: Salas 06 a 29 (Blocos 1 e 2) | Salas 100 a 415 (Bloco 3) | Salas 501 a 516 (Bloco 5)', 14, 30.2);
