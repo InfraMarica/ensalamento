@@ -4,59 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Ensalamento | Univassouras & FACMAR</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <script>
-    function safeCreateIcons() {
-      if (typeof lucide !== 'undefined' && lucide.createIcons) {
-        lucide.createIcons();
-      }
-    }
-  </script>
-  <!-- Lucide Icons -->
+  <script>function safeCreateIcons(){if(typeof lucide!=='undefined'&&lucide.createIcons){lucide.createIcons();}}</script>
   <script src="https://unpkg.com/lucide@latest" onload="safeCreateIcons()"></script>
-  <!-- jsPDF & AutoTable -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-  
-  <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
   <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #fafaf9;
-      color: #1c1917;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fafaf9; color: #1c1917; }
     ::-webkit-scrollbar { height: 6px; width: 6px; }
     ::-webkit-scrollbar-track { background: #f5f5f4; }
     ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #7a001e; }
-    .drag-over-cell {
-      background-color: #fef3c7 !important;
-      outline: 2px dashed #7a001e !important;
-      outline-offset: -2px;
-    }
-    .dragging-card {
-      opacity: 0.45;
-      transform: scale(0.96);
-    }
-    .copy-active-cell:hover {
-      background-color: #dbeafe !important;
-      outline: 2px dashed #2563eb !important;
-      outline-offset: -2px;
-    }
+    .drag-over-cell { background-color: #fef3c7 !important; outline: 2px dashed #7a001e !important; outline-offset: -2px; }
+    .dragging-card { opacity: 0.45; transform: scale(0.96); }
+    .copy-active-cell:hover { background-color: #dbeafe !important; outline: 2px dashed #2563eb !important; outline-offset: -2px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#fafaf9]">
 
-  <!-- HOMEPAGE: SELEÇÃO DE TURNO -->
+  <!-- HOMEPAGE -->
   <div id="homeScreen" class="fixed inset-0 z-50 bg-[#fafaf9] flex flex-col justify-between p-6 overflow-y-auto">
     <div class="max-w-5xl w-full mx-auto pt-4 flex items-center justify-between border-b border-stone-200 pb-4">
       <div class="flex items-center gap-3">
@@ -64,553 +35,190 @@
           <i data-lucide="building-2" class="w-6 h-6 text-amber-300"></i>
         </div>
         <div>
-          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
-            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
-          </span>
-          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
-            Portal Integrado de Ensalamento Acadêmico
-          </h1>
+          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
+          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">Portal Integrado de Ensalamento Acadêmico</h1>
         </div>
       </div>
-      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">
-        Semestre 2027.1
-      </span>
+      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">Semestre 2027.1</span>
     </div>
 
     <div class="max-w-4xl w-full mx-auto my-auto py-8 text-center">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 mb-3">
-        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-        Selecione o Mapa que deseja acessar
+        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i> Selecione o Mapa que deseja acessar
       </span>
-      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">
-        Escolha o Turno de Ensalamento
-      </h2>
-      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">
-        Cada turno possui mapas de salas, distribuição de turmas e relatórios em PDF independentes. Sincronizado na nuvem.
-      </p>
+      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">Escolha o Turno de Ensalamento</h2>
+      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">Cada turno possui mapas de salas e relatórios independentes. Sincronizado na nuvem.</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <!-- Turno Manhã -->
-        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <i data-lucide="sun" class="w-7 h-7 text-amber-600"></i>
-              </div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
-                Diurno
-              </span>
+              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="sun" class="w-7 h-7"></i></div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">Diurno</span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
-              Manhã / Integral
-            </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento matutino e cursos de horário integral. Contém mapeamento de salas e quadro de turmas por curso.
-            </p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Manhã / Integral</h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento matutino e cursos de horário integral.</p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryManha" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
-              <span>Acessar Mapa</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
           </div>
         </button>
 
-        <!-- Turno Noturno -->
-        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform">
-                <i data-lucide="moon-star" class="w-7 h-7 text-[#7a001e]"></i>
-              </div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">
-                Noturno
-              </span>
+              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="moon-star" class="w-7 h-7"></i></div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">Noturno</span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
-              Noturno
-            </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento das turmas da noite nos Campi 1 e 2, distribuição automática e visualização por curso.
-            </p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Noturno</h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento das turmas da noite nos Campi 1 e 2.</p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryNoite" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
-              <span>Acessar Mapa</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
           </div>
         </button>
       </div>
     </div>
-
-    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
-      <span>Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
-      <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
-    </div>
   </div>
 
-  <!-- MENU FLUTUANTE DA TURMA -->
+  <!-- MENUS E MODAIS -->
   <div id="turmaActionMenu" class="hidden fixed z-50 w-44 bg-white rounded-xl shadow-xl border border-stone-200 py-1.5 text-xs">
     <div class="px-3 py-1 border-b border-stone-100 mb-1">
       <span id="turmaMenuTitle" class="block font-black text-[#7a001e] truncate">Turma</span>
       <span id="turmaMenuSubtitle" class="block text-[10px] text-stone-400 font-semibold">Dia</span>
     </div>
-    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors">
-      <i data-lucide="copy" class="w-3.5 h-3.5 text-blue-600"></i><span>Duplicar Turma</span>
-    </button>
-    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors">
-      <i data-lucide="edit-3" class="w-3.5 h-3.5 text-stone-500"></i><span>Editar Sala / Horário</span>
-    </button>
+    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Duplicar Turma</button>
+    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar Sala</button>
     <div class="my-1 border-t border-stone-100"></div>
-    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors">
-      <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-600"></i><span>Excluir deste Dia</span>
-    </button>
+    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir do Dia</button>
   </div>
 
-  <!-- BARRA DO MODO DUPLICAR RÁPIDO -->
-  <div id="copyModeBanner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-blue-950 text-white px-4 py-2.5 rounded-2xl shadow-2xl border border-blue-400/30 flex items-center gap-3">
-    <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center shrink-0 animate-pulse">
-      <i data-lucide="copy" class="w-4 h-4 text-white"></i>
-    </div>
+  <div id="copyModeBanner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-blue-950 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3">
+    <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center animate-pulse"><i data-lucide="copy" class="w-4 h-4"></i></div>
     <div class="text-xs">
-      <span class="text-blue-200 font-medium">Modo Duplicar Ativo:</span>
-      <strong id="copyBannerText" class="font-black text-white ml-1">Turma</strong>
-      <span class="hidden sm:inline text-blue-300 text-[11px] ml-1.5">• Clique nos dias/salas desejados para colar</span>
+      <span class="text-blue-200 font-medium">Modo Duplicar:</span><strong id="copyBannerText" class="font-black ml-1">Turma</strong>
+      <span class="hidden sm:inline text-blue-300 ml-1.5">• Clique nos dias para colar</span>
     </div>
-    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg transition-colors shadow-xs">
-      Concluir (ESC)
-    </button>
+    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg">Concluir (ESC)</button>
   </div>
 
-  <!-- CABEÇALHO SUPERIOR INTERNO -->
+  <!-- CABEÇALHOS DO MAPA -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="w-full px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <button onclick="openHomeScreen()" title="Voltar à tela inicial" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
-          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i>
-          <span class="hidden md:inline">Início / Turnos</span>
+        <button onclick="openHomeScreen()" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
+          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i><span class="hidden md:inline">Início / Turnos</span>
         </button>
-        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
-          <i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i>
-        </div>
+        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <span class="block text-xs sm:text-[13px] font-black uppercase tracking-wider text-[#7a001e] leading-tight">
-              UNIVASSOURAS CAMPUS MARICÁ E FACMAR
-            </span>
-            <span id="shiftHeaderBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
-              Noturno
-            </span>
-            <span id="roleStatusBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200">
-              <i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura
-            </span>
-            <!-- Indicador de Status do Firebase -->
-            <span id="firebaseStatusBadge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200" title="Sincronizado na nuvem">
-              <i data-lucide="cloud-check" class="w-3 h-3"></i> Online
-            </span>
+            <span class="block text-xs sm:text-[13px] font-black uppercase tracking-wider text-[#7a001e] leading-tight">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
+            <span id="shiftHeaderBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">Noturno</span>
+            <span id="roleStatusBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200"><i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura</span>
+            <span id="firebaseStatusBadge" class="hidden items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200"><i data-lucide="cloud-check" class="w-3 h-3"></i> Online</span>
           </div>
-          <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900 leading-tight">
-            <span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span>
-          </h1>
+          <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900 leading-tight"><span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span></h1>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
         <div class="relative hidden sm:block w-36 lg:w-44">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
-          <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Pesquisar..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7a001e]/30 focus:border-[#7a001e] transition-all">
+          <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Pesquisar..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:border-[#7a001e]">
         </div>
 
         <div id="adminHeaderControls" class="hidden items-center gap-2">
-          <button onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm transition-all shrink-0">
-            <i data-lucide="wand-2" class="w-3.5 h-3.5"></i>
-            <span>Distribuir Turma</span>
-          </button>
-          <button onclick="downloadBackupJSON()" title="Salvar Backup Local" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs transition-all">
-            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-stone-600"></i>
-            <span class="hidden md:inline">Salvar Backup</span>
-          </button>
-          <label title="Restaurar (Envia direto para o Firebase)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer transition-all">
-            <i data-lucide="upload-cloud" class="w-3.5 h-3.5 text-stone-600"></i>
-            <span class="hidden md:inline">Restaurar</span>
-            <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)">
+          <button onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i><span>Distribuir</span></button>
+          <button onclick="downloadBackupJSON()" title="Salvar Backup Local" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
+          <label title="Restaurar (Firebase)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer">
+            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Restaurar</span><input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)">
           </label>
-          <button onclick="openClearConfirmModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg transition-all">
-            <i data-lucide="eraser" class="w-3.5 h-3.5 text-amber-700"></i>
-            <span class="hidden xl:inline">Limpar Alocações</span>
-          </button>
-          <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg hover:bg-stone-50 shadow-xs transition-all">
-            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-stone-500"></i>
-            <span class="hidden lg:inline">Excel</span>
-          </button>
-          <button onclick="openChangePassModal()" class="inline-flex items-center justify-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg transition-all">
-            <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
-          </button>
+          <button onclick="openClearConfirmModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg"><i data-lucide="eraser" class="w-3.5 h-3.5"></i><span class="hidden xl:inline">Limpar</span></button>
+          <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg"><i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i><span class="hidden lg:inline">Excel</span></button>
+          <button onclick="openChangePassModal()" class="inline-flex items-center justify-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg"><i data-lucide="key-round" class="w-3.5 h-3.5"></i></button>
         </div>
 
         <div class="relative inline-block text-left" id="pdfDropdownContainer">
           <div class="inline-flex rounded-lg shadow-sm">
-            <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg transition-all">
-              <i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i>
-              <span id="pdfBtnLabel">PDF (Todos os Blocos)</span>
-            </button>
-            <button onclick="togglePdfDropdown()" class="px-2 py-1.5 text-xs font-black text-white bg-[#620018] hover:bg-[#4d0013] rounded-r-lg border-l border-white/20 transition-all">
-              <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
-            </button>
+            <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg"><i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i><span id="pdfBtnLabel">PDF (Blocos)</span></button>
+            <button onclick="togglePdfDropdown()" class="px-2 py-1.5 text-xs font-black text-white bg-[#620018] hover:bg-[#4d0013] rounded-r-lg border-l border-white/20"><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></button>
           </div>
           <div id="pdfDropdownMenu" class="hidden absolute right-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-stone-200 py-1.5 z-50">
-            <button onclick="exportNativePDF(false); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-stone-700 hover:bg-stone-100 flex items-center gap-2">
-              <i data-lucide="file" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-              <span>Exportar Bloco Atual (Mapa)</span>
-            </button>
-            <button onclick="exportNativePDF(true); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-stone-700 hover:bg-stone-100 flex items-center gap-2">
-              <i data-lucide="files" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-              <span class="font-bold">Exportar Todos os Blocos (Mapa)</span>
-            </button>
+            <button onclick="exportNativePDF(false); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs font-semibold hover:bg-stone-100">Bloco Atual (Mapa)</button>
+            <button onclick="exportNativePDF(true); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs font-bold hover:bg-stone-100">Todos os Blocos (Mapa)</button>
             <div class="my-1 border-t border-stone-100"></div>
-            <button onclick="exportCoursesPDF(); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-[#7a001e] hover:bg-rose-50 flex items-center gap-2 font-black">
-              <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-              <span>Exportar Salas por Curso (PDF)</span>
-            </button>
+            <button onclick="exportCoursesPDF(); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-[#7a001e] font-black hover:bg-rose-50">Salas por Curso (PDF)</button>
           </div>
         </div>
-
-        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg transition-all shrink-0">
-          <i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i>
-          <span>Admin</span>
-        </button>
+        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span></button>
       </div>
     </div>
 
-    <!-- BARRA DE NAVEGAÇÃO INTERNA -->
+    <!-- NAVEGAÇÃO SECUNDÁRIA -->
     <div class="w-full px-4 sm:px-6 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 py-2 bg-stone-50/80">
       <div class="flex items-center gap-2.5 overflow-x-auto w-full sm:w-auto">
         <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shadow-inner shrink-0">
-          <button id="btnQuickShiftManha" onclick="switchShift('MANHA')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all text-stone-600 hover:text-stone-900">
-            <i data-lucide="sun" class="w-3 h-3"></i>
-            <span>Manhã/Integral</span>
-          </button>
-          <button id="btnQuickShiftNoite" onclick="switchShift('NOITE')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs">
-            <i data-lucide="moon" class="w-3 h-3"></i>
-            <span>Noturno</span>
-          </button>
+          <button id="btnQuickShiftManha" onclick="switchShift('MANHA')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900"><i data-lucide="sun" class="w-3 h-3"></i><span>Manhã/Integral</span></button>
+          <button id="btnQuickShiftNoite" onclick="switchShift('NOITE')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white"><i data-lucide="moon" class="w-3 h-3"></i><span>Noturno</span></button>
         </div>
-
         <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
-
         <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shadow-inner shrink-0">
-          <button id="btnViewRooms" onclick="switchViewMode('ROOMS')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs">
-            <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-amber-300"></i>
-            <span>Mapa de Salas</span>
-          </button>
-          <button id="btnViewCourses" onclick="switchViewMode('COURSES')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg transition-all text-stone-700 hover:text-stone-900">
-            <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-            <span>Salas por Curso</span>
-          </button>
+          <button id="btnViewRooms" onclick="switchViewMode('ROOMS')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs"><i data-lucide="layout-grid" class="w-3.5 h-3.5 text-amber-300"></i><span>Mapa de Salas</span></button>
+          <button id="btnViewCourses" onclick="switchViewMode('COURSES')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900"><i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#7a001e]"></i><span>Salas por Curso</span></button>
         </div>
-
         <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
-
         <div id="roomNavigationControls" class="flex items-center gap-2.5">
-          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner shrink-0" id="campusButtonsContainer"></div>
-          <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white hover:bg-stone-100 border border-[#7a001e]/30 rounded-lg shadow-2xs transition-all shrink-0">
-            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-            <span>Novo Campus</span>
-          </button>
+          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner" id="campusButtonsContainer"></div>
+          <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white rounded-lg border border-[#7a001e]/30 shadow-2xs shrink-0"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i><span>Campus</span></button>
           <div class="h-5 w-px bg-stone-300 hidden sm:block"></div>
           <div class="flex items-center gap-1.5" id="blockTabs"></div>
-          <button id="btnNovoBloco" onclick="openNewBlockModal()" class="hidden items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-100 border border-stone-200 rounded-lg shadow-2xs transition-all shrink-0">
-            <i data-lucide="folder-plus" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-            <span>Novo Bloco</span>
-          </button>
+          <button id="btnNovoBloco" onclick="openNewBlockModal()" class="hidden items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white rounded-lg border border-stone-200 shadow-2xs shrink-0"><i data-lucide="folder-plus" class="w-3.5 h-3.5 text-[#7a001e]"></i><span>Bloco</span></button>
         </div>
-
         <div id="courseNavigationControls" class="hidden items-center gap-2">
-          <span class="text-xs font-bold text-stone-500">Filtrar Curso:</span>
-          <select id="courseFilterSelect" onchange="setCourseFilter(this.value)" class="px-3 py-1 text-xs font-bold bg-white border border-stone-200 rounded-lg text-stone-800 focus:outline-none focus:border-[#7a001e]">
-            <option value="ALL">Todos os Cursos</option>
-          </select>
+          <span class="text-xs font-bold text-stone-500">Curso:</span>
+          <select id="courseFilterSelect" onchange="setCourseFilter(this.value)" class="px-3 py-1 text-xs font-bold bg-white border border-stone-200 rounded-lg focus:border-[#7a001e]"><option value="ALL">Todos</option></select>
         </div>
-      </div>
-
-      <div class="text-xs text-stone-500 whitespace-nowrap hidden xl:flex items-center gap-3">
-        <span id="adminDragTip" class="hidden text-[11px] bg-stone-200/70 text-stone-600 px-2 py-0.5 rounded-md font-medium">
-          💡 Arraste para mover • <strong class="text-stone-800">Ctrl + Arrastar</strong> ou menu <strong class="text-stone-800">⌄</strong> para duplicar
-        </span>
-        <span class="text-stone-300">|</span>
-        <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
-        <span class="text-stone-400">•</span>
-        <span class="text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-2.5 py-0.5 rounded-md border border-[#7a001e]/20 tracking-wide">Semestre 2027.1</span>
       </div>
     </div>
   </header>
 
+  <!-- ÁREA DE MAPAS -->
   <main class="flex-1 w-full p-4 sm:p-6 max-w-[1920px] mx-auto">
     <div id="matricesContainer" class="space-y-8"></div>
     <div id="coursesViewContainer" class="hidden max-w-5xl mx-auto space-y-5"></div>
   </main>
 
-  <!-- MODAL ADMIN LOGIN -->
+  <!-- MODAIS E FORMS SIMPLIFICADOS -->
   <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-[#7a001e] text-white flex items-center justify-center">
-            <i data-lucide="shield-lock" class="w-4 h-4 text-amber-300"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-black text-[#7a001e]">Acesso Administrador</h3>
-            <p class="text-xs text-stone-500">Digite a senha para liberar edições</p>
-          </div>
-        </div>
-        <button onclick="closeAdminLoginModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <h3 class="text-base font-black text-[#7a001e]">Acesso Administrador</h3>
+        <button onclick="closeAdminLoginModal()" class="text-stone-400 hover:bg-stone-100 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       <form onsubmit="verifyAdminPassword(event)" class="mt-4 space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-stone-700 mb-1">Senha de Administrador</label>
-          <input type="password" id="adminPasswordInput" required class="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-stone-900">
-          <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600 mt-1.5">Senha incorreta. Tente novamente.</p>
-        </div>
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
-          <button type="button" onclick="closeAdminLoginModal()" class="px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Desbloquear Edição</button>
-        </div>
+        <input type="password" id="adminPasswordInput" required placeholder="Senha..." class="w-full px-3 py-2 text-xs border border-stone-200 rounded-lg focus:border-[#7a001e] font-bold">
+        <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600">Senha incorreta.</p>
+        <div class="flex justify-end pt-3"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Entrar</button></div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL MUDAR SENHA -->
   <div id="changePassModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <div>
-          <h3 class="text-base font-black text-[#7a001e]">Alterar Senha Admin</h3>
-        </div>
-        <button onclick="closeChangePassModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
+        <h3 class="text-base font-black text-[#7a001e]">Alterar Senha</h3>
+        <button onclick="closeChangePassModal()" class="text-stone-400 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
       <form onsubmit="saveNewAdminPassword(event)" class="mt-4 space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-stone-700 mb-1">Nova Senha</label>
-          <input type="password" id="newAdminPassInput" required minlength="3" class="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-stone-900">
-        </div>
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
-          <button type="button" onclick="closeChangePassModal()" class="px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Salvar Senha</button>
-        </div>
+        <input type="password" id="newAdminPassInput" required minlength="3" placeholder="Nova senha..." class="w-full px-3 py-2 text-xs border border-stone-200 rounded-lg">
+        <div class="flex justify-end pt-3"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar</button></div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL DISTRIBUIÇÃO AUTOMÁTICA -->
-  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-stone-200 max-h-[92vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-amber-400 text-amber-950 flex items-center justify-center font-black">
-            <i data-lucide="wand-2" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-black text-[#7a001e]">Alocação Automática</h3>
-          </div>
-        </div>
-        <button onclick="closeAutoDistModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <div id="autoDistErrorBox" class="hidden mt-4 p-3.5 bg-rose-50 border border-rose-300 rounded-xl flex items-start gap-2.5">
-        <i data-lucide="alert-circle" class="w-5 h-5 text-rose-700 shrink-0 mt-0.5"></i>
-        <div class="text-xs text-rose-900 leading-snug">
-          <strong class="block font-black text-rose-950 mb-0.5">Não foi possível alocar esta turma:</strong>
-          <span id="autoDistErrorMsg"></span>
-        </div>
-      </div>
-
-      <form id="autoDistForm" onsubmit="executeAutoDistribution(event)" class="mt-4 space-y-3.5">
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold text-stone-700 mb-1">Período</label>
-            <select id="distPeriodo" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold">
-              <option value="1º">1º Período</option>
-              <option value="2º">2º Período</option>
-              <option value="3º">3º Período</option>
-              <option value="4º">4º Período</option>
-              <option value="5º">5º Período</option>
-              <option value="6º">6º Período</option>
-              <option value="7º">7º Período</option>
-              <option value="8º">8º Período</option>
-              <option value="9º">9º Período</option>
-              <option value="10º">10º Período</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-bold text-stone-700 mb-1">Curso</label>
-            <select id="distCurso" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
-              <option value="" disabled selected>Selecione o Curso...</option>
-              <option value="Adm">Administração (Adm)</option>
-              <option value="Ads">Análise de Sistemas (Ads)</option>
-              <option value="Biomedicina">Biomedicina</option>
-              <option value="Contábeis">Ciências Contábeis (Contábeis)</option>
-              <option value="Direito">Direito</option>
-              <option value="Ed. Física">Educação Física (Ed. Física)</option>
-              <option value="Enfermagem">Enfermagem</option>
-              <option value="Civil">Engenharia Civil (Civil)</option>
-              <option value="Software">Engenharia de Software (Software)</option>
-              <option value="Fisioterapia">Fisioterapia</option>
-              <option value="Gastronomia">Gastronomia</option>
-              <option value="Ambiental">Gestão Ambiental (Ambiental)</option>
-              <option value="Veterinária">Medicina Veterinária (Veterinária)</option>
-              <option value="Nutrição">Nutrição</option>
-              <option value="Pedagogia">Pedagogia</option>
-              <option value="Psicologia">Psicologia</option>
-              <option value="Rh">Recursos Humanos (Rh)</option>
-              <option value="Seso">Serviço Social (Seso)</option>
-              <option value="T.o">Terapia Ocupacional (T.o)</option>
-            </select>
-          </div>
-          <div class="sm:col-span-1">
-            <label class="block text-xs font-bold text-stone-700 mb-1">Turma (Letra)</label>
-            <select id="distTurmaLetra" class="w-full px-2 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold">
-              <option value="">Única</option>
-              <option value="A">Turma A</option>
-              <option value="B">Turma B</option>
-              <option value="C">Turma C</option>
-              <option value="A/B">Turma A/B</option>
-              <option value="B/C">Turma B/C</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Qtd. de Alunos</label>
-            <input type="number" id="distQtdAlunos" required min="1" max="150" placeholder="Ex: 50" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-black text-stone-900">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Campus Desejado</label>
-            <select id="distCampusPref" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold">
-              <option value="ONLY_C2">Apenas Campus 2</option>
-              <option value="ONLY_C1">Apenas Campus 1</option>
-              <option value="PREF_C2">Preferencialmente Campus 2</option>
-              <option value="PREF_C1">Preferencialmente Campus 1</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Mob. Reduzida</label>
-            <label class="flex items-center gap-2 p-1.5 bg-blue-50/70 border border-blue-200 rounded-lg cursor-pointer h-[34px]">
-              <input type="checkbox" id="distAcessibilidade" class="rounded text-blue-600 focus:ring-blue-500 w-4 h-4">
-              <span class="text-xs font-bold text-blue-900 flex items-center gap-1">
-                <i data-lucide="accessibility" class="w-3.5 h-3.5 text-blue-700 shrink-0"></i>
-                <span>Aluno PMR</span>
-              </span>
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <label class="block text-xs font-bold text-stone-700">Preferência de Local / Restrição (Opcional)</label>
-            <span class="text-[10px] text-stone-400">Ex: só 4 andar, bloco 5...</span>
-          </div>
-          <div class="relative">
-            <i data-lucide="compass" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
-            <input type="text" id="distPreferencia" placeholder="Escreva preferência ou deixe vazio..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:bg-white focus:outline-none focus:border-[#7a001e] text-stone-800 font-medium">
-          </div>
-        </div>
-
-        <div class="pt-1">
-          <div class="flex items-center justify-between mb-2">
-            <span class="block text-xs font-black uppercase tracking-wider text-[#7a001e]">Dias de Aula e Laboratórios</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <!-- SEGUNDA -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaSeg" onchange="toggleDistDay('Seg')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Segunda-feira</span>
-              </label>
-              <label id="lblLabSeg" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabSeg" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-            <!-- TERÇA -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaTer" onchange="toggleDistDay('Ter')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Terça-feira</span>
-              </label>
-              <label id="lblLabTer" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabTer" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-            <!-- QUARTA -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaQua" onchange="toggleDistDay('Qua')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Quarta-feira</span>
-              </label>
-              <label id="lblLabQua" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabQua" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-            <!-- QUINTA -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaQui" onchange="toggleDistDay('Qui')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Quinta-feira</span>
-              </label>
-              <label id="lblLabQui" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabQui" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-            <!-- SEXTA -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaSex" onchange="toggleDistDay('Sex')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Sexta-feira</span>
-              </label>
-              <label id="lblLabSex" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabSex" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-            <!-- SÁBADO -->
-            <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center justify-between">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="chkDiaSab" onchange="toggleDistDay('Sab')" class="rounded text-[#7a001e] w-4 h-4">
-                <span class="text-xs font-bold text-stone-800">Sábado</span>
-              </label>
-              <label id="lblLabSab" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded-md cursor-pointer">
-                <input type="checkbox" id="chkLabSab" class="rounded text-purple-600 w-3.5 h-3.5">
-                <span>Lab</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-stone-100">
-          <button type="button" onclick="closeAutoDistModal()" class="px-4 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm transition-all">
-            <i data-lucide="check" class="w-3.5 h-3.5"></i>
-            <span>Distribuir</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL EDITAR SALA -->
+  <!-- MODAL DE EDIÇÃO DE SALA -->
   <div id="editModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
@@ -629,226 +237,98 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <div class="flex items-center justify-between mb-1">
+            <div class="flex justify-between mb-1">
               <label class="block text-xs font-bold text-stone-700">Nome</label>
-              <button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-black transition-all bg-stone-200 text-stone-600">
-                <i data-lucide="accessibility" class="w-3 h-3"></i>
-                <span id="lblAcessibilidadeRoom">Acessibilidade</span>
-              </button>
+              <button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200 text-stone-600">Acessibilidade</button>
               <input type="hidden" id="editRoomAcessibilidade" value="false">
             </div>
-            <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
+            <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
           </div>
           <div>
             <label class="block text-xs font-bold text-stone-700 mb-1">Capacidade</label>
-            <input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e]">
+            <input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-stone-700 mb-1">Local / Andar</label>
-            <input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e]">
+            <input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
           </div>
           <div>
             <label class="block text-xs font-bold text-stone-700 mb-1">Subtítulo</label>
-            <input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] text-stone-700 font-semibold">
+            <input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
           </div>
         </div>
 
         <div class="pt-2">
-          <div class="flex items-center justify-between mb-2">
-            <span class="block text-[11px] font-black uppercase tracking-wider text-[#7a001e]">Alocações (Ex: 4º Direito A (50))</span>
-          </div>
+          <span class="block text-[11px] font-black uppercase tracking-wider text-[#7a001e] mb-2">Alocações (Ex: 4º Direito A (50))</span>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Segunda-feira</label>
-                <button type="button" onclick="togglePMR('Seg')" id="btnPmrSeg" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrSeg">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editSeg" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Seg')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrSeg" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Segunda</label><button type="button" onclick="togglePMR('Seg')" id="btnPmrSeg" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editSeg" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSeg" value="false">
             </div>
-
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Terça-feira</label>
-                <button type="button" onclick="togglePMR('Ter')" id="btnPmrTer" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrTer">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editTer" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Ter')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrTer" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Terça</label><button type="button" onclick="togglePMR('Ter')" id="btnPmrTer" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editTer" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrTer" value="false">
             </div>
-
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Quarta-feira</label>
-                <button type="button" onclick="togglePMR('Qua')" id="btnPmrQua" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrQua">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editQua" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Qua')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrQua" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quarta</label><button type="button" onclick="togglePMR('Qua')" id="btnPmrQua" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editQua" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrQua" value="false">
             </div>
-
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Quinta-feira</label>
-                <button type="button" onclick="togglePMR('Qui')" id="btnPmrQui" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrQui">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editQui" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Qui')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrQui" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Quinta</label><button type="button" onclick="togglePMR('Qui')" id="btnPmrQui" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editQui" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrQui" value="false">
             </div>
-
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Sexta-feira</label>
-                <button type="button" onclick="togglePMR('Sex')" id="btnPmrSex" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrSex">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editSex" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Sex')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrSex" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sexta</label><button type="button" onclick="togglePMR('Sex')" id="btnPmrSex" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editSex" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSex" value="false">
             </div>
-
             <div class="bg-stone-50 p-2 rounded-lg border border-stone-200" id="fieldSabadoContainer">
-              <div class="flex items-center justify-between mb-1">
-                <label class="text-[11px] font-bold text-stone-700">Sábado</label>
-                <button type="button" onclick="togglePMR('Sab')" id="btnPmrSab" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold transition-all bg-stone-200 text-stone-600">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> <span id="lblPmrSab">PMR</span>
-                </button>
-              </div>
-              <div class="relative flex items-center">
-                <input type="text" id="editSab" class="w-full pl-2.5 pr-7 py-1 text-xs bg-white border border-stone-200 rounded focus:border-[#7a001e]">
-                <button type="button" onclick="clearModalDayInput('Sab')" class="absolute right-1.5 text-rose-500 hover:text-rose-700 p-0.5 rounded hover:bg-rose-50"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-              </div>
-              <input type="hidden" id="pmrSab" value="false">
+              <div class="flex justify-between mb-1"><label class="text-[11px] font-bold">Sábado</label><button type="button" onclick="togglePMR('Sab')" id="btnPmrSab" class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200">PMR</button></div>
+              <input type="text" id="editSab" class="w-full px-2.5 py-1 text-xs rounded border border-stone-200"><input type="hidden" id="pmrSab" value="false">
             </div>
           </div>
         </div>
 
         <div class="flex items-center justify-between pt-4 border-t border-stone-100">
-          <button type="button" onclick="deleteRoomFromModal()" class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir Sala
-          </button>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="closeModal()" class="px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-            <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Salvar</button>
+          <button type="button" onclick="deleteRoomFromModal()" class="px-3 py-1.5 text-xs font-bold text-rose-700 bg-rose-50 rounded-lg">Excluir Sala</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeModal()" class="px-3 py-1.5 text-xs text-stone-500 rounded-lg">Cancelar</button>
+            <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar Alterações</button>
           </div>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL ADICIONAR SALA, REORDENAR, LIMPAR, CAMPUS E BLOCO -->
-  <div id="newRoomModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Nova Sala</h3>
-        <button onclick="closeNewRoomModal()" class="text-stone-400 hover:bg-stone-100 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form onsubmit="saveNewRoom(event)" class="mt-4 space-y-3">
-        <input type="hidden" id="newRoomBlockIdx">
-        <div>
-          <div class="flex justify-between mb-1">
-            <label class="text-xs font-bold text-stone-700">Nome</label>
-            <button type="button" id="btnNewRoomAcessibilidade" onclick="toggleNewRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-bold bg-stone-200 text-stone-600">Acessibilidade</button>
-            <input type="hidden" id="newRoomAcessibilidade" value="false">
-          </div>
-          <input type="text" id="newRoomName" required class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg focus:border-[#7a001e]">
-        </div>
-        <div>
-          <label class="text-xs font-bold text-stone-700 mb-1">Subtítulo</label>
-          <input type="text" id="newRoomSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="text-xs font-bold text-stone-700 mb-1">Andar</label><input type="text" id="newRoomAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
-          <div><label class="text-xs font-bold text-stone-700 mb-1">Capacidade</label><input type="number" id="newRoomCap" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
-        </div>
-        <div class="flex justify-end gap-2 pt-4 border-t border-stone-100">
-          <button type="button" onclick="closeNewRoomModal()" class="px-3 py-1.5 text-xs text-stone-500 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Cadastrar</button>
-        </div>
-      </form>
-    </div>
+  <!-- OUTROS MODAIS COMPACTOS -->
+  <div id="newRoomModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Nova Sala</h3><button onclick="closeNewRoomModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewRoom(event)" class="space-y-3"><input type="hidden" id="newRoomBlockIdx"><input type="text" id="newRoomName" placeholder="Nome da sala" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
   </div>
 
-  <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
-      <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-3"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
-      <h3 class="text-base font-black text-stone-900 mb-1">Limpar Todas as Alocações?</h3>
-      <p class="text-xs text-stone-500 mb-4" id="clearConfirmDesc">Esta ação vai esvaziar todas as turmas deste campus.</p>
-      <div class="flex justify-center gap-2">
-        <button onclick="closeClearConfirmModal()" class="px-3.5 py-1.5 text-xs text-stone-600 bg-stone-100 rounded-lg">Cancelar</button>
-        <button onclick="confirmClearAllocations()" class="px-4 py-1.5 text-xs font-bold text-white bg-amber-700 rounded-lg">Sim, Limpar</button>
-      </div>
-    </div>
+  <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-stone-900 mb-2">Limpar Todas as Alocações?</h3><div class="flex justify-center gap-2 mt-4"><button onclick="closeClearConfirmModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded">Cancelar</button><button onclick="confirmClearAllocations()" class="px-3 py-1.5 text-xs bg-amber-700 text-white rounded">Limpar Tudo</button></div></div>
   </div>
 
-  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Reordenar Salas</h3>
-        <button onclick="closeReorderModal()" class="text-stone-400 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <div id="reorderRoomsList" class="mt-3 max-h-72 overflow-y-auto space-y-1.5 pr-1"></div>
-      <div class="flex justify-end gap-2 pt-4 mt-3 border-t border-stone-100">
-        <button type="button" onclick="closeReorderModal()" class="px-3.5 py-1.5 text-xs text-stone-500 rounded-lg">Cancelar</button>
-        <button type="button" onclick="saveReorderRooms()" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar Ordem</button>
-      </div>
-    </div>
+  <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Bloco</h3><button onclick="closeNewBlockModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewBlock(event)" class="space-y-3"><input type="text" id="newBlockNameInput" placeholder="Nome do bloco" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
   </div>
 
-  <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Novo Bloco</h3>
-        <button onclick="closeNewBlockModal()" class="text-stone-400 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form onsubmit="saveNewBlock(event)" class="mt-4 space-y-3">
-        <input type="text" id="newBlockNameInput" required placeholder="Nome do bloco..." class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg focus:border-[#7a001e]">
-        <div class="flex justify-end gap-2 pt-4"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Criar</button></div>
-      </form>
-    </div>
+  <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Campus</h3><button onclick="closeNewCampusModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewCampus(event)" class="space-y-3"><input type="text" id="newCampusNameInput" placeholder="Nome do campus" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div>
   </div>
+  
+  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-md"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><div id="reorderRoomsList" class="mt-2 max-h-60 overflow-y-auto space-y-1"></div><div class="flex justify-end pt-4"><button onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-3 py-1.5 text-xs rounded">Salvar</button></div></div></div>
 
-  <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <h3 class="text-base font-black text-[#7a001e]">Novo Campus</h3>
-        <button onclick="closeNewCampusModal()" class="text-stone-400 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
-      </div>
-      <form onsubmit="saveNewCampus(event)" class="mt-4 space-y-3">
-        <input type="text" id="newCampusNameInput" required placeholder="Nome..." class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg focus:border-[#7a001e]">
-        <div class="flex justify-end gap-2 pt-4"><button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Criar</button></div>
-      </form>
-    </div>
-  </div>
+  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><h3 class="font-black text-[#7a001e] mb-4">Distribuir Turma (Em breve)</h3><button onclick="closeAutoDistModal()" class="px-3 py-1 bg-stone-200 rounded">Fechar</button></div></div>
 
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
 
   <script>
-    // Mude AQUI as suas credenciais
+    // ==================================================================
+    // 1) COLE AQUI A SUA CONFIGURAÇÃO DO FIREBASE GERADA NO SITE
+    // ==================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyClpvMrkfDmJp9RWtnlI7sVDlcgkIUKwFc",
       authDomain: "salas-univassouras-marica.firebaseapp.com",
@@ -859,87 +339,635 @@
       measurementId: "G-340011RLRW",
       databaseURL: "https://salas-univassouras-marica-default-rtdb.firebaseio.com"
     };
-    
-    let dbRef = null;
-    let isFirebaseConnected = false;
 
-    // Remove as inicializações antigas para focar só no Firebase
+    // ==================================================================
+    // DADOS INICIAIS COMPACTADOS (NÃO MEXER)
+    // ==================================================================
+    const IC1=[{"bloco":"CAMPUS 1 - 1º e 2º ANDAR","rooms":[{"sala":"Sala 12","andar":"1º andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. 01","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 02","andar":"2º andar","subtitulo":"Informática","capacidade":45,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 03","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 22","andar":"2º andar","capacidade":48,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 23","andar":"2º andar","capacidade":44,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 24","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 25","andar":"2º andar","capacidade":79,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 26","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 27","andar":"2º andar","capacidade":63,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 28","andar":"2º andar","capacidade":47,"schedule":{},"pmr":{},"acessibilidade":false}]},{"bloco":"CAMPUS 1 - 3º ANDAR","rooms":[{"sala":"Sala 34","andar":"3º Andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 36","andar":"3º Andar","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 37","andar":"3º Andar","capacidade":65,"schedule":{},"pmr":{},"acessibilidade":false}]}];
+    const IC2=[{"bloco":"BLOCO 1 E 2","rooms":[{"sala":"Sala 06","andar":"Térreo","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 20","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 21","andar":"2° andar","capacidade":"73","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 22","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 23","andar":"2° andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 25","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 26","andar":"2° andar","subtitulo":"Metodologias Ativas","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 29","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 1° ANDAR","rooms":[{"sala":"Sala 100","andar":"Térreo","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 102","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 104","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 105","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 106","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 107","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 108","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 109","andar":"Térreo","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 2° ANDAR","rooms":[{"sala":"Lab. Informática 01","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 02","andar":"2° Andar","capacidade":"36","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 03","andar":"2° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 200","andar":"2° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 203","andar":"2° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 206","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 207","andar":"2° Andar","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 209","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"LIJ","andar":"2° Andar","subtitulo":"Sala 208","capacidade":"43","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 3° ANDAR","rooms":[{"sala":"Sala 301","andar":"3° Andar","capacidade":"47","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 302","andar":"3° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 303","andar":"3° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 304","andar":"3° Andar","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 305","andar":"3° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 306","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 307","andar":"3° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 308","andar":"3° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 309","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 310","andar":"3° Andar","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 311","andar":"3° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 313","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 4° ANDAR","rooms":[{"sala":"Sala 400","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 401","andar":"4° Andar","capacidade":"41","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 402","andar":"4° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 403","andar":"4° Andar","capacidade":"69","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 404","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 405","andar":"4° Andar","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 406","andar":"4° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 407","andar":"4° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 408","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 409","andar":"4° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 410","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 411","andar":"4° Andar","capacidade":"60","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 413","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 415","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 5","rooms":[{"sala":"Sala 502","andar":"Térreo","capacidade":"78","schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 510","andar":"2° andar","capacidade":64,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 511","andar":"2° andar","capacidade":68,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 512","andar":"2° andar","capacidade":77,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 513","andar":"2° andar","capacidade":76,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 514","andar":"2° andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 515","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 516","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false}]}];
+
+    const COURSE_STANDARD_NAMES = [
+      { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'ADMINISTRAÇÃO' },
+      { regex: /an[aá]lise\s*de\s*sistemas|\bads\b/gi, label: 'Ads', fullTitle: 'ANÁLISE DE SISTEMAS' },
+      { regex: /biomedicina/gi, label: 'Biomedicina', fullTitle: 'BIOMEDICINA' },
+      { regex: /ci[eê]ncias\s*cont[aá]beis|cont[aá]beis/gi, label: 'Contábeis', fullTitle: 'CIÊNCIAS CONTÁBEIS' },
+      { regex: /direito/gi, label: 'Direito', fullTitle: 'DIREITO' },
+      { regex: /educa[cç][aã]o\s*f[ií]sica|ed\.?\s*f[ií]sica/gi, label: 'Ed. Física', fullTitle: 'EDUCAÇÃO FÍSICA' },
+      { regex: /enfermagem/gi, label: 'Enfermagem', fullTitle: 'ENFERMAGEM' },
+      { regex: /engenharia\s*civil|\bcivil\b/gi, label: 'Civil', fullTitle: 'ENGENHARIA CIVIL' },
+      { regex: /engenharia\s*de\s*software|\bsoftware\b/gi, label: 'Software', fullTitle: 'ENGENHARIA DE SOFTWARE' },
+      { regex: /fisioterapia/gi, label: 'Fisioterapia', fullTitle: 'FISIOTERAPIA' },
+      { regex: /gastronomia/gi, label: 'Gastronomia', fullTitle: 'GASTRONOMIA' },
+      { regex: /gest[aã]o\s*ambiental|\bambiental\b/gi, label: 'Ambiental', fullTitle: 'GESTÃO AMBIENTAL' },
+      { regex: /medicina\s*veterin[aá]ria|\bveterin[aá]ria\b/gi, label: 'Veterinária', fullTitle: 'MEDICINA VETERINÁRIA' },
+      { regex: /nutri[cç][aã]o/gi, label: 'Nutrição', fullTitle: 'NUTRIÇÃO' },
+      { regex: /pedagogia/gi, label: 'Pedagogia', fullTitle: 'PEDAGOGIA' },
+      { regex: /psicologia/gi, label: 'Psicologia', fullTitle: 'PSICOLOGIA' },
+      { regex: /recursos\s*humanos|\brh\b/gi, label: 'Rh', fullTitle: 'RECURSOS HUMANOS' },
+      { regex: /servi[cç]o\s*social|\bseso\b/gi, label: 'Seso', fullTitle: 'SERVIÇO SOCIAL' },
+      { regex: /terapia\s*ocupacional|\bt\.?o\.?\b/gi, label: 'T.o', fullTitle: 'TERAPIA OCUPACIONAL' }
+    ];
+
+    function normalizeTurmaText(text) {
+      if (!text) return '';
+      let result = text;
+      COURSE_STANDARD_NAMES.forEach(item => { result = result.replace(item.regex, item.label); });
+      return result;
+    }
+
+    // ==================================================================
+    // INICIALIZAÇÃO "OFFLINE-FIRST" (CARREGA NA HORA DA MEMÓRIA LOCAL E SINCRONIZA DEPOIS)
+    // ==================================================================
+    const STORAGE_KEYS = {
+      NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10',
+      MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1'
+    };
+    const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
+
+    let allShiftsData = { NOITE: null, MANHA: null };
+    let multiCampusData = null;
+    let activeShift = 'NOITE';
+    let activeViewMode = 'ROOMS';
+    let selectedBlockFilter = 'ALL';
+    let selectedCourseFilter = 'ALL';
+    let searchQuery = '';
+    let dragSource = null;
+    let copyClipboard = null;
+    let activeMenuTarget = null;
+    let isAdmin = false;
+
     window.addEventListener('DOMContentLoaded', () => {
-      safeCreateIcons();
+      // 1. Carrega imediatamente do localStorage para abrir em zero segundos
+      loadLocalFallback();
+      
+      // 2. Tenta conectar no Firebase no fundo para pegar novidades
       initFirebaseData();
     });
 
+    function loadLocalFallback() {
+      ['NOITE', 'MANHA'].forEach(shift => {
+        const raw = localStorage.getItem(STORAGE_KEYS[shift]);
+        if (raw) {
+          try { allShiftsData[shift] = JSON.parse(raw); } catch(e) {}
+        }
+        if (!allShiftsData[shift] || !allShiftsData[shift].CAMPUS_1) {
+          allShiftsData[shift] = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+        }
+      });
+      finishDataLoad();
+    }
+
     function initFirebaseData() {
-      try {
-        firebase.initializeApp(firebaseConfig);
-        dbRef = firebase.database().ref('ensalamento_2027_1_oficial');
-        
-        // Monitora o estado da conexão para a badge online
-        const connectedRef = firebase.database().ref(".info/connected");
-        connectedRef.on("value", (snap) => {
-          isFirebaseConnected = snap.val() === true;
-          const statusBadge = document.getElementById('firebaseStatusBadge');
+      if (!dbRef) return;
+      
+      const connectedRef = firebase.database().ref(".info/connected");
+      connectedRef.on("value", (snap) => {
+        const isFirebaseConnected = snap.val() === true;
+        const statusBadge = document.getElementById('firebaseStatusBadge');
+        if (statusBadge) {
           if (isFirebaseConnected) {
-            if (statusBadge) statusBadge.classList.replace('hidden', 'inline-flex');
+            statusBadge.classList.replace('hidden', 'inline-flex');
           } else {
-            if (statusBadge) statusBadge.classList.replace('inline-flex', 'hidden');
+            statusBadge.classList.replace('inline-flex', 'hidden');
           }
-        });
+        }
+      });
 
-        // Carrega (ou cria) os dados pela primeira vez
-        dbRef.once('value').then((snapshot) => {
-          if (snapshot.exists()) {
-            allShiftsData = snapshot.val();
-          } else {
-            // Se o Firebase estiver vazio (primeiro uso), carrega do localStorage ou dos dados default (para não perder o v10)
-            const localNoite = localStorage.getItem('mapa_ensalamento_univassouras_2027_1_oficial_v10');
-            allShiftsData = {
-              NOITE: localNoite ? JSON.parse(localNoite) : { CAMPUS_1: INITIAL_CAMPUS_1, CAMPUS_2: INITIAL_CAMPUS_2 },
-              MANHA: { CAMPUS_1: INITIAL_CAMPUS_1, CAMPUS_2: INITIAL_CAMPUS_2 }
-            };
-            dbRef.set(allShiftsData);
+      // Sincroniza sempre que alguém mudar algo online
+      dbRef.on('value', (snap) => {
+        if (snap.exists()) {
+          const newData = snap.val();
+          // Só redesenha se os dados que vieram forem realmente diferentes dos locais
+          if (JSON.stringify(allShiftsData) !== JSON.stringify(newData)) {
+            allShiftsData = newData;
+            
+            // Salva as novidades no cache local
+            localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+            localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+            
+            multiCampusData = allShiftsData[activeShift];
+            updateHomeSummaries();
+            if (document.getElementById('homeScreen').classList.contains('hidden')) {
+              renderActiveView();
+              safeCreateIcons();
+            }
           }
-          finishDataLoad();
+        }
+      });
+    }
 
-          // A MÁGICA EM TEMPO REAL: Escuta qualquer alteração feita por outros usuários
-          dbRef.on('value', (snap) => {
-            if (snap.exists() && activeShift) {
-              const newData = snap.val();
-              // Atualiza apenas se os dados forem realmente diferentes
-              if (JSON.stringify(allShiftsData) !== JSON.stringify(newData)) {
-                allShiftsData = newData;
-                multiCampusData = allShiftsData[activeShift];
-                updateHomeSummaries();
-                if (document.getElementById('homeScreen').classList.contains('hidden')) {
-                  renderActiveView(); // Redesenha a tela se estiver com o mapa aberto
-                  safeCreateIcons();
-                }
-              }
+    function finishDataLoad() {
+      multiCampusData = allShiftsData[activeShift];
+      updateHomeSummaries();
+      updateAdminUI();
+      updateCampusUI();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function countShiftStats(dataset) {
+      let totalRooms = 0, allocatedSlots = 0;
+      Object.keys(dataset || {}).forEach(cKey => {
+        (dataset[cKey] || []).forEach(block => {
+          (block.rooms || []).forEach(room => {
+            totalRooms++;
+            if (room.schedule) {
+              Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
             }
           });
-        }).catch((error) => {
-          console.error("Erro no Firebase (Regras de Segurança?):", error);
-          loadLocalFallback();
         });
-      } catch(err) {
-        console.warn("Erro ao iniciar Firebase:", err);
-        loadLocalFallback();
+      });
+      return { totalRooms, allocatedSlots };
+    }
+
+    function updateHomeSummaries() {
+      const statsManha = countShiftStats(allShiftsData.MANHA);
+      const statsNoite = countShiftStats(allShiftsData.NOITE);
+      const elManha = document.getElementById('homeSummaryManha');
+      const elNoite = document.getElementById('homeSummaryNoite');
+      if (elManha) elManha.innerText = `${statsManha.totalRooms} Salas • ${statsManha.allocatedSlots} turmas alocadas`;
+      if (elNoite) elNoite.innerText = `${statsNoite.totalRooms} Salas • ${statsNoite.allocatedSlots} turmas alocadas`;
+    }
+
+    function getShiftDisplayName(shift = activeShift) { return shift === 'MANHA' ? 'Manhã / Integral' : 'Noturno'; }
+    function getShiftShortSlug(shift = activeShift) { return shift === 'MANHA' ? 'Manha_Integral' : 'Noite'; }
+    function getShiftUpperTitle(shift = activeShift) { return shift === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOITE'; }
+
+    function openHomeScreen() {
+      clearCopyPasteMode(); closeTurmaActionMenu(); updateHomeSummaries();
+      document.getElementById('homeScreen').classList.remove('hidden'); safeCreateIcons();
+    }
+
+    function selectShiftAndEnter(shiftKey) {
+      switchShift(shiftKey);
+      document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
+    }
+
+    function switchShift(shiftKey) {
+      activeShift = shiftKey; multiCampusData = allShiftsData[activeShift]; activeCampus = 'CAMPUS_2';
+      selectedBlockFilter = 'ALL'; selectedCourseFilter = 'ALL'; searchQuery = '';
+      const searchEl = document.getElementById('searchInput'); if (searchEl) searchEl.value = '';
+      clearCopyPasteMode(); closeTurmaActionMenu(); updateShiftUI(); updateCampusUI();
+      renderTabs(); renderActiveView(); safeCreateIcons();
+    }
+
+    function updateShiftUI() {
+      const badge = document.getElementById('shiftHeaderBadge');
+      const mainTitle = document.getElementById('headerMainTitle');
+      const btnQuickManha = document.getElementById('btnQuickShiftManha');
+      const btnQuickNoite = document.getElementById('btnQuickShiftNoite');
+
+      if (activeShift === 'MANHA') {
+        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
+        badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
+        mainTitle.innerText = 'Mapa de Ensalamento Manhã / Integral';
+        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs';
+        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all text-stone-600 hover:text-stone-900';
+      } else {
+        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
+        badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
+        mainTitle.innerText = 'Mapa de Ensalamento Noturno';
+        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-[#7a001e] text-white shadow-xs';
+        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg transition-all text-stone-600 hover:text-stone-900';
       }
+
+      document.getElementById('headerCampusLabel').innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
+    }
+
+    function switchViewMode(mode) {
+      activeViewMode = mode; closeTurmaActionMenu();
+      const btnRooms = document.getElementById('btnViewRooms'), btnCourses = document.getElementById('btnViewCourses');
+      const roomNav = document.getElementById('roomNavigationControls'), courseNav = document.getElementById('courseNavigationControls');
+      const matricesEl = document.getElementById('matricesContainer'), coursesEl = document.getElementById('coursesViewContainer');
+
+      if (mode === 'ROOMS') {
+        btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
+        roomNav.classList.replace('hidden', 'flex'); courseNav.classList.replace('flex', 'hidden');
+        matricesEl.classList.remove('hidden'); coursesEl.classList.add('hidden');
+        document.getElementById('pdfBtnLabel').innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
+      } else {
+        btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
+        roomNav.classList.replace('flex', 'hidden'); courseNav.classList.replace('hidden', 'flex');
+        matricesEl.classList.add('hidden'); coursesEl.classList.remove('hidden');
+        document.getElementById('pdfBtnLabel').innerText = 'PDF (Salas por Curso)';
+      }
+      updateShiftUI(); renderActiveView(); safeCreateIcons();
+    }
+
+    function handlePrimaryPdfButton() { activeViewMode === 'COURSES' ? exportCoursesPDF() : exportNativePDF(selectedBlockFilter === 'ALL'); }
+    function renderActiveView() { activeViewMode === 'COURSES' ? renderCoursesView() : renderMatrices(); }
+
+    function formatShortRoomCode(roomName, campusKey) {
+      const cSuffix = campusKey === 'CAMPUS_1' ? 'C1' : (campusKey === 'CAMPUS_2' ? 'C2' : campusKey);
+      const clean = (roomName || '').trim();
+      if (/^lij$/i.test(clean)) return `LIJ-${cSuffix}`;
+      const labMatch = clean.match(/lab(?:orat[oó]rio)?\.?\s*(?:de\s*)?(?:inform[aá]tica)?\s*0*(\d+)/i);
+      if (labMatch) return `LAB${labMatch[1]}-${cSuffix}`;
+      const salaMatch = clean.match(/^sala\s*(\d+[a-z]?)$/i);
+      if (salaMatch) return `${salaMatch[1]}-${cSuffix}`;
+      return `${clean}-${cSuffix}`;
+    }
+
+    function parseTurmaAllocationString(rawLine) {
+      const countMatch = rawLine.match(/\(\s*(\d+)\s*(?:alunos?)?\s*\)/i);
+      const studentCount = countMatch ? countMatch[1] : null;
+      const inlinePMR = /\[PMR\]/i.test(rawLine);
+      let cleaned = rawLine.replace(/\(\s*\d+\s*(?:alunos?)?\s*\)/gi, '').replace(/\[PMR\]/gi, '').trim();
+      if (!cleaned) return null;
+      let matchedCourse = null;
+      for (const item of COURSE_STANDARD_NAMES) {
+        item.regex.lastIndex = 0;
+        if (item.regex.test(cleaned)) { matchedCourse = item; break; }
+      }
+      const periodMatch = cleaned.match(/(\d+)\s*[º°]/);
+      const periodNum = periodMatch ? parseInt(periodMatch[1], 10) : 99;
+      let courseFullTitle = matchedCourse ? matchedCourse.fullTitle : 'OUTROS CURSOS';
+      let remainder = cleaned;
+      if (matchedCourse) { matchedCourse.regex.lastIndex = 0; remainder = remainder.replace(matchedCourse.regex, ' '); }
+      if (periodMatch) remainder = remainder.replace(periodMatch[0], ' ');
+      remainder = remainder.replace(/\bper[ií]odo\b/gi, ' ').replace(/\bturma\b/gi, ' ').replace(/\s+/g, ' ').trim();
+      let periodLabel = periodNum !== 99 ? (remainder ? `${periodNum}º Período ${remainder.toUpperCase()}` : `${periodNum}º Período`) : (remainder ? remainder : cleaned);
+      return { courseFullTitle, periodNum, suffix: remainder.toUpperCase(), periodLabel, studentCount, inlinePMR };
+    }
+
+    function buildCoursesDataFromMap() {
+      const daysOrder = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+      const coursesMap = {};
+      [...COURSE_STANDARD_NAMES].sort((a, b) => a.fullTitle.localeCompare(b.fullTitle, 'pt-BR')).forEach(c => coursesMap[c.fullTitle] = {});
+
+      Object.keys(multiCampusData).forEach(campusKey => {
+        (multiCampusData[campusKey] || []).forEach(block => {
+          (block.rooms || []).forEach(room => {
+            const shortRoom = formatShortRoomCode(room.sala, campusKey);
+            daysOrder.forEach(day => {
+              const cellContent = (room.schedule && room.schedule[day]) ? room.schedule[day].trim() : '';
+              if (!cellContent) return;
+              const cellHasPMR = !!(room.pmr && room.pmr[day]);
+              cellContent.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(line => {
+                const parsed = parseTurmaAllocationString(line);
+                if (!parsed) return;
+                const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
+                if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
+                if (!coursesMap[courseFullTitle][periodLabel]) {
+                  coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
+                }
+                const entry = coursesMap[courseFullTitle][periodLabel];
+                if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
+                if (cellHasPMR || inlinePMR) entry.hasPMR = true;
+                if (!entry.days[day].includes(shortRoom)) entry.days[day].push(shortRoom);
+              });
+            });
+          });
+        });
+      });
+
+      const filterSelect = document.getElementById('courseFilterSelect');
+      if (filterSelect) {
+        const currentVal = filterSelect.value || 'ALL';
+        let optionsHtml = `<option value="ALL">Todos os Cursos</option>`;
+        Object.keys(coursesMap).forEach(cTitle => { optionsHtml += `<option value="${cTitle}" ${currentVal === cTitle ? 'selected' : ''}>${cTitle}</option>`; });
+        filterSelect.innerHTML = optionsHtml;
+      }
+      return coursesMap;
+    }
+
+    function setCourseFilter(val) { selectedCourseFilter = val; renderCoursesView(); safeCreateIcons(); }
+
+    function renderCoursesView() {
+      const container = document.getElementById('coursesViewContainer');
+      const coursesMap = buildCoursesDataFromMap();
+      const daysOrder = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+
+      let html = `
+        <div class="bg-white rounded-2xl border border-stone-200 shadow-xs p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-[#7a001e]/10 text-[#7a001e] flex items-center justify-center font-black"><i data-lucide="info" class="w-4 h-4"></i></div>
+            <div><h2 class="text-xs sm:text-sm font-black text-stone-900 uppercase tracking-wide">Quadro de Salas por Curso • Turno ${getShiftDisplayName()}</h2><p class="text-[11px] text-stone-500">Sincronizado automaticamente com as alocações e turmas do Mapa de Salas</p></div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-[11px]">
+            <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg">
+              <span class="font-black text-[#7a001e] uppercase mr-1">Legendas:</span>
+              <span class="font-bold text-stone-700">C1:</span> <span class="text-stone-600 mr-1.5">Campus 1</span><span class="font-bold text-stone-700">C2:</span> <span class="text-stone-600">Campus 2</span>
+            </div>
+            <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg flex flex-wrap items-center gap-1.5">
+              <span class="font-black text-[#7a001e] uppercase">Blocos C2:</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">06 a 29: Bl. 1 e 2</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">100 a 415: Bl. 3</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">501 a 516: Bl. 5</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      Object.keys(coursesMap).filter(cTitle => selectedCourseFilter === 'ALL' || cTitle === selectedCourseFilter).forEach(courseTitle => {
+        let rows = Object.values(coursesMap[courseTitle]);
+        if (searchQuery) {
+          if (!courseTitle.toLowerCase().includes(searchQuery)) {
+            rows = rows.filter(r => r.periodLabel.toLowerCase().includes(searchQuery) || daysOrder.some(d => r.days[d].join(' ').toLowerCase().includes(searchQuery)));
+          }
+        }
+        rows.sort((a, b) => a.periodNum !== b.periodNum ? a.periodNum - b.periodNum : a.periodLabel.localeCompare(b.periodLabel, 'pt-BR'));
+
+        html += `
+          <div class="bg-white rounded-2xl border border-stone-200 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[620px] table-fixed">
+                <colgroup><col class="w-44 sm:w-52"><col><col><col><col><col><col></colgroup>
+                <thead>
+                  <tr class="bg-[#7a001e] text-white border-b border-[#620018]">
+                    <th class="py-2.5 px-3 text-xs sm:text-sm font-black uppercase tracking-wider border-r border-white/15 text-center bg-[#620018]">${courseTitle}</th>
+                    ${daysOrder.map(d => `<th class="py-2.5 px-2 text-center text-xs font-black uppercase tracking-wider border-r border-white/15">${d}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-stone-200 text-xs">
+                  ${rows.length > 0 ? rows.map((row, rIdx) => `
+                    <tr class="${rIdx % 2 === 0 ? 'bg-white' : 'bg-stone-50/70'} hover:bg-amber-50/50 transition-colors">
+                      <td class="py-2.5 px-2.5 border-r border-stone-200 text-center bg-stone-100/80 align-middle">
+                        <div class="flex flex-col items-center justify-center gap-1">
+                          <span class="font-black text-xs sm:text-[13px] text-stone-900 leading-tight">${row.periodLabel}</span>
+                          ${(row.studentCount || row.hasPMR) ? `
+                            <div class="inline-flex flex-wrap items-center justify-center gap-1">
+                              ${row.studentCount ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-stone-200/90 text-stone-700">${row.studentCount} alunos</span>` : ''}
+                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs" title="Turma com aluno de mobilidade reduzida (PMR)"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
+                            </div>
+                          ` : ''}
+                        </div>
+                      </td>
+                      ${daysOrder.map(d => {
+                        const roomsList = row.days[d];
+                        const hasRoom = roomsList && roomsList.length > 0;
+                        return `<td class="py-2 px-1.5 text-center border-r border-stone-200 align-middle ${hasRoom ? 'text-stone-900' : 'text-stone-400'}">${hasRoom ? roomsList.map(rm => `<span class="inline-block px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-300/90 text-[#7a001e] font-black text-sm sm:text-[15px] tracking-tight shadow-2xs">${rm}</span>`).join('<div class="h-1"></div>') : '<span class="text-sm font-bold text-stone-400">X</span>'}</td>`;
+                      }).join('')}
+                    </tr>
+                  `).join('') : `<tr><td colspan="7" class="p-3.5 text-center text-xs text-stone-400 italic">Nenhuma turma de ${courseTitle} alocada no turno ${getShiftDisplayName()} até o momento.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function formatTurmaCardContent(rawContent) {
+      if (!rawContent) return '';
+      const normalized = normalizeTurmaText(rawContent.trim());
+      const match = normalized.match(/^(.*?)\s*\((\d+)\s*(?:alunos?)?\)\s*$/i);
+      const paddingRight = isAdmin ? 'pr-3' : '';
+      if (match) {
+        return `
+          <span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${match[1].trim().replace(/\n/g, '<br>')}</span>
+          <span class="inline-block text-[9.5px] font-bold text-stone-600 bg-stone-100 border border-stone-200/80 px-1.5 py-0.2 rounded-md mt-0.5">${match[2]} alunos</span>
+        `;
+      }
+      return `<span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${normalized.replace(/\n/g, '<br>')}</span>`;
+    }
+
+    function openTurmaActionMenu(event, blockIdx, roomIdx, day) {
+      event.stopPropagation();
+      if (!isAdmin) return;
+      const blocks = getActiveCampusBlocks();
+      const room = blocks[blockIdx].rooms[roomIdx];
+      activeMenuTarget = { blockIdx, roomIdx, day };
+      const menu = document.getElementById('turmaActionMenu');
+      document.getElementById('turmaMenuTitle').innerText = normalizeTurmaText(room.schedule[day] || '');
+      document.getElementById('turmaMenuSubtitle').innerText = `${room.sala} • ${day}`;
+      menu.classList.remove('hidden');
+      const rect = event.currentTarget.getBoundingClientRect();
+      let left = rect.right - 176, top = rect.bottom + 4;
+      if (left < 10) left = 10;
+      if (top + 135 > window.innerHeight) top = rect.top - 135;
+      menu.style.left = `${left}px`; menu.style.top = `${top}px`;
+      safeCreateIcons();
+    }
+
+    function closeTurmaActionMenu() { const m = document.getElementById('turmaActionMenu'); if (m) m.classList.add('hidden'); activeMenuTarget = null; }
+
+    function triggerCopyFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx, day } = activeMenuTarget; closeTurmaActionMenu();
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+      const turma = normalizeTurmaText(room.schedule[day] || '');
+      if (!turma) return;
+      copyClipboard = { turma, pmr: !!(room.pmr && room.pmr[day]) };
+      document.getElementById('copyBannerText').innerText = turma;
+      document.getElementById('copyModeBanner').classList.remove('hidden');
+      renderActiveView(); safeCreateIcons();
+      showToast(`Modo Duplicar Ativo para "${turma}"!`);
+    }
+
+    function triggerEditFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx } = activeMenuTarget; closeTurmaActionMenu();
+      openEditModal(blockIdx, roomIdx);
+    }
+
+    function triggerDeleteFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx, day } = activeMenuTarget; closeTurmaActionMenu();
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+      const turmaRemovida = room.schedule[day];
+      room.schedule[day] = ''; if (room.pmr) room.pmr[day] = false;
+      saveToStorage(); renderActiveView(); safeCreateIcons();
+      showToast(`Turma removida da ${room.sala} (${day})!`);
+    }
+
+    function handleDragStart(event, blockIdx, roomIdx, day, forceDuplicate = false) {
+      if (!isAdmin) { event.preventDefault(); return; }
+      event.stopPropagation(); closeTurmaActionMenu();
+      dragSource = { campus: activeCampus, blockIdx, roomIdx, day, forceDuplicate: forceDuplicate || event.ctrlKey || event.altKey };
+      event.dataTransfer.effectAllowed = 'copyMove'; event.dataTransfer.setData('text/plain', `${blockIdx}:${roomIdx}:${day}`);
+      setTimeout(() => (event.currentTarget.closest('.turma-card') || event.currentTarget).classList.add('dragging-card'), 0);
+    }
+
+    function handleDragEnd(event) {
+      (event.currentTarget.closest('.turma-card') || event.currentTarget).classList.remove('dragging-card');
+      document.querySelectorAll('.drag-over-cell').forEach(el => el.classList.remove('drag-over-cell'));
+    }
+
+    function handleDragOver(event) { if (isAdmin) { event.preventDefault(); event.currentTarget.classList.add('drag-over-cell'); } }
+    function handleDragLeave(event) { event.currentTarget.classList.remove('drag-over-cell'); }
+
+    function handleDrop(event, targetBlockIdx, targetRoomIdx, targetDay) {
+      if (!isAdmin) return;
+      event.preventDefault(); event.stopPropagation(); event.currentTarget.classList.remove('drag-over-cell');
+      if (!dragSource || dragSource.campus !== activeCampus) return;
+
+      const { blockIdx: srcB, roomIdx: srcR, day: srcD, forceDuplicate } = dragSource;
+      if (srcB === targetBlockIdx && srcR === targetRoomIdx && srcD === targetDay) { dragSource = null; return; }
+
+      const blocks = getActiveCampusBlocks();
+      const srcRoom = blocks[srcB].rooms[srcR], destRoom = blocks[targetBlockIdx].rooms[targetRoomIdx];
+      srcRoom.pmr = srcRoom.pmr || {}; destRoom.pmr = destRoom.pmr || {};
+
+      const srcTurma = srcRoom.schedule[srcD] || '', srcPmr = !!srcRoom.pmr[srcD];
+      const destTurma = destRoom.schedule[targetDay] || '', destPmr = !!destRoom.pmr[targetDay];
+
+      if (forceDuplicate || event.ctrlKey || event.altKey) {
+        destRoom.schedule[targetDay] = srcTurma; destRoom.pmr[targetDay] = srcPmr;
+        showToast(`Turma duplicada para ${destRoom.sala}!`);
+      } else {
+        destRoom.schedule[targetDay] = srcTurma; destRoom.pmr[targetDay] = srcPmr;
+        srcRoom.schedule[srcD] = destTurma; srcRoom.pmr[srcD] = destPmr;
+        showToast(destTurma ? 'Turmas trocadas!' : 'Turma movida!');
+      }
+      dragSource = null; saveToStorage(); renderActiveView(); safeCreateIcons();
+    }
+
+    function clearCopyPasteMode() { copyClipboard = null; document.getElementById('copyModeBanner').classList.add('hidden'); renderActiveView(); safeCreateIcons(); }
+
+    function handleCellClick(blockIdx, roomIdx, day) {
+      if (!isAdmin) return;
+      closeTurmaActionMenu();
+      if (copyClipboard) {
+        const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+        room.schedule[day] = copyClipboard.turma; room.pmr = room.pmr || {}; room.pmr[day] = copyClipboard.pmr;
+        saveToStorage(); renderActiveView(); safeCreateIcons(); showToast(`Colada na ${room.sala}!`);
+        return;
+      }
+      openEditModal(blockIdx, roomIdx);
     }
 
     function saveToStorage() {
-      // Atualiza a memória local (cache)
       allShiftsData[activeShift] = multiCampusData;
       localStorage.setItem(STORAGE_KEYS[activeShift], JSON.stringify(multiCampusData));
       
-      // Envia os dados para a nuvem em tempo real
       if (dbRef) {
         dbRef.set(allShiftsData).catch(err => {
-          console.error("Erro ao salvar no Firebase:", err);
-          showToast("Atenção: Falha ao salvar online. Verifique sua conexão.");
+          console.error("Erro Firebase:", err);
+          showToast("Atenção: Falha ao salvar online.");
         });
       }
       updateHomeSummaries();
+    }
+
+    // PDF EXPORTS
+    function exportCoursesPDF() {
+      const btn = document.getElementById('btnExportPDF'); const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Gerando...`;
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+          const coursesMap = buildCoursesDataFromMap(); const daysOrder = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+          const todayStr = new Date().toLocaleDateString('pt-BR'); const shiftTitle = getShiftUpperTitle();
+
+          const drawHeader = () => {
+            doc.setFillColor(122, 0, 30); doc.rect(10, 8, 190, 16, 'F');
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(255, 255, 255);
+            doc.text(`ENSALAMENTO ${shiftTitle} - 2027.1 - MARICÁ`, 14, 14.5);
+            doc.setFontSize(8.5); doc.setTextColor(254, 240, 138); doc.text(`TURMAS ${shiftTitle} • SALAS POR CURSO`, 14, 20.5);
+            doc.setFontSize(7.5); doc.setTextColor(255, 255, 255);
+            doc.text('ELABORADO POR JONAS FLORENCIO', 196, 14, { align: 'right' }); doc.text(`ATUALIZADO EM: ${todayStr}`, 196, 20, { align: 'right' });
+            doc.setFillColor(245, 245, 244); doc.rect(10, 25.5, 190, 7.5, 'F');
+            doc.setFontSize(6.8); doc.setTextColor(122, 0, 30);
+            doc.text('LEGENDAS: C1: Campus 1 | C2: Campus 2   •   BLOCOS C2: Salas 06 a 29 (Blocos 1 e 2) | Salas 100 a 415 (Bloco 3) | Salas 501 a 516 (Bloco 5)', 14, 30.2);
+          };
+
+          drawHeader(); let currentY = 36;
+          Object.keys(coursesMap).filter(c => selectedCourseFilter === 'ALL' || c === selectedCourseFilter).forEach((cTitle) => {
+            let rows = Object.values(coursesMap[cTitle]);
+            rows.sort((a, b) => a.periodNum !== b.periodNum ? a.periodNum - b.periodNum : a.periodLabel.localeCompare(b.periodLabel, 'pt-BR'));
+            if (currentY + 10 + Math.max(rows.length, 1) * 8.5 > 280) { doc.addPage('a4', 'portrait'); drawHeader(); currentY = 36; }
+            const body = rows.length > 0 ? rows.map(r => {
+              let labelCell = r.periodLabel; const extras = [];
+              if (r.studentCount) extras.push(`${r.studentCount} alunos`);
+              if (r.hasPMR) extras.push('PMR');
+              if (extras.length > 0) labelCell += `\n(${extras.join(' • ')})`;
+              return [labelCell, ...daysOrder.map(d => (r.days[d] && r.days[d].length > 0) ? r.days[d].join('\n') : 'X')];
+            }) : [['Sem turmas', 'X', 'X', 'X', 'X', 'X', 'X']];
+            
+            doc.autoTable({
+              startY: currentY, margin: { left: 10, right: 10 }, head: [[cTitle, ...daysOrder]], body: body,
+              styles: { font: 'helvetica', fontSize: 9, cellPadding: 2, valign: 'middle', halign: 'center', lineWidth: 0.15, lineColor: [214, 211, 209] },
+              headStyles: { fillColor: [122, 0, 30], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8.5 },
+              columnStyles: { 0: { cellWidth: 42, fontStyle: 'bold', fillColor: [245, 245, 244], textColor: [28, 25, 23], fontSize: 8 } },
+              didParseCell: function (data) {
+                if (data.section === 'body') {
+                  if (data.column.index === 0 && typeof data.cell.raw === 'string' && data.cell.raw.includes('PMR')) data.cell.styles.textColor = [37, 99, 235];
+                  if (data.column.index > 0) {
+                    if (data.cell.raw === 'X') { data.cell.styles.textColor = [168, 162, 158]; data.cell.styles.fontStyle = 'normal'; } 
+                    else { data.cell.styles.textColor = [122, 0, 30]; data.cell.styles.fontStyle = 'bold'; data.cell.styles.fontSize = 9.5; }
+                  }
+                }
+              }
+            });
+            currentY = doc.lastAutoTable.finalY + 5;
+          });
+
+          for (let p = 1; p <= doc.internal.getNumberOfPages(); p++) {
+            doc.setPage(p); doc.setFontSize(7.5); doc.setTextColor(120, 113, 108);
+            doc.text(`Univassouras • FACMAR • Infraestrutura Acadêmica • Turno ${getShiftDisplayName()}`, 10, 290);
+            doc.text(`Página ${p} de ${doc.internal.getNumberOfPages()}`, 200, 290, { align: 'right' });
+          }
+          doc.save(`Ensalamento_Marica_2027.1_TURMAS_${getShiftShortSlug().toUpperCase()}_Por_Curso.pdf`);
+          showToast('PDF gerado!');
+        } catch (err) { console.error(err); showToast('Erro no PDF.'); } finally { btn.innerHTML = originalHTML; safeCreateIcons(); }
+      }, 50);
+    }
+
+    function exportNativePDF(exportAll = false) {
+      const btn = document.getElementById('btnExportPDF'); const originalHTML = btn.innerHTML;
+      btn.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Gerando...`;
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+          const blocks = getActiveCampusBlocks(); const campusName = formatCampusDisplayName(activeCampus); const shiftName = getShiftDisplayName();
+          const blocksToExport = exportAll ? blocks : (selectedBlockFilter === 'ALL' ? blocks : blocks.filter(b => b.bloco === selectedBlockFilter));
+          let pageCount = 0;
+
+          blocksToExport.forEach((block) => {
+            const days = getDaysForBlock(block.bloco);
+            const slices = (block.bloco.includes('4° ANDAR') && block.rooms.length >= 14) ? [{ rooms: block.rooms.slice(0, 7), label: `${block.bloco} - PARTE 1` }, { rooms: block.rooms.slice(7), label: `${block.bloco} - PARTE 2` }] : [{ rooms: block.rooms, label: block.bloco }];
+            slices.forEach((slice) => {
+              if (pageCount > 0) doc.addPage('a4', 'landscape');
+              pageCount++;
+
+              doc.setFillColor(122, 0, 30); doc.rect(10, 8, 277, 16, 'F');
+              doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5); doc.setTextColor(255, 255, 255);
+              doc.text('UNIVASSOURAS CAMPUS MARICÁ E FACMAR', 14, 15);
+              doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.text(`Quadro Integrado de Ensalamento (${shiftName} • ${campusName}) • Semestre 2027.1`, 14, 20);
+              doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(254, 240, 138); doc.text('2027.1', 280, 15, { align: 'right' });
+              doc.setFontSize(7.5); doc.setTextColor(255, 255, 255); doc.text('Elaborado por Jonas Florencio', 280, 20, { align: 'right' });
+
+              doc.setFillColor(245, 245, 244); doc.rect(10, 26, 277, 8, 'F');
+              doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(122, 0, 30);
+              doc.text(`${slice.label} - ${campusName.toUpperCase()} (${shiftName.toUpperCase()})`, 14, 31.5);
+              doc.setFontSize(8); doc.setTextColor(100, 100, 100); doc.text(`${slice.rooms.length} SALAS ALOCADAS`, 280, 31.5, { align: 'right' });
+
+              const head1 = ['LOCAL', ...slice.rooms.map(r => (r.andar || '—').toUpperCase())];
+              const head2 = ['SALA', ...slice.rooms.map(r => { let t = ''; if (r.acessibilidade === true) t += '[ACESSIBILIDADE]\n'; t += r.sala; if (r.subtitulo) t += `\n(${r.subtitulo})`; return t; })];
+              const head3 = ['CAPAC.', ...slice.rooms.map(r => String(r.capacidade || '—'))];
+              const body = days.map(d => [d, ...slice.rooms.map(r => { const t = normalizeTurmaText(r.schedule[d] || '—'); return (r.pmr && r.pmr[d]) ? `${t}\n[PMR]` : t; })]);
+              
+              const colWidth = (277 - 24) / slice.rooms.length;
+              const colStyles = { 0: { cellWidth: 24, fontStyle: 'bold', fillColor: [122, 0, 30], textColor: [255, 255, 255], halign: 'center' } };
+              for (let i = 1; i <= slice.rooms.length; i++) colStyles[i] = { cellWidth: colWidth, halign: 'center' };
+
+              doc.autoTable({
+                startY: 36, margin: { left: 10, right: 10 }, head: [head1, head2, head3], body: body,
+                styles: { font: 'helvetica', fontSize: slice.rooms.length > 9 ? 7.5 : 8.5, cellPadding: 2, valign: 'middle', lineWidth: 0.15, lineColor: [214, 211, 209] },
+                headStyles: { fillColor: [255, 255, 255], textColor: [28, 25, 23], lineWidth: 0.2, lineColor: [214, 211, 209] },
+                columnStyles: colStyles, rowPageBreak: 'avoid',
+                didParseCell: function (data) {
+                  if (data.section === 'head') {
+                    if (data.row.index === 0) { data.cell.styles.fillColor = [245, 245, 244]; data.cell.styles.fontStyle = 'bold'; data.cell.styles.fontSize = 6.5; data.cell.styles.textColor = [120, 113, 108]; data.cell.styles.minCellHeight = 7; }
+                    if (data.row.index === 1) { data.cell.styles.minCellHeight = 11; if (data.column.index === 0) { data.cell.styles.fillColor = [122, 0, 30]; data.cell.styles.textColor = [255, 255, 255]; data.cell.styles.fontSize = 9; } else { data.cell.styles.fillColor = [255, 255, 255]; data.cell.styles.textColor = [122, 0, 30]; data.cell.styles.fontStyle = 'bold'; data.cell.styles.fontSize = 8; } }
+                    if (data.row.index === 2) { data.cell.styles.fillColor = [250, 250, 249]; data.cell.styles.fontStyle = 'bold'; data.cell.styles.fontSize = 7; data.cell.styles.textColor = [68, 64, 60]; data.cell.styles.minCellHeight = 6.5; }
+                  }
+                  if (data.section === 'body') { data.cell.styles.minCellHeight = days.length === 5 ? 23 : 18; if (typeof data.cell.raw === 'string' && data.cell.raw.includes('[PMR]')) { data.cell.styles.textColor = [37, 99, 235]; data.cell.styles.fontStyle = 'bold'; } }
+                }
+              });
+              doc.setFontSize(7.5); doc.setTextColor(120, 113, 108); doc.text(`Univassouras • FACMAR • Infraestrutura Acadêmica • ${campusName} (${shiftName})`, 10, 202);
+            });
+          });
+
+          for (let p = 1; p <= doc.internal.getNumberOfPages(); p++) { doc.setPage(p); doc.text(`Página ${p} de ${doc.internal.getNumberOfPages()}`, 287, 202, { align: 'right' }); }
+          doc.save(`Ensalamento_${activeCampus}_${getShiftShortSlug()}_2027.1.pdf`); showToast('PDF gerado com sucesso!');
+        } catch (err) { console.error(err); showToast('Erro ao exportar PDF.'); } finally { btn.innerHTML = originalHTML; safeCreateIcons(); }
+      }, 50);
     }
   </script>
 </body>
