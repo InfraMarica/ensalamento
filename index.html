@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
+  <!-- CDN Mais Estável para os Ícones -->
   <script>
     function safeCreateIcons() {
       if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -18,7 +19,6 @@
       }
     }
   </script>
-  <!-- CDN Mais Estável para os Ícones (Lucide via jsDelivr) -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" onload="safeCreateIcons()"></script>
   
   <!-- jsPDF & AutoTable -->
@@ -91,6 +91,7 @@
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+        <!-- Turno Manhã -->
         <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
@@ -117,6 +118,7 @@
           </div>
         </button>
 
+        <!-- Turno Noturno -->
         <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
@@ -143,6 +145,11 @@
           </div>
         </button>
       </div>
+    </div>
+
+    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
+      <span>Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
+      <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
     </div>
   </div>
 
@@ -177,8 +184,9 @@
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="w-full px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <button onclick="openHomeScreen()" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
-          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i><span class="hidden md:inline">Início / Turnos</span>
+        <button onclick="openHomeScreen()" title="Voltar à tela inicial" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
+          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i>
+          <span class="hidden md:inline">Início / Turnos</span>
         </button>
         <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center shrink-0"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
         <div>
@@ -191,11 +199,13 @@
           <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900 leading-tight"><span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span></h1>
         </div>
       </div>
+
       <div class="flex items-center gap-2">
         <div class="relative hidden sm:block w-36 lg:w-44">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
           <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Pesquisar..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:border-[#7a001e]">
         </div>
+
         <div id="adminHeaderControls" class="hidden items-center gap-2">
           <button onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i><span>Distribuir</span></button>
           <button onclick="downloadBackupJSON()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
@@ -204,6 +214,7 @@
           <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg"><i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i><span class="hidden lg:inline">Excel</span></button>
           <button onclick="openChangePassModal()" class="inline-flex items-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg"><i data-lucide="key-round" class="w-3.5 h-3.5"></i></button>
         </div>
+
         <div class="relative inline-block text-left" id="pdfDropdownContainer">
           <div class="inline-flex rounded-lg shadow-sm">
             <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg"><i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i><span id="pdfBtnLabel">PDF (Todos)</span></button>
@@ -216,10 +227,11 @@
             <button onclick="exportCoursesPDF(); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-xs text-[#7a001e] font-black hover:bg-rose-50">Salas por Curso (PDF)</button>
           </div>
         </div>
-        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5"></i><span>Admin</span></button>
+        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0"><i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span></button>
       </div>
     </div>
-    
+
+    <!-- NAVEGAÇÃO SECUNDÁRIA -->
     <div class="w-full px-4 sm:px-6 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 py-2 bg-stone-50/80">
       <div class="flex items-center gap-2.5 overflow-x-auto w-full sm:w-auto">
         <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shadow-inner shrink-0">
@@ -233,7 +245,7 @@
         </div>
         <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
         <div id="roomNavigationControls" class="flex items-center gap-2.5">
-          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner shrink-0" id="campusButtonsContainer"></div>
+          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner" id="campusButtonsContainer"></div>
           <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white rounded-lg border border-[#7a001e]/30 shadow-2xs shrink-0"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i><span>Campus</span></button>
           <div class="h-5 w-px bg-stone-300 hidden sm:block"></div>
           <div class="flex items-center gap-1.5" id="blockTabs"></div>
@@ -247,12 +259,13 @@
     </div>
   </header>
 
+  <!-- ÁREA DE MAPAS -->
   <main class="flex-1 w-full p-4 sm:p-6 max-w-[1920px] mx-auto">
     <div id="matricesContainer" class="space-y-8"></div>
     <div id="coursesViewContainer" class="hidden max-w-5xl mx-auto space-y-5"></div>
   </main>
 
-  <!-- MODAIS SIMPLIFICADOS -->
+  <!-- MODAIS E FORMS SIMPLIFICADOS -->
   <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm">
       <div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Acesso Administrador</h3><button onclick="closeAdminLoginModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
@@ -264,27 +277,49 @@
     <div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Alterar Senha</h3><button onclick="closeChangePassModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewAdminPassword(event)"><input type="password" id="newAdminPassInput" required class="w-full p-2 text-xs border rounded-lg"><div class="flex justify-end pt-4"><button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs">Salvar</button></div></form></div>
   </div>
 
-  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-[#7a001e] mb-4">Em Breve</h3><button onclick="closeAutoDistModal()" class="px-4 py-2 bg-stone-200 rounded">Fechar</button></div></div>
-
+  <!-- MODAL DE EDIÇÃO DE SALA -->
   <div id="editModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
-        <div><h3 class="text-base font-black text-[#7a001e]">Editar Sala</h3></div>
-        <button onclick="closeModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <div>
+          <h3 class="text-base font-black text-[#7a001e]">Editar Sala</h3>
+          <p class="text-xs text-stone-500" id="modalBlocoSubtitle">Bloco</p>
+        </div>
+        <button onclick="closeModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
       </div>
+
       <form id="editForm" onsubmit="saveModalData(event)" class="mt-4 space-y-3">
-        <input type="hidden" id="editBlockIdx"><input type="hidden" id="editRoomIdx">
+        <input type="hidden" id="editBlockIdx">
+        <input type="hidden" id="editRoomIdx">
+
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <div class="flex justify-between mb-1"><label class="text-xs font-bold">Nome</label><button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200">Acessibilidade</button><input type="hidden" id="editRoomAcessibilidade" value="false"></div>
+            <div class="flex justify-between mb-1">
+              <label class="block text-xs font-bold text-stone-700">Nome</label>
+              <button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200 text-stone-600">Acessibilidade</button>
+              <input type="hidden" id="editRoomAcessibilidade" value="false">
+            </div>
             <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
           </div>
-          <div><label class="block text-xs font-bold mb-1">Capacidade</label><input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Capacidade</label>
+            <input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
+          </div>
         </div>
+
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold mb-1">Local / Andar</label><input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
-          <div><label class="block text-xs font-bold mb-1">Subtítulo</label><input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg"></div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Local / Andar</label>
+            <input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Subtítulo</label>
+            <input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border border-stone-200 rounded-lg">
+          </div>
         </div>
+
         <div class="pt-2">
           <span class="block text-[11px] font-black uppercase text-[#7a001e] mb-2">Alocações (Ex: 4º Direito A (50))</span>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -305,10 +340,15 @@
   <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-stone-900 mb-2">Limpar Todas as Alocações?</h3><div class="flex justify-center gap-2 mt-4"><button onclick="closeClearConfirmModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded">Cancelar</button><button onclick="confirmClearAllocations()" class="px-3 py-1.5 text-xs bg-amber-700 text-white rounded">Limpar Tudo</button></div></div></div>
   <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Bloco</h3><button onclick="closeNewBlockModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewBlock(event)" class="space-y-3"><input type="text" id="newBlockNameInput" placeholder="Nome do bloco" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div></div>
   <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Novo Campus</h3><button onclick="closeNewCampusModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><form onsubmit="saveNewCampus(event)" class="space-y-3"><input type="text" id="newCampusNameInput" placeholder="Nome do campus" class="w-full text-xs p-2 border rounded" required><div class="flex gap-2 justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-3 py-1.5 rounded text-xs">Criar</button></div></form></div></div>
-  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-md"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><div id="reorderRoomsList" class="mt-2 max-h-60 overflow-y-auto space-y-1"></div><div class="flex justify-end pt-4"><button type="button" onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-3 py-1.5 text-xs rounded">Salvar</button></div></div></div>
+  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-md"><div class="flex justify-between pb-3"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div><div id="reorderRoomsList" class="mt-2 max-h-60 overflow-y-auto space-y-1"></div><div class="flex justify-end pt-4"><button onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-3 py-1.5 text-xs rounded">Salvar</button></div></div></div>
+  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4"><div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center"><h3 class="font-black text-[#7a001e] mb-4">Em Breve</h3><button onclick="closeAutoDistModal()" class="px-4 py-2 bg-stone-200 rounded">Fechar</button></div></div>
+
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
 
   <script>
+    // ==================================================================
+    // 1) CONFIGURAÇÃO DO FIREBASE (NÃO MEXER - JÁ ESTÁ CERTO)
+    // ==================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyClpvMrkfDmJp9RWtnlI7sVDlcgkIUKwFc",
       authDomain: "salas-univassouras-marica.firebaseapp.com",
@@ -320,6 +360,9 @@
       databaseURL: "https://salas-univassouras-marica-default-rtdb.firebaseio.com"
     };
 
+    // ==================================================================
+    // DADOS INICIAIS COMPACTADOS
+    // ==================================================================
     const IC1=[{"bloco":"CAMPUS 1 - 1º e 2º ANDAR","rooms":[{"sala":"Sala 12","andar":"1º andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. 01","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 02","andar":"2º andar","subtitulo":"Informática","capacidade":45,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Lab. 03","andar":"2º andar","subtitulo":"Informática","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 22","andar":"2º andar","capacidade":48,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 23","andar":"2º andar","capacidade":44,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 24","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 25","andar":"2º andar","capacidade":79,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 26","andar":"2º andar","capacidade":62,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 27","andar":"2º andar","capacidade":63,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 28","andar":"2º andar","capacidade":47,"schedule":{},"pmr":{},"acessibilidade":false}]},{"bloco":"CAMPUS 1 - 3º ANDAR","rooms":[{"sala":"Sala 34","andar":"3º Andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 36","andar":"3º Andar","capacidade":60,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 37","andar":"3º Andar","capacidade":65,"schedule":{},"pmr":{},"acessibilidade":false}]}];
     const IC2=[{"bloco":"BLOCO 1 E 2","rooms":[{"sala":"Sala 06","andar":"Térreo","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 20","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 21","andar":"2° andar","capacidade":"73","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 22","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 23","andar":"2° andar","capacidade":"80","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 25","andar":"2° andar","capacidade":"75","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 26","andar":"2° andar","subtitulo":"Metodologias Ativas","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 29","andar":"2° andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 1° ANDAR","rooms":[{"sala":"Sala 100","andar":"Térreo","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 102","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 104","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 105","andar":"Térreo","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 106","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 107","andar":"Térreo","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 108","andar":"Térreo","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 109","andar":"Térreo","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 2° ANDAR","rooms":[{"sala":"Lab. Informática 01","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 02","andar":"2° Andar","capacidade":"36","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Lab. Informática 03","andar":"2° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 200","andar":"2° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 203","andar":"2° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 206","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 207","andar":"2° Andar","capacidade":"51","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 209","andar":"2° Andar","capacidade":"56","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"LIJ","andar":"2° Andar","subtitulo":"Sala 208","capacidade":"43","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 3° ANDAR","rooms":[{"sala":"Sala 301","andar":"3° Andar","capacidade":"47","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 302","andar":"3° Andar","capacidade":"72","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 303","andar":"3° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 304","andar":"3° Andar","capacidade":"53","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 305","andar":"3° Andar","capacidade":"70","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 306","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 307","andar":"3° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 308","andar":"3° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 309","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 310","andar":"3° Andar","capacidade":"49","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 311","andar":"3° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 313","andar":"3° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 3 - 4° ANDAR","rooms":[{"sala":"Sala 400","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 401","andar":"4° Andar","capacidade":"41","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 402","andar":"4° Andar","capacidade":"76","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 403","andar":"4° Andar","capacidade":"69","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 404","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 405","andar":"4° Andar","capacidade":"48","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 406","andar":"4° Andar","capacidade":"52","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 407","andar":"4° Andar","capacidade":"45","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 408","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 409","andar":"4° Andar","capacidade":"54","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 410","andar":"4° Andar","capacidade":"50","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 411","andar":"4° Andar","capacidade":"60","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 413","andar":"4° Andar","capacidade":"46","schedule":{},"pmr":{},"acessibilidade":true},{"sala":"Sala 415","andar":"4° Andar","capacidade":"55","schedule":{},"pmr":{},"acessibilidade":true}]},{"bloco":"BLOCO 5","rooms":[{"sala":"Sala 502","andar":"Térreo","capacidade":"78","schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 510","andar":"2° andar","capacidade":64,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 511","andar":"2° andar","capacidade":68,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 512","andar":"2° andar","capacidade":77,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 513","andar":"2° andar","capacidade":76,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 514","andar":"2° andar","capacidade":70,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 515","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false},{"sala":"Sala 516","andar":"2° andar","capacidade":78,"schedule":{},"pmr":{},"acessibilidade":false}]}];
 
@@ -355,11 +398,17 @@
     const STORAGE_KEYS = { NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10', MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1' };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
     
-    // BLINDAGEM CONTRA FALHAS ESTRUTURAIS
+    // BLINDAGEM DE DADOS: Limpa qualquer lixo da memória local que não seja um objeto com NOITE e MANHA
     function ensureDataIntegrity(data) {
-      if (!data) data = {};
-      if (!data.NOITE) data.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
-      if (!data.MANHA) data.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!data || Array.isArray(data) || typeof data !== 'object') {
+        data = {};
+      }
+      if (!data.NOITE || Array.isArray(data.NOITE)) {
+        data.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      }
+      if (!data.MANHA || Array.isArray(data.MANHA)) {
+        data.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      }
       if (!data.NOITE.CAMPUS_1) data.NOITE.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
       if (!data.NOITE.CAMPUS_2) data.NOITE.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
       if (!data.MANHA.CAMPUS_1) data.MANHA.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
@@ -393,7 +442,14 @@
       let temp = {};
       ['NOITE', 'MANHA'].forEach(shift => {
         const raw = localStorage.getItem(STORAGE_KEYS[shift]);
-        if (raw) { try { temp[shift] = JSON.parse(raw); } catch(e) {} }
+        if (raw && raw.trim().startsWith('{')) { 
+          try { 
+            const parsed = JSON.parse(raw); 
+            if (!Array.isArray(parsed)) {
+              temp[shift] = parsed; 
+            }
+          } catch(e) {} 
+        }
       });
       allShiftsData = ensureDataIntegrity(temp);
       finishDataLoad();
@@ -438,22 +494,32 @@
               }
             }
           });
-        }).catch((err) => { console.warn("Firebase rules/read error:", err); });
+        }).catch((err) => { console.warn("Firebase error:", err); });
       } catch(err) { console.warn("Erro ao iniciar Firebase:", err); }
     }
 
     function finishDataLoad() {
-      Object.keys(allShiftsData).forEach(sKey => {
-        Object.keys(allShiftsData[sKey]).forEach(cKey => {
-          (allShiftsData[sKey][cKey] || []).forEach(block => {
-            (block.rooms || []).forEach(room => {
-              if (room.schedule) Object.keys(room.schedule).forEach(day => {
-                if (room.schedule[day]) room.schedule[day] = normalizeTurmaText(room.schedule[day]);
+      try {
+        Object.keys(allShiftsData).forEach(sKey => {
+          Object.keys(allShiftsData[sKey]).forEach(cKey => {
+            if (Array.isArray(allShiftsData[sKey][cKey])) {
+              allShiftsData[sKey][cKey].forEach(block => {
+                if (Array.isArray(block.rooms)) {
+                  block.rooms.forEach(room => {
+                    if (room.schedule) {
+                      Object.keys(room.schedule).forEach(day => {
+                        if (room.schedule[day]) room.schedule[day] = normalizeTurmaText(room.schedule[day]);
+                      });
+                    }
+                  });
+                }
               });
-            });
+            }
           });
         });
-      });
+      } catch(err) {
+        console.error("Erro na limpeza de dados:", err);
+      }
       multiCampusData = allShiftsData[activeShift];
       updateHomeSummaries(); updateAdminUI(); updateCampusUI(); renderTabs(); renderActiveView(); safeCreateIcons();
     }
@@ -461,12 +527,16 @@
     function countShiftStats(dataset) {
       let totalRooms = 0, allocatedSlots = 0;
       Object.keys(dataset || {}).forEach(cKey => {
-        (dataset[cKey] || []).forEach(block => {
-          (block.rooms || []).forEach(room => {
-            totalRooms++;
-            if (room.schedule) Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
+        if (Array.isArray(dataset[cKey])) {
+          dataset[cKey].forEach(block => {
+            if (Array.isArray(block.rooms)) {
+              block.rooms.forEach(room => {
+                totalRooms++;
+                if (room.schedule) Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
+              });
+            }
           });
-        });
+        }
       });
       return { totalRooms, allocatedSlots };
     }
@@ -589,27 +659,31 @@
       if (!multiCampusData) return coursesMap;
       
       Object.keys(multiCampusData).forEach(campusKey => {
-        (multiCampusData[campusKey] || []).forEach(block => {
-          (block.rooms || []).forEach(room => {
-            const shortRoom = formatShortRoomCode(room.sala, campusKey);
-            daysOrder.forEach(day => {
-              const cellContent = (room.schedule && room.schedule[day]) ? room.schedule[day].trim() : '';
-              if (!cellContent) return;
-              const cellHasPMR = !!(room.pmr && room.pmr[day]);
-              cellContent.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(line => {
-                const parsed = parseTurmaAllocationString(line);
-                if (!parsed) return;
-                const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
-                if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
-                if (!coursesMap[courseFullTitle][periodLabel]) coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
-                const entry = coursesMap[courseFullTitle][periodLabel];
-                if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
-                if (cellHasPMR || inlinePMR) entry.hasPMR = true;
-                if (!entry.days[day].includes(shortRoom)) entry.days[day].push(shortRoom);
+        if (Array.isArray(multiCampusData[campusKey])) {
+          multiCampusData[campusKey].forEach(block => {
+            if (Array.isArray(block.rooms)) {
+              block.rooms.forEach(room => {
+                const shortRoom = formatShortRoomCode(room.sala, campusKey);
+                daysOrder.forEach(day => {
+                  const cellContent = (room.schedule && room.schedule[day]) ? room.schedule[day].trim() : '';
+                  if (!cellContent) return;
+                  const cellHasPMR = !!(room.pmr && room.pmr[day]);
+                  cellContent.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(line => {
+                    const parsed = parseTurmaAllocationString(line);
+                    if (!parsed) return;
+                    const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
+                    if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
+                    if (!coursesMap[courseFullTitle][periodLabel]) coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
+                    const entry = coursesMap[courseFullTitle][periodLabel];
+                    if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
+                    if (cellHasPMR || inlinePMR) entry.hasPMR = true;
+                    if (!entry.days[day].includes(shortRoom)) entry.days[day].push(shortRoom);
+                  });
+                });
               });
-            });
+            }
           });
-        });
+        }
       });
 
       const filterSelect = document.getElementById('courseFilterSelect');
@@ -673,7 +747,7 @@
                           ${(row.studentCount || row.hasPMR) ? `
                             <div class="inline-flex flex-wrap items-center justify-center gap-1">
                               ${row.studentCount ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-stone-200/90 text-stone-700">${row.studentCount} alunos</span>` : ''}
-                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
+                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs" title="Turma com aluno de mobilidade reduzida (PMR)"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
                             </div>
                           ` : ''}
                         </div>
@@ -848,7 +922,7 @@
               if (r.hasPMR) extras.push('PMR');
               if (extras.length > 0) labelCell += `\n(${extras.join(' • ')})`;
               return [labelCell, ...daysOrder.map(d => (r.days[d] && r.days[d].length > 0) ? r.days[d].join('\n') : 'X')];
-            }) : [['Sem turmas', 'X', 'X', 'X', 'X', 'X', 'X']];
+            }) : [['Sem turmas alocadas', 'X', 'X', 'X', 'X', 'X', 'X']];
             
             doc.autoTable({
               startY: currentY, margin: { left: 10, right: 10 }, head: [[cTitle, ...daysOrder]], body: body,
@@ -939,6 +1013,74 @@
           doc.save(`Ensalamento_${activeCampus}_${getShiftShortSlug()}_2027.1.pdf`); showToast('PDF gerado com sucesso!');
         } catch (err) { console.error(err); showToast('Erro ao exportar PDF.'); } finally { btn.innerHTML = originalHTML; safeCreateIcons(); }
       }, 50);
+    }
+
+    function togglePdfDropdown() { document.getElementById('pdfDropdownMenu').classList.toggle('hidden'); }
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('pdfDropdownContainer'), menu = document.getElementById('pdfDropdownMenu');
+      if (container && !container.contains(e.target)) menu.classList.add('hidden');
+      const actionMenu = document.getElementById('turmaActionMenu');
+      if (actionMenu && !actionMenu.contains(e.target)) closeTurmaActionMenu();
+    });
+
+    function exportCSV() {
+      if (!isAdmin) return;
+      const blocks = getActiveCampusBlocks();
+      let csv = 'TURNO;CAMPUS;BLOCO;SALA;ACESSIBILIDADE;SUBTITULO;ANDAR;CAPACIDADE;SEGUNDA;TERÇA;QUARTA;QUINTA;SEXTA;SÁBADO\n';
+      blocks.forEach(b => {
+        b.rooms.forEach(r => {
+          const isAcessivel = (r.acessibilidade === true) ? 'SIM' : 'NÃO';
+          csv += `"${getShiftDisplayName()}";"${formatCampusDisplayName(activeCampus)}";"${b.bloco}";"${r.sala}";"${isAcessivel}";"${r.subtitulo || ''}";"${r.andar || ''}";"${r.capacidade || ''}";"${normalizeTurmaText(r.schedule['SEGUNDA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['TERÇA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['QUARTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['QUINTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['SEXTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['SÁBADO']||'').replace(/"/g, '""')}"\n`;
+        });
+      });
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = `Ensalamento_${activeCampus}_${getShiftShortSlug()}_2027.1.csv`; a.click(); URL.revokeObjectURL(url);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+    }
+
+    function getAdminPassword() { return localStorage.getItem(ADMIN_PASS_KEY) || 'admin'; }
+    function handleAdminButtonClick() {
+      if (isAdmin) {
+        isAdmin = false; clearCopyPasteMode(); closeTurmaActionMenu(); updateAdminUI(); renderActiveView(); safeCreateIcons();
+        showToast('Modo Administrador bloqueado.');
+      } else {
+        document.getElementById('adminPasswordInput').value = ''; document.getElementById('adminLoginError').classList.add('hidden');
+        document.getElementById('adminLoginModal').classList.remove('hidden'); setTimeout(() => document.getElementById('adminPasswordInput').focus(), 50);
+      }
+    }
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+    function verifyAdminPassword(e) {
+      e.preventDefault();
+      if (document.getElementById('adminPasswordInput').value === getAdminPassword()) {
+        isAdmin = true; closeAdminLoginModal(); updateAdminUI(); renderActiveView(); safeCreateIcons(); showToast('Modo Administrador desbloqueado!');
+      } else { document.getElementById('adminLoginError').classList.remove('hidden'); }
+    }
+    function openChangePassModal() { if (!isAdmin) return; document.getElementById('newAdminPassInput').value = ''; document.getElementById('changePassModal').classList.remove('hidden'); setTimeout(() => document.getElementById('newAdminPassInput').focus(), 50); }
+    function closeChangePassModal() { document.getElementById('changePassModal').classList.add('hidden'); }
+    function saveNewAdminPassword(e) { e.preventDefault(); const newPass = document.getElementById('newAdminPassInput').value.trim(); if (!newPass) return; localStorage.setItem(ADMIN_PASS_KEY, newPass); closeChangePassModal(); showToast('Senha de administrador alterada com sucesso!'); }
+    
+    function updateAdminUI() {
+      const adminControls = document.getElementById('adminHeaderControls'), btnAdminToggle = document.getElementById('btnAdminToggle');
+      const roleBadge = document.getElementById('roleStatusBadge'), btnNovoCampus = document.getElementById('btnNovoCampus'), btnNovoBloco = document.getElementById('btnNovoBloco');
+      if (isAdmin) {
+        adminControls.classList.replace('hidden', 'flex'); btnNovoCampus.classList.replace('hidden', 'inline-flex'); btnNovoBloco.classList.replace('hidden', 'inline-flex');
+        btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-900 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 rounded-lg shrink-0';
+        btnAdminToggle.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5 text-emerald-700"></i><span>Bloquear</span>`;
+        roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300';
+        roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3 text-emerald-700"></i> Modo Admin`;
+      } else {
+        adminControls.classList.replace('flex', 'hidden'); btnNovoCampus.classList.replace('inline-flex', 'hidden'); btnNovoBloco.classList.replace('inline-flex', 'hidden');
+        btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0';
+        btnAdminToggle.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span>`;
+        roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200';
+        roleBadge.innerHTML = `<i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura`;
+      }
+      safeCreateIcons();
     }
   </script>
 </body>
