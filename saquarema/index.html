@@ -488,22 +488,18 @@
             <select id="distCurso" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
               <option value="" disabled selected>Selecione o Curso...</option>
               <option value="Adm">Administração (Adm)</option>
-              <option value="Ads">Análise de Sistemas (Ads)</option>
               <option value="Biomedicina">Biomedicina</option>
               <option value="Contábeis">Ciências Contábeis (Contábeis)</option>
-              <option value="Direito">Direito</option>
               <option value="Ed. Física">Educação Física (Ed. Física)</option>
               <option value="Enfermagem">Enfermagem</option>
               <option value="Civil">Engenharia Civil (Civil)</option>
               <option value="Software">Engenharia de Software (Software)</option>
               <option value="Fisioterapia">Fisioterapia</option>
-              <option value="Gastronomia">Gastronomia</option>
-              <option value="Ambiental">Gestão Ambiental (Ambiental)</option>
               <option value="Veterinária">Medicina Veterinária (Veterinária)</option>
               <option value="Nutrição">Nutrição</option>
+              <option value="Odonto">Odontologia (Odonto)</option>
               <option value="Pedagogia">Pedagogia</option>
               <option value="Psicologia">Psicologia</option>
-              <option value="Rh">Recursos Humanos (Rh)</option>
               <option value="Seso">Serviço Social (Seso)</option>
               <option value="T.o">Terapia Ocupacional (T.o)</option>
             </select>
@@ -685,7 +681,7 @@
         <div class="pt-2">
           <div class="flex items-center justify-between mb-2">
             <span class="block text-[11px] font-black uppercase tracking-wider text-[#7a001e]">Turmas Alocadas por Dia</span>
-            <span class="text-[10px] text-stone-400 font-semibold">Ex: 4º Direito A (50)</span>
+            <span class="text-[10px] text-stone-400 font-semibold">Ex: 4º Odonto A (50)</span>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -870,31 +866,31 @@
     </div>
   </div>
 
-  <!-- MODAL REORDENAR SALAS -->
+  <!-- MODAL REORDENAR E RENOMEAR SALAS -->
   <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-stone-200">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
         <div>
-          <h3 class="text-base font-black text-[#7a001e]">Reordenar Salas</h3>
+          <h3 class="text-base font-black text-[#7a001e]">Reordenar e Renomear Salas</h3>
           <p class="text-xs text-stone-500" id="reorderBlockLabel">Bloco</p>
         </div>
         <button onclick="closeReorderModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p class="text-xs text-stone-500 mt-2 mb-3">Utilize as setas para mover as salas para a esquerda/direita (ordem na tabela):</p>
+      <p class="text-xs text-stone-500 mt-2 mb-3">Edite os nomes das salas diretamente nos campos abaixo ou use as setas para alterar a ordem:</p>
       <div id="reorderRoomsList" class="max-h-72 overflow-y-auto space-y-1.5 pr-1"></div>
       <div class="flex items-center justify-end gap-2 pt-4 mt-3 border-t border-stone-100">
         <button type="button" onclick="closeReorderModal()" class="px-3.5 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-        <button type="button" onclick="saveReorderRooms()" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg shadow-sm">Salvar Nova Ordem</button>
+        <button type="button" onclick="saveReorderRooms()" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg shadow-sm">Salvar Alterações</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL NOVO BLOCO -->
+  <!-- MODAL NOVO BLOCO (COM QUANTIDADE E RENOMEAÇÃO DE SALAS) -->
   <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 max-h-[92vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100 shrink-0">
         <div>
           <h3 class="text-base font-black text-[#7a001e]">Adicionar Novo Bloco</h3>
           <p class="text-xs text-stone-500" id="newBlockCampusLabel">Campus</p>
@@ -903,16 +899,46 @@
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <form id="newBlockForm" onsubmit="saveNewBlock(event)" class="mt-4 space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-stone-700 mb-1">Nome do Bloco</label>
-          <input type="text" id="newBlockNameInput" required placeholder="Ex: BLOCO 4, ANEXO B..." class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
+      <form id="newBlockForm" onsubmit="saveNewBlock(event)" class="mt-4 space-y-3 flex-1 overflow-hidden flex flex-col">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-stone-700 mb-1">Nome do Bloco</label>
+            <input type="text" id="newBlockNameInput" required placeholder="Ex: BLOCO 5, ANEXO..." class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Qtd. de Salas</label>
+            <input type="number" id="newBlockRoomCount" min="0" max="60" value="5" oninput="generateNewBlockRoomInputs(this.value)" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-black text-stone-900">
+          </div>
         </div>
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-stone-100">
+
+        <div class="pt-1 flex-1 overflow-hidden flex flex-col">
+          <div class="flex items-center justify-between mb-1.5 shrink-0">
+            <span class="text-[11px] font-black uppercase tracking-wider text-[#7a001e]">Configurar e Renomear Salas do Bloco</span>
+            <span class="text-[10px] text-stone-400 font-semibold">Máx. 13 salas por linha na tabela</span>
+          </div>
+          <div id="newBlockRoomsContainer" class="overflow-y-auto space-y-1.5 pr-1 max-h-60 border border-stone-100 rounded-xl p-2 bg-stone-50/50"></div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-stone-100 shrink-0">
           <button type="button" onclick="closeNewBlockModal()" class="px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Criar Bloco</button>
+          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Criar Bloco e Salas</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMAÇÃO PARA EXCLUIR BLOCO -->
+  <div id="deleteBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200 text-center">
+      <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="trash-2" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base font-black text-stone-900 mb-1">Excluir Bloco Inteiro?</h3>
+      <p class="text-xs text-stone-500 mb-4" id="deleteBlockConfirmDesc">Tem certeza que deseja excluir este bloco e todas as suas salas?</p>
+      <div class="flex items-center justify-center gap-2">
+        <button type="button" onclick="closeDeleteBlockModal()" class="px-3.5 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100 rounded-lg">Cancelar</button>
+        <button type="button" onclick="confirmDeleteBlock()" class="px-4 py-1.5 text-xs font-bold text-white bg-rose-700 hover:bg-rose-800 rounded-lg shadow-sm">Sim, Excluir Bloco</button>
+      </div>
     </div>
   </div>
 
@@ -1081,25 +1107,21 @@
       }
     ];
 
-    // PADRONIZAÇÃO DOS NOMES DOS CURSOS E TÍTULOS COMPLETOS PARA "SALAS POR CURSO"
+    // PADRONIZAÇÃO DOS NOMES DOS CURSOS DE SAQUAREMA
     const COURSE_STANDARD_NAMES = [
       { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'ADMINISTRAÇÃO' },
-      { regex: /an[aá]lise\s*de\s*sistemas|\bads\b/gi, label: 'Ads', fullTitle: 'ANÁLISE DE SISTEMAS' },
       { regex: /biomedicina/gi, label: 'Biomedicina', fullTitle: 'BIOMEDICINA' },
       { regex: /ci[eê]ncias\s*cont[aá]beis|cont[aá]beis/gi, label: 'Contábeis', fullTitle: 'CIÊNCIAS CONTÁBEIS' },
-      { regex: /direito/gi, label: 'Direito', fullTitle: 'DIREITO' },
       { regex: /educa[cç][aã]o\s*f[ií]sica|ed\.?\s*f[ií]sica/gi, label: 'Ed. Física', fullTitle: 'EDUCAÇÃO FÍSICA' },
       { regex: /enfermagem/gi, label: 'Enfermagem', fullTitle: 'ENFERMAGEM' },
       { regex: /engenharia\s*civil|\bcivil\b/gi, label: 'Civil', fullTitle: 'ENGENHARIA CIVIL' },
       { regex: /engenharia\s*de\s*software|\bsoftware\b/gi, label: 'Software', fullTitle: 'ENGENHARIA DE SOFTWARE' },
       { regex: /fisioterapia/gi, label: 'Fisioterapia', fullTitle: 'FISIOTERAPIA' },
-      { regex: /gastronomia/gi, label: 'Gastronomia', fullTitle: 'GASTRONOMIA' },
-      { regex: /gest[aã]o\s*ambiental|\bambiental\b/gi, label: 'Ambiental', fullTitle: 'GESTÃO AMBIENTAL' },
       { regex: /medicina\s*veterin[aá]ria|\bveterin[aá]ria\b/gi, label: 'Veterinária', fullTitle: 'MEDICINA VETERINÁRIA' },
       { regex: /nutri[cç][aã]o/gi, label: 'Nutrição', fullTitle: 'NUTRIÇÃO' },
+      { regex: /odontologia|\bodonto\b/gi, label: 'Odonto', fullTitle: 'ODONTOLOGIA' },
       { regex: /pedagogia/gi, label: 'Pedagogia', fullTitle: 'PEDAGOGIA' },
       { regex: /psicologia/gi, label: 'Psicologia', fullTitle: 'PSICOLOGIA' },
-      { regex: /recursos\s*humanos|\brh\b/gi, label: 'Rh', fullTitle: 'RECURSOS HUMANOS' },
       { regex: /servi[cç]o\s*social|\bseso\b/gi, label: 'Seso', fullTitle: 'SERVIÇO SOCIAL' },
       { regex: /terapia\s*ocupacional|\bt\.?o\.?\b/gi, label: 'T.o', fullTitle: 'TERAPIA OCUPACIONAL' }
     ];
@@ -1119,6 +1141,7 @@
       MANHA: 'mapa_ensalamento_univassouras_saquarema_2027_1_manha_integral_v1'
     };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
+    const MAX_ROOMS_PER_LINE = 13;
 
     function loadShiftDataset(shiftKey) {
       const storageKey = STORAGE_KEYS[shiftKey];
@@ -1940,16 +1963,59 @@
       showToast(`Campus "${rawName}" criado com sucesso!`);
     }
 
+    // GESTÃO DE BLOCOS (CRIAR COM QTD DE SALAS + RENOMEAR + EXCLUIR BLOCO)
     function openNewBlockModal() {
       if (!isAdmin) return;
       document.getElementById('newBlockCampusLabel').innerText = formatCampusDisplayName(activeCampus);
       document.getElementById('newBlockNameInput').value = '';
+      document.getElementById('newBlockRoomCount').value = '5';
+      generateNewBlockRoomInputs(5);
       document.getElementById('newBlockModal').classList.remove('hidden');
       safeCreateIcons();
     }
 
     function closeNewBlockModal() {
       document.getElementById('newBlockModal').classList.add('hidden');
+    }
+
+    function generateNewBlockRoomInputs(countVal) {
+      const container = document.getElementById('newBlockRoomsContainer');
+      if (!container) return;
+      const count = Math.max(0, Math.min(60, parseInt(countVal) || 0));
+
+      const existingNames = Array.from(container.querySelectorAll('.nb-room-name')).map(el => el.value);
+      const existingAndares = Array.from(container.querySelectorAll('.nb-room-andar')).map(el => el.value);
+      const existingCaps = Array.from(container.querySelectorAll('.nb-room-cap')).map(el => el.value);
+
+      if (count === 0) {
+        container.innerHTML = '<p class="text-xs text-stone-400 text-center py-3">Bloco será criado vazio (0 salas).</p>';
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        const defaultName = existingNames[i] !== undefined ? existingNames[i] : `Sala ${String(i + 1).padStart(2, '0')}`;
+        const defaultAndar = existingAndares[i] !== undefined ? existingAndares[i] : '1º andar';
+        const defaultCap = existingCaps[i] !== undefined ? existingCaps[i] : '60';
+
+        html += `
+          <div class="grid grid-cols-12 gap-2 items-center bg-white p-1.5 rounded-lg border border-stone-200">
+            <div class="col-span-1 text-center">
+              <span class="w-5 h-5 rounded bg-stone-200 text-stone-700 text-[10px] font-black inline-flex items-center justify-center">${i + 1}</span>
+            </div>
+            <div class="col-span-5">
+              <input type="text" required value="${defaultName}" placeholder="Nome da Sala" class="nb-room-name w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] font-bold text-stone-800">
+            </div>
+            <div class="col-span-3">
+              <input type="text" value="${defaultAndar}" placeholder="Andar/Local" class="nb-room-andar w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] text-stone-700">
+            </div>
+            <div class="col-span-3">
+              <input type="number" value="${defaultCap}" placeholder="Capac." class="nb-room-cap w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] text-stone-700">
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
     }
 
     function saveNewBlock(e) {
@@ -1962,11 +2028,66 @@
         showToast('Já existe um bloco com esse nome neste campus!');
         return;
       }
-      blocks.push({ bloco: name, rooms: [] });
+
+      const container = document.getElementById('newBlockRoomsContainer');
+      const nameInputs = container ? Array.from(container.querySelectorAll('.nb-room-name')) : [];
+      const andarInputs = container ? Array.from(container.querySelectorAll('.nb-room-andar')) : [];
+      const capInputs = container ? Array.from(container.querySelectorAll('.nb-room-cap')) : [];
+
+      const newRooms = nameInputs.map((input, idx) => {
+        const rName = input.value.trim() || `Sala ${idx + 1}`;
+        const rAndar = (andarInputs[idx] && andarInputs[idx].value.trim()) || '';
+        const rCap = (capInputs[idx] && capInputs[idx].value) ? parseInt(capInputs[idx].value) : '';
+        const isTerr = rAndar.toLowerCase().includes('térreo') || rAndar.toLowerCase().includes('terreo');
+        return {
+          sala: rName,
+          subtitulo: '',
+          andar: rAndar,
+          capacidade: rCap,
+          acessibilidade: isTerr,
+          schedule: { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" },
+          pmr: {}
+        };
+      });
+
+      blocks.push({ bloco: name, rooms: newRooms });
       saveToStorage();
       closeNewBlockModal();
       setFilter(name);
-      showToast(`Bloco "${name}" adicionado!`);
+      showToast(`Bloco "${name}" criado com ${newRooms.length} salas!`);
+    }
+
+    let currentDeleteBlockIdx = null;
+
+    function openDeleteBlockModal(blockIdx) {
+      if (!isAdmin) return;
+      const blocks = getActiveCampusBlocks();
+      const block = blocks[blockIdx];
+      if (!block) return;
+      currentDeleteBlockIdx = blockIdx;
+      document.getElementById('deleteBlockConfirmDesc').innerText = `Tem certeza que deseja excluir o bloco "${block.bloco}" (${block.rooms.length} salas) do ${formatCampusDisplayName(activeCampus)}?`;
+      document.getElementById('deleteBlockModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeDeleteBlockModal() {
+      document.getElementById('deleteBlockModal').classList.add('hidden');
+      currentDeleteBlockIdx = null;
+    }
+
+    function confirmDeleteBlock() {
+      if (!isAdmin || currentDeleteBlockIdx === null) return;
+      const blocks = getActiveCampusBlocks();
+      const removed = blocks.splice(currentDeleteBlockIdx, 1)[0];
+      selectedBlockFilter = 'ALL';
+      saveToStorage();
+      closeDeleteBlockModal();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+      if (removed) {
+        showToast(`Bloco "${removed.bloco}" excluído com sucesso!`);
+      }
     }
 
     function formatTurmaCardContent(rawContent) {
@@ -2465,7 +2586,7 @@
       safeCreateIcons();
     }
 
-    // MODAL REORDENAR SALAS
+    // MODAL REORDENAR E RENOMEAR SALAS
     let currentReorderBlockIdx = null;
     let tempReorderRooms = [];
 
@@ -2488,6 +2609,11 @@
       tempReorderRooms = [];
     }
 
+    function updateTempRoomField(idx, field, val) {
+      if (!tempReorderRooms[idx]) return;
+      tempReorderRooms[idx][field] = val;
+    }
+
     function renderReorderList() {
       const container = document.getElementById('reorderRoomsList');
       if (!tempReorderRooms || tempReorderRooms.length === 0) {
@@ -2499,17 +2625,16 @@
       tempReorderRooms.forEach((r, idx) => {
         const isFirst = idx === 0;
         const isLast = idx === tempReorderRooms.length - 1;
-        const isAcessivel = (r.acessibilidade === true);
+        const safeSala = (r.sala || '').replace(/"/g, '&quot;');
+        const safeAndar = (r.andar || '').replace(/"/g, '&quot;');
         html += `
-          <div class="flex items-center justify-between p-2 rounded-xl bg-stone-50 border border-stone-200">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-md bg-stone-200 text-stone-700 text-[10px] font-black flex items-center justify-center">${idx + 1}</span>
-              <span class="text-xs font-black text-[#7a001e]">${r.sala}</span>
-              ${isAcessivel ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9px] font-black bg-blue-600 text-white uppercase"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> Acessibilidade</span>` : ''}
-              ${r.subtitulo ? `<span class="text-[11px] text-stone-500 font-semibold">(${r.subtitulo})</span>` : ''}
-              <span class="text-[10px] text-stone-400 font-bold ml-1">• ${r.andar || '—'}</span>
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-stone-50 border border-stone-200">
+            <div class="flex items-center gap-2 flex-1">
+              <span class="w-5 h-5 rounded-md bg-stone-200 text-stone-700 text-[10px] font-black flex items-center justify-center shrink-0">${idx + 1}</span>
+              <input type="text" value="${safeSala}" oninput="updateTempRoomField(${idx}, 'sala', this.value)" placeholder="Nome da Sala" class="w-full px-2 py-1 text-xs font-black text-[#7a001e] bg-white border border-stone-200 rounded focus:outline-none focus:border-[#7a001e]">
+              <input type="text" value="${safeAndar}" oninput="updateTempRoomField(${idx}, 'andar', this.value)" placeholder="Andar" class="w-24 px-2 py-1 text-[11px] font-semibold text-stone-600 bg-white border border-stone-200 rounded focus:outline-none focus:border-[#7a001e] shrink-0">
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 shrink-0">
               <button type="button" onclick="moveRoomInReorder(${idx}, -1)" ${isFirst ? 'disabled class="p-1 rounded text-stone-300 cursor-not-allowed"' : 'class="p-1 rounded hover:bg-stone-200 text-stone-700 transition-colors"'} title="Mover para cima / esquerda">
                 <i data-lucide="chevron-up" class="w-4 h-4"></i>
               </button>
@@ -2535,12 +2660,16 @@
     function saveReorderRooms() {
       if (!isAdmin || currentReorderBlockIdx === null) return;
       const blocks = getActiveCampusBlocks();
+      tempReorderRooms.forEach((r, idx) => {
+        r.sala = (r.sala || '').trim() || `Sala ${idx + 1}`;
+        r.andar = (r.andar || '').trim();
+      });
       blocks[currentReorderBlockIdx].rooms = tempReorderRooms;
       saveToStorage();
       closeReorderModal();
       renderActiveView();
       safeCreateIcons();
-      showToast('Ordem das salas atualizada com sucesso!');
+      showToast('Ordem e nomes das salas atualizados!');
     }
 
     function getActiveCampusBlocks() {
@@ -2717,11 +2846,10 @@
         const originalBlockIdx = blocks.findIndex(item => item.bloco === block.bloco);
         const campusBadge = formatCampusDisplayName(activeCampus);
         const days = getDaysForBlock(block.bloco);
-        const isBlock3Floor4 = block.bloco.includes('4° ANDAR') && block.rooms.length >= 14;
         
         html += `
           <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden mb-6">
-            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between">
+            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-2.5">
                 <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
                 <h3 class="text-sm sm:text-base font-black tracking-wide">${block.bloco}</h3>
@@ -2729,13 +2857,17 @@
               </div>
               <div class="flex items-center gap-2">
                 ${isAdmin ? `
-                  <button onclick="openReorderModal(${originalBlockIdx})" title="Alterar a ordem das salas deste bloco" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
+                  <button onclick="openReorderModal(${originalBlockIdx})" title="Renomear ou alterar a ordem das salas deste bloco" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
                     <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-amber-300"></i>
-                    <span class="hidden sm:inline">Reordenar</span>
+                    <span class="hidden sm:inline">Renomear / Ordem</span>
                   </button>
                   <button onclick="openNewRoomModal(${originalBlockIdx})" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-900 rounded-md transition-all shadow-xs">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     <span>Nova Sala</span>
+                  </button>
+                  <button onclick="openDeleteBlockModal(${originalBlockIdx})" title="Excluir este bloco inteiro" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-rose-600/80 hover:bg-rose-600 text-white rounded-md border border-rose-400/30 transition-all">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-100"></i>
+                    <span class="hidden md:inline">Excluir Bloco</span>
                   </button>
                 ` : ''}
                 <span class="text-[10px] uppercase font-bold tracking-wider bg-black/20 px-2 py-1 rounded text-amber-200">${campusBadge} • ${getShiftDisplayName()}</span>
@@ -2743,12 +2875,20 @@
             </div>
         `;
 
-        if (isBlock3Floor4) {
-          const slice1 = block.rooms.slice(0, 7);
-          const slice2 = block.rooms.slice(7);
-          html += renderTableSegment(block, originalBlockIdx, slice1, 0, days, 'Parte 1 (Salas 400 a 406)');
-          html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
-          html += renderTableSegment(block, originalBlockIdx, slice2, 7, days, 'Parte 2 (Salas 407 a 415)');
+        if (block.rooms.length === 0) {
+          html += `<div class="p-6 text-center text-xs text-stone-400 italic">Nenhuma sala cadastrada neste bloco. ${isAdmin ? 'Clique em "Nova Sala" acima para adicionar.' : ''}</div>`;
+        } else if (block.rooms.length > MAX_ROOMS_PER_LINE) {
+          let partNum = 1;
+          for (let i = 0; i < block.rooms.length; i += MAX_ROOMS_PER_LINE) {
+            const slice = block.rooms.slice(i, i + MAX_ROOMS_PER_LINE);
+            const firstRoom = slice[0] ? slice[0].sala : '';
+            const lastRoom = slice[slice.length - 1] ? slice[slice.length - 1].sala : '';
+            if (i > 0) {
+              html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
+            }
+            html += renderTableSegment(block, originalBlockIdx, slice, i, days, `Parte ${partNum} (${firstRoom} a ${lastRoom})`);
+            partNum++;
+          }
         } else {
           html += renderTableSegment(block, originalBlockIdx, block.rooms, 0, days);
         }
@@ -3035,17 +3175,25 @@
           let pageCount = 0;
 
           blocksToExport.forEach((block) => {
-            const isFloor4 = block.bloco.includes('4° ANDAR') && block.rooms.length >= 14;
+            if (!block.rooms || block.rooms.length === 0) return;
             const days = getDaysForBlock(block.bloco);
+            const slices = [];
 
-            const slices = isFloor4 
-              ? [
-                  { rooms: block.rooms.slice(0, 7), label: `${block.bloco} - PARTE 1 (SALAS 400 A 406)` },
-                  { rooms: block.rooms.slice(7), label: `${block.bloco} - PARTE 2 (SALAS 407 A 415)` }
-                ]
-              : [
-                  { rooms: block.rooms, label: block.bloco }
-                ];
+            if (block.rooms.length > MAX_ROOMS_PER_LINE) {
+              let partNum = 1;
+              for (let i = 0; i < block.rooms.length; i += MAX_ROOMS_PER_LINE) {
+                const roomChunk = block.rooms.slice(i, i + MAX_ROOMS_PER_LINE);
+                const firstR = roomChunk[0] ? roomChunk[0].sala : '';
+                const lastR = roomChunk[roomChunk.length - 1] ? roomChunk[roomChunk.length - 1].sala : '';
+                slices.push({
+                  rooms: roomChunk,
+                  label: `${block.bloco} - PARTE ${partNum} (${firstR.toUpperCase()} A ${lastR.toUpperCase()})`
+                });
+                partNum++;
+              }
+            } else {
+              slices.push({ rooms: block.rooms, label: block.bloco });
+            }
 
             slices.forEach((slice) => {
               if (pageCount > 0) doc.addPage('a4', 'landscape');
