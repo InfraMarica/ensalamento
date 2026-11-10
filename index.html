@@ -186,7 +186,7 @@
         </div>
         <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
         <div id="roomNavigationControls" class="flex items-center gap-2.5">
-          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner" id="campusButtonsContainer"></div>
+          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shadow-inner shrink-0" id="campusButtonsContainer"></div>
           <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white rounded-lg border border-[#7a001e]/30 shadow-2xs shrink-0"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i><span>Campus</span></button>
           <div class="h-5 w-px bg-stone-300 hidden sm:block"></div>
           <div class="flex items-center gap-1.5" id="blockTabs"></div>
@@ -310,7 +310,6 @@
     const STORAGE_KEYS = { NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10', MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1' };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
     
-    // GERA PROTEÇÃO TOTAL (Armadura contra o Firebase apagando Objetos Vazios)
     function ensureDataIntegrity(data) {
       let safeData = { NOITE: null, MANHA: null };
       if (data && typeof data === 'object' && !Array.isArray(data)) {
@@ -323,7 +322,7 @@
       if (!safeData.NOITE.CAMPUS_1) safeData.NOITE.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
       if (!safeData.NOITE.CAMPUS_2) safeData.NOITE.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
       if (!safeData.MANHA.CAMPUS_1) safeData.MANHA.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
-      if (!data.MANHA.CAMPUS_2) safeData.MANHA.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
+      if (!safeData.MANHA.CAMPUS_2) safeData.MANHA.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
 
       // Reconstrói as "Agendas" que o Firebase apagou
       ['NOITE', 'MANHA'].forEach(s => {
@@ -336,7 +335,6 @@
            });
         });
       });
-
       return safeData;
     }
 
@@ -353,6 +351,7 @@
     let copyClipboard = null;
     let activeMenuTarget = null;
     let isAdmin = false;
+    let activeCampus = 'CAMPUS_2';
     let dbRef = null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -434,8 +433,17 @@
           });
         });
       });
+      
+      // Define os dados ativos
+      activeShift = 'NOITE'; // padrão inicial
       multiCampusData = allShiftsData[activeShift];
-      updateHomeSummaries(); updateAdminUI(); updateCampusUI(); renderTabs(); renderActiveView(); safeCreateIcons();
+      
+      updateHomeSummaries(); 
+      updateAdminUI(); 
+      updateCampusUI(); 
+      renderTabs(); 
+      renderActiveView(); 
+      safeCreateIcons();
     }
 
     function countShiftStats(dataset) {
@@ -462,8 +470,15 @@
       if (elNoite) elNoite.innerText = `${statsNoite.totalRooms} Salas • ${statsNoite.allocatedSlots} turmas`;
     }
 
+    function formatCampusDisplayName(key) {
+      if (key === 'CAMPUS_1') return 'CAMPUS 1';
+      if (key === 'CAMPUS_2') return 'CAMPUS 2';
+      return key.replace(/_/g, ' ').toUpperCase();
+    }
+
     function getShiftDisplayName(shift = activeShift) { return shift === 'MANHA' ? 'Manhã / Integral' : 'Noturno'; }
     function getShiftShortSlug(shift = activeShift) { return shift === 'MANHA' ? 'Manha_Integral' : 'Noite'; }
+    function getShiftUpperTitle(shift = activeShift) { return shift === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOITE'; }
 
     function openHomeScreen() {
       clearCopyPasteMode(); closeTurmaActionMenu(); updateHomeSummaries();
@@ -473,7 +488,8 @@
     function selectShiftAndEnter(shiftKey) {
       try {
         switchShift(shiftKey);
-        document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
+        document.getElementById('homeScreen').classList.add('hidden'); 
+        safeCreateIcons();
       } catch(err) {
         console.error("Erro fatal ao entrar no turno:", err);
       }
@@ -483,29 +499,52 @@
       activeShift = shiftKey; 
       multiCampusData = allShiftsData[activeShift]; 
       activeCampus = 'CAMPUS_2';
-      selectedBlockFilter = 'ALL'; selectedCourseFilter = 'ALL'; searchQuery = '';
-      const searchEl = document.getElementById('searchInput'); if (searchEl) searchEl.value = '';
-      clearCopyPasteMode(); closeTurmaActionMenu(); updateShiftUI(); updateCampusUI();
-      renderTabs(); renderActiveView(); safeCreateIcons();
+      selectedBlockFilter = 'ALL'; 
+      selectedCourseFilter = 'ALL'; 
+      searchQuery = '';
+      
+      const searchEl = document.getElementById('searchInput'); 
+      if (searchEl) searchEl.value = '';
+      
+      clearCopyPasteMode(); 
+      closeTurmaActionMenu(); 
+      
+      // Atualizações de Tela
+      updateShiftUI(); 
+      updateCampusUI();
+      renderTabs(); 
+      renderActiveView(); 
+      safeCreateIcons();
     }
 
     function updateShiftUI() {
-      const badge = document.getElementById('shiftHeaderBadge'), mainTitle = document.getElementById('headerMainTitle');
-      const btnQuickManha = document.getElementById('btnQuickShiftManha'), btnQuickNoite = document.getElementById('btnQuickShiftNoite');
+      const badge = document.getElementById('shiftHeaderBadge');
+      const mainTitle = document.getElementById('headerMainTitle');
+      const btnQuickManha = document.getElementById('btnQuickShiftManha');
+      const btnQuickNoite = document.getElementById('btnQuickShiftNoite');
+      
       if (activeShift === 'MANHA') {
-        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
-        badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
-        mainTitle.innerText = 'Mapa de Ensalamento Manhã / Integral';
+        if(badge) {
+            badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
+            badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
+        }
+        if(mainTitle) mainTitle.innerText = 'Mapa de Ensalamento Manhã / Integral';
         if(btnQuickManha) btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
         if(btnQuickNoite) btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       } else {
-        badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
-        badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
-        mainTitle.innerText = 'Mapa de Ensalamento Noturno';
+        if(badge) {
+            badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
+            badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
+        }
+        if(mainTitle) mainTitle.innerText = 'Mapa de Ensalamento Noturno';
         if(btnQuickNoite) btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
         if(btnQuickManha) btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       }
-      document.getElementById('headerCampusLabel').innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
+      
+      const campusLabel = document.getElementById('headerCampusLabel');
+      if (campusLabel) {
+         campusLabel.innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
+      }
     }
 
     function switchViewMode(mode) {
@@ -513,19 +552,24 @@
       const btnRooms = document.getElementById('btnViewRooms'), btnCourses = document.getElementById('btnViewCourses');
       const roomNav = document.getElementById('roomNavigationControls'), courseNav = document.getElementById('courseNavigationControls');
       const matricesEl = document.getElementById('matricesContainer'), coursesEl = document.getElementById('coursesViewContainer');
+      const pdfLbl = document.getElementById('pdfBtnLabel');
 
       if (mode === 'ROOMS') {
         if(btnRooms) btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
         if(btnCourses) btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
-        roomNav.classList.replace('hidden', 'flex'); courseNav.classList.replace('flex', 'hidden');
-        matricesEl.classList.remove('hidden'); coursesEl.classList.add('hidden');
-        document.getElementById('pdfBtnLabel').innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
+        if(roomNav) roomNav.classList.replace('hidden', 'flex'); 
+        if(courseNav) courseNav.classList.replace('flex', 'hidden');
+        if(matricesEl) matricesEl.classList.remove('hidden'); 
+        if(coursesEl) coursesEl.classList.add('hidden');
+        if(pdfLbl) pdfLbl.innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
       } else {
         if(btnCourses) btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
         if(btnRooms) btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
-        roomNav.classList.replace('flex', 'hidden'); courseNav.classList.replace('hidden', 'flex');
-        matricesEl.classList.add('hidden'); coursesEl.classList.remove('hidden');
-        document.getElementById('pdfBtnLabel').innerText = 'PDF (Salas por Curso)';
+        if(roomNav) roomNav.classList.replace('flex', 'hidden'); 
+        if(courseNav) courseNav.classList.replace('hidden', 'flex');
+        if(matricesEl) matricesEl.classList.add('hidden'); 
+        if(coursesEl) coursesEl.classList.remove('hidden');
+        if(pdfLbl) pdfLbl.innerText = 'PDF (Salas por Curso)';
       }
       updateShiftUI(); renderActiveView(); safeCreateIcons();
     }
@@ -533,7 +577,10 @@
     function handlePrimaryPdfButton() { activeViewMode === 'COURSES' ? exportCoursesPDF() : exportNativePDF(selectedBlockFilter === 'ALL'); }
     function renderActiveView() { activeViewMode === 'COURSES' ? renderCoursesView() : renderMatrices(); }
 
-    function getActiveCampusBlocks() { return getArray(multiCampusData[activeCampus]); }
+    function getActiveCampusBlocks() { 
+        if(!multiCampusData || !activeCampus) return [];
+        return getArray(multiCampusData[activeCampus]); 
+    }
 
     function formatShortRoomCode(roomName, campusKey) {
       const cSuffix = campusKey === 'CAMPUS_1' ? 'C1' : (campusKey === 'CAMPUS_2' ? 'C2' : campusKey);
@@ -656,7 +703,7 @@
                           ${(row.studentCount || row.hasPMR) ? `
                             <div class="inline-flex flex-wrap items-center justify-center gap-1">
                               ${row.studentCount ? `<span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-stone-200/90 text-stone-700">${row.studentCount} alunos</span>` : ''}
-                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs" title="Turma com aluno de mobilidade reduzida (PMR)"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
+                              ${row.hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-2xs"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
                             </div>
                           ` : ''}
                         </div>
@@ -676,6 +723,136 @@
       container.innerHTML = html;
     }
 
+    function formatTurmaCardContent(rawContent) {
+      if (!rawContent) return '';
+      const normalized = normalizeTurmaText(rawContent.trim());
+      const match = normalized.match(/^(.*?)\s*\((\d+)\s*(?:alunos?)?\)\s*$/i);
+      const paddingRight = isAdmin ? 'pr-3' : '';
+      if (match) {
+        return `
+          <span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${match[1].trim().replace(/\n/g, '<br>')}</span>
+          <span class="inline-block text-[9.5px] font-bold text-stone-600 bg-stone-100 border border-stone-200/80 px-1.5 py-0.2 rounded-md mt-0.5">${match[2]} alunos</span>
+        `;
+      }
+      return `<span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${normalized.replace(/\n/g, '<br>')}</span>`;
+    }
+
+    function openTurmaActionMenu(event, blockIdx, roomIdx, day) {
+      event.stopPropagation();
+      if (!isAdmin) return;
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+      activeMenuTarget = { blockIdx, roomIdx, day };
+      const menu = document.getElementById('turmaActionMenu');
+      document.getElementById('turmaMenuTitle').innerText = normalizeTurmaText(room.schedule[day] || '');
+      document.getElementById('turmaMenuSubtitle').innerText = `${room.sala} • ${day}`;
+      menu.classList.remove('hidden');
+      const rect = event.currentTarget.getBoundingClientRect();
+      let left = rect.right - 176, top = rect.bottom + 4;
+      if (left < 10) left = 10;
+      if (top + 135 > window.innerHeight) top = rect.top - 135;
+      menu.style.left = `${left}px`; menu.style.top = `${top}px`;
+      safeCreateIcons();
+    }
+
+    function closeTurmaActionMenu() { const m = document.getElementById('turmaActionMenu'); if (m) m.classList.add('hidden'); activeMenuTarget = null; }
+
+    function triggerCopyFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx, day } = activeMenuTarget; closeTurmaActionMenu();
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+      const turma = normalizeTurmaText(room.schedule[day] || '');
+      if (!turma) return;
+      copyClipboard = { turma, pmr: !!(room.pmr && room.pmr[day]) };
+      document.getElementById('copyBannerText').innerText = turma;
+      document.getElementById('copyModeBanner').classList.remove('hidden');
+      renderActiveView(); safeCreateIcons();
+      showToast(`Modo Duplicar Ativo para "${turma}"!`);
+    }
+
+    function triggerEditFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx } = activeMenuTarget; closeTurmaActionMenu();
+      openEditModal(blockIdx, roomIdx);
+    }
+
+    function triggerDeleteFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx, roomIdx, day } = activeMenuTarget; closeTurmaActionMenu();
+      const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+      room.schedule[day] = ''; if (room.pmr) room.pmr[day] = false;
+      saveToStorage(); renderActiveView(); safeCreateIcons();
+      showToast(`Turma removida da ${room.sala} (${day})!`);
+    }
+
+    function handleDragStart(event, blockIdx, roomIdx, day, forceDuplicate = false) {
+      if (!isAdmin) { event.preventDefault(); return; }
+      event.stopPropagation(); closeTurmaActionMenu();
+      dragSource = { campus: activeCampus, blockIdx, roomIdx, day, forceDuplicate: forceDuplicate || event.ctrlKey || event.altKey };
+      event.dataTransfer.effectAllowed = 'copyMove'; event.dataTransfer.setData('text/plain', `${blockIdx}:${roomIdx}:${day}`);
+      setTimeout(() => (event.currentTarget.closest('.turma-card') || event.currentTarget).classList.add('dragging-card'), 0);
+    }
+
+    function handleDragEnd(event) {
+      (event.currentTarget.closest('.turma-card') || event.currentTarget).classList.remove('dragging-card');
+      document.querySelectorAll('.drag-over-cell').forEach(el => el.classList.remove('drag-over-cell'));
+    }
+
+    function handleDragOver(event) { if (isAdmin) { event.preventDefault(); event.currentTarget.classList.add('drag-over-cell'); } }
+    function handleDragLeave(event) { event.currentTarget.classList.remove('drag-over-cell'); }
+
+    function handleDrop(event, targetBlockIdx, targetRoomIdx, targetDay) {
+      if (!isAdmin) return;
+      event.preventDefault(); event.stopPropagation(); event.currentTarget.classList.remove('drag-over-cell');
+      if (!dragSource || dragSource.campus !== activeCampus) return;
+
+      const { blockIdx: srcB, roomIdx: srcR, day: srcD, forceDuplicate } = dragSource;
+      if (srcB === targetBlockIdx && srcR === targetRoomIdx && srcD === targetDay) { dragSource = null; return; }
+
+      const blocks = getActiveCampusBlocks();
+      const srcRoom = blocks[srcB].rooms[srcR], destRoom = blocks[targetBlockIdx].rooms[targetRoomIdx];
+      srcRoom.pmr = srcRoom.pmr || {}; destRoom.pmr = destRoom.pmr || {};
+      const srcTurma = srcRoom.schedule[srcD] || '', srcPmr = !!srcRoom.pmr[srcD];
+      const destTurma = destRoom.schedule[targetDay] || '', destPmr = !!destRoom.pmr[targetDay];
+
+      if (forceDuplicate || event.ctrlKey || event.altKey) {
+        destRoom.schedule[targetDay] = srcTurma; destRoom.pmr[targetDay] = srcPmr;
+        showToast(`Turma duplicada para ${destRoom.sala}!`);
+      } else {
+        destRoom.schedule[targetDay] = srcTurma; destRoom.pmr[targetDay] = srcPmr;
+        srcRoom.schedule[srcD] = destTurma; srcRoom.pmr[srcD] = destPmr;
+        showToast(destTurma ? 'Turmas trocadas!' : 'Turma movida!');
+      }
+      dragSource = null; saveToStorage(); renderActiveView(); safeCreateIcons();
+    }
+
+    function clearCopyPasteMode() { 
+      copyClipboard = null; 
+      const banner = document.getElementById('copyModeBanner');
+      if(banner) banner.classList.add('hidden'); 
+      renderActiveView(); 
+      safeCreateIcons(); 
+    }
+
+    function handleCellClick(blockIdx, roomIdx, day) {
+      if (!isAdmin) return;
+      closeTurmaActionMenu();
+      if (copyClipboard) {
+        const room = getActiveCampusBlocks()[blockIdx].rooms[roomIdx];
+        room.schedule[day] = copyClipboard.turma; room.pmr = room.pmr || {}; room.pmr[day] = copyClipboard.pmr;
+        saveToStorage(); renderActiveView(); safeCreateIcons(); showToast(`Colada na ${room.sala}!`);
+        return;
+      }
+      openEditModal(blockIdx, roomIdx);
+    }
+
+    function saveToStorage() {
+      allShiftsData[activeShift] = multiCampusData;
+      localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+      localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+      if (dbRef) dbRef.set(allShiftsData).catch(err => { console.error("Erro Firebase:", err); showToast("Falha ao salvar online."); });
+      updateHomeSummaries();
+    }
+
     function renderTabs() {
       const tabsEl = document.getElementById('blockTabs');
       const blocks = getActiveCampusBlocks();
@@ -687,9 +864,10 @@
         html += `<button onclick="setFilter('${b.bloco}')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider whitespace-nowrap transition-all ${isActive ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-200'}">${b.bloco}</button>`;
       });
 
-      tabsEl.innerHTML = html;
-      if (activeViewMode === 'ROOMS') {
-        document.getElementById('pdfBtnLabel').innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
+      if(tabsEl) tabsEl.innerHTML = html;
+      const pdfLbl = document.getElementById('pdfBtnLabel');
+      if (activeViewMode === 'ROOMS' && pdfLbl) {
+        pdfLbl.innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
       }
     }
 
@@ -708,6 +886,7 @@
     }
 
     function getDaysForBlock(blockName) {
+      if (!blockName) return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
       if (blockName.includes('3° ANDAR') || blockName.includes('4° ANDAR') || blockName.includes('3º ANDAR')) {
         return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA'];
       }
@@ -814,6 +993,8 @@
 
     function renderMatrices() {
       const container = document.getElementById('matricesContainer');
+      if (!container) return;
+      
       const blocks = getActiveCampusBlocks();
       const filteredBlocks = selectedBlockFilter === 'ALL' ? blocks : blocks.filter(b => b.bloco === selectedBlockFilter);
 
@@ -823,14 +1004,15 @@
         const campusBadge = formatCampusDisplayName(activeCampus);
         const days = getDaysForBlock(block.bloco);
         const roomsArray = getArray(block.rooms);
-        const isBlock3Floor4 = block.bloco.includes('4° ANDAR') && roomsArray.length >= 14;
+        const blockName = block.bloco || '';
+        const isBlock3Floor4 = blockName.includes('4° ANDAR') && roomsArray.length >= 14;
         
         html += `
           <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden mb-6">
             <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between">
               <div class="flex items-center gap-2.5">
                 <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
-                <h3 class="text-sm sm:text-base font-black tracking-wide">${block.bloco}</h3>
+                <h3 class="text-sm sm:text-base font-black tracking-wide">${blockName}</h3>
                 <span class="text-xs text-amber-100/90 font-medium">• ${roomsArray.length} Salas Alocadas</span>
               </div>
               <div class="flex items-center gap-2">
@@ -980,10 +1162,14 @@
       }, 50);
     }
 
-    function togglePdfDropdown() { document.getElementById('pdfDropdownMenu').classList.toggle('hidden'); }
+    function togglePdfDropdown() { 
+        const menu = document.getElementById('pdfDropdownMenu'); 
+        if(menu) menu.classList.toggle('hidden'); 
+    }
+    
     document.addEventListener('click', (e) => {
       const container = document.getElementById('pdfDropdownContainer'), menu = document.getElementById('pdfDropdownMenu');
-      if (container && !container.contains(e.target)) menu.classList.add('hidden');
+      if (container && !container.contains(e.target) && menu) menu.classList.add('hidden');
       const actionMenu = document.getElementById('turmaActionMenu');
       if (actionMenu && !actionMenu.contains(e.target)) closeTurmaActionMenu();
     });
@@ -1004,7 +1190,8 @@
     }
 
     function showToast(msg) {
-      const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0');
+      const toast = document.getElementById('toast'); if(!toast) return;
+      toast.innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0');
       setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
     }
 
@@ -1015,46 +1202,93 @@
         const isActive = activeCampus === k;
         html += `<button onclick="switchCampus('${k}')" class="px-3.5 py-1 text-xs font-black rounded-lg transition-all ${isActive ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}">${formatCampusDisplayName(k)}</button>`;
       });
-      container.innerHTML = html;
-      if (activeViewMode === 'ROOMS') document.getElementById('headerCampusLabel').innerText = `| ${formatCampusDisplayName(activeCampus)}`;
+      if(container) container.innerHTML = html;
+      const lbl = document.getElementById('headerCampusLabel');
+      if (activeViewMode === 'ROOMS' && lbl) lbl.innerText = `| ${formatCampusDisplayName(activeCampus)}`;
     }
 
     function getAdminPassword() { return localStorage.getItem(ADMIN_PASS_KEY) || 'admin'; }
+    
     function handleAdminButtonClick() {
       if (isAdmin) {
         isAdmin = false; clearCopyPasteMode(); closeTurmaActionMenu(); updateAdminUI(); renderActiveView(); safeCreateIcons();
         showToast('Modo Administrador bloqueado.');
       } else {
-        document.getElementById('adminPasswordInput').value = ''; document.getElementById('adminLoginError').classList.add('hidden');
-        document.getElementById('adminLoginModal').classList.remove('hidden'); setTimeout(() => document.getElementById('adminPasswordInput').focus(), 50);
+        const passIn = document.getElementById('adminPasswordInput');
+        const err = document.getElementById('adminLoginError');
+        const modal = document.getElementById('adminLoginModal');
+        if(passIn) passIn.value = ''; 
+        if(err) err.classList.add('hidden');
+        if(modal) modal.classList.remove('hidden'); 
+        setTimeout(() => { if(passIn) passIn.focus(); }, 50);
       }
     }
-    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+    
+    function closeAdminLoginModal() { 
+        const m = document.getElementById('adminLoginModal'); 
+        if(m) m.classList.add('hidden'); 
+    }
+    
     function verifyAdminPassword(e) {
       e.preventDefault();
-      if (document.getElementById('adminPasswordInput').value === getAdminPassword()) {
+      const passIn = document.getElementById('adminPasswordInput');
+      if (passIn && passIn.value === getAdminPassword()) {
         isAdmin = true; closeAdminLoginModal(); updateAdminUI(); renderActiveView(); safeCreateIcons(); showToast('Modo Admin liberado!');
-      } else { document.getElementById('adminLoginError').classList.remove('hidden'); }
+      } else { 
+        const err = document.getElementById('adminLoginError');
+        if(err) err.classList.remove('hidden'); 
+      }
     }
-    function openChangePassModal() { if (!isAdmin) return; document.getElementById('newAdminPassInput').value = ''; document.getElementById('changePassModal').classList.remove('hidden'); setTimeout(() => document.getElementById('newAdminPassInput').focus(), 50); }
-    function closeChangePassModal() { document.getElementById('changePassModal').classList.add('hidden'); }
-    function saveNewAdminPassword(e) { e.preventDefault(); const newPass = document.getElementById('newAdminPassInput').value.trim(); if (!newPass) return; localStorage.setItem(ADMIN_PASS_KEY, newPass); closeChangePassModal(); showToast('Senha alterada com sucesso!'); }
+    
+    function openChangePassModal() { 
+        if (!isAdmin) return; 
+        const passIn = document.getElementById('newAdminPassInput');
+        if(passIn) passIn.value = ''; 
+        const m = document.getElementById('changePassModal');
+        if(m) m.classList.remove('hidden'); 
+        setTimeout(() => { if(passIn) passIn.focus(); }, 50); 
+    }
+    function closeChangePassModal() { 
+        const m = document.getElementById('changePassModal');
+        if(m) m.classList.add('hidden'); 
+    }
+    function saveNewAdminPassword(e) { 
+        e.preventDefault(); 
+        const passIn = document.getElementById('newAdminPassInput');
+        if(!passIn) return;
+        const newPass = passIn.value.trim(); 
+        if (!newPass) return; 
+        localStorage.setItem(ADMIN_PASS_KEY, newPass); 
+        closeChangePassModal(); showToast('Senha alterada com sucesso!'); 
+    }
     
     function updateAdminUI() {
       const adminControls = document.getElementById('adminHeaderControls'), btnAdminToggle = document.getElementById('btnAdminToggle');
       const roleBadge = document.getElementById('roleStatusBadge'), btnNovoCampus = document.getElementById('btnNovoCampus'), btnNovoBloco = document.getElementById('btnNovoBloco');
       if (isAdmin) {
-        adminControls.classList.replace('hidden', 'flex'); btnNovoCampus.classList.replace('hidden', 'inline-flex'); btnNovoBloco.classList.replace('hidden', 'inline-flex');
-        btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-900 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 rounded-lg shrink-0';
-        btnAdminToggle.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5 text-emerald-700"></i><span>Bloquear</span>`;
-        roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300';
-        roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3 text-emerald-700"></i> Modo Admin`;
+        if(adminControls) adminControls.classList.replace('hidden', 'flex'); 
+        if(btnNovoCampus) btnNovoCampus.classList.replace('hidden', 'inline-flex'); 
+        if(btnNovoBloco) btnNovoBloco.classList.replace('hidden', 'inline-flex');
+        if(btnAdminToggle) {
+            btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-900 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 rounded-lg shrink-0';
+            btnAdminToggle.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5 text-emerald-700"></i><span>Bloquear</span>`;
+        }
+        if(roleBadge) {
+            roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300';
+            roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3 text-emerald-700"></i> Modo Admin`;
+        }
       } else {
-        adminControls.classList.replace('flex', 'hidden'); btnNovoCampus.classList.replace('inline-flex', 'hidden'); btnNovoBloco.classList.replace('inline-flex', 'hidden');
-        btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0';
-        btnAdminToggle.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span>`;
-        roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200';
-        roleBadge.innerHTML = `<i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura`;
+        if(adminControls) adminControls.classList.replace('flex', 'hidden'); 
+        if(btnNovoCampus) btnNovoCampus.classList.replace('inline-flex', 'hidden'); 
+        if(btnNovoBloco) btnNovoBloco.classList.replace('inline-flex', 'hidden');
+        if(btnAdminToggle) {
+            btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0';
+            btnAdminToggle.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-stone-600"></i><span>Admin</span>`;
+        }
+        if(roleBadge) {
+            roleBadge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200';
+            roleBadge.innerHTML = `<i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura`;
+        }
       }
       safeCreateIcons();
     }
