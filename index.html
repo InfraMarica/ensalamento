@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Ensalamento | Univassouras & FACMAR</title>
+  <title>Sistema de Ensalamento | Univassouras Campus Saquarema</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Plus Jakarta Sans -->
@@ -62,7 +62,7 @@
         </div>
         <div>
           <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
-            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
+            UNIVASSOURAS CAMPUS SAQUAREMA
           </span>
           <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
             Portal Integrado de Ensalamento Acadêmico
@@ -84,7 +84,7 @@
         Escolha o Turno de Ensalamento
       </h2>
       <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">
-        Cada turno possui mapas de salas, distribuição de turmas e relatórios em PDF independentes para os Campi 1 e 2.
+        Cada turno possui mapas de salas, distribuição de turmas e relatórios em PDF independentes para os Campi 1 e 3.
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
@@ -137,7 +137,7 @@
               Noturno
             </h3>
             <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento das turmas da noite nos Campi 1 e 2, distribuição automática e visualização por curso.
+              Grade de ensalamento das turmas da noite nos Campi 1 e 3, distribuição automática e visualização por curso.
             </p>
           </div>
 
@@ -154,7 +154,7 @@
 
     <!-- Rodapé da Homepage -->
     <div class="max-w-5xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
-      <span>Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
+      <span>Univassouras Campus Saquarema • Infraestrutura Acadêmica</span>
       <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
     </div>
   </div>
@@ -214,7 +214,7 @@
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="block text-xs sm:text-[13px] font-black uppercase tracking-wider text-[#7a001e] leading-tight">
-              UNIVASSOURAS CAMPUS MARICÁ E FACMAR
+              UNIVASSOURAS CAMPUS SAQUAREMA
             </span>
             <span id="shiftHeaderBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
               Noturno
@@ -224,7 +224,7 @@
             </span>
           </div>
           <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900 leading-tight">
-            <span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span>
+            <span id="headerMainTitle">Mapa de Ensalamento Noturno</span> <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 3</span>
           </h1>
         </div>
       </div>
@@ -488,22 +488,18 @@
             <select id="distCurso" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
               <option value="" disabled selected>Selecione o Curso...</option>
               <option value="Adm">Administração (Adm)</option>
-              <option value="Ads">Análise de Sistemas (Ads)</option>
               <option value="Biomedicina">Biomedicina</option>
               <option value="Contábeis">Ciências Contábeis (Contábeis)</option>
-              <option value="Direito">Direito</option>
               <option value="Ed. Física">Educação Física (Ed. Física)</option>
               <option value="Enfermagem">Enfermagem</option>
               <option value="Civil">Engenharia Civil (Civil)</option>
               <option value="Software">Engenharia de Software (Software)</option>
               <option value="Fisioterapia">Fisioterapia</option>
-              <option value="Gastronomia">Gastronomia</option>
-              <option value="Ambiental">Gestão Ambiental (Ambiental)</option>
               <option value="Veterinária">Medicina Veterinária (Veterinária)</option>
               <option value="Nutrição">Nutrição</option>
+              <option value="Odonto">Odontologia (Odonto)</option>
               <option value="Pedagogia">Pedagogia</option>
               <option value="Psicologia">Psicologia</option>
-              <option value="Rh">Recursos Humanos (Rh)</option>
               <option value="Seso">Serviço Social (Seso)</option>
               <option value="T.o">Terapia Ocupacional (T.o)</option>
             </select>
@@ -531,9 +527,9 @@
           <div>
             <label class="block text-xs font-bold text-stone-700 mb-1">Campus Desejado</label>
             <select id="distCampusPref" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold">
-              <option value="ONLY_C2">Apenas Campus 2</option>
+              <option value="ONLY_C2">Apenas Campus 3</option>
               <option value="ONLY_C1">Apenas Campus 1</option>
-              <option value="PREF_C2">Preferencialmente Campus 2</option>
+              <option value="PREF_C2">Preferencialmente Campus 3</option>
               <option value="PREF_C1">Preferencialmente Campus 1</option>
             </select>
           </div>
@@ -685,7 +681,7 @@
         <div class="pt-2">
           <div class="flex items-center justify-between mb-2">
             <span class="block text-[11px] font-black uppercase tracking-wider text-[#7a001e]">Turmas Alocadas por Dia</span>
-            <span class="text-[10px] text-stone-400 font-semibold">Ex: 4º Direito A (50)</span>
+            <span class="text-[10px] text-stone-400 font-semibold">Ex: 4º Odonto A (50)</span>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -870,31 +866,31 @@
     </div>
   </div>
 
-  <!-- MODAL REORDENAR SALAS -->
+  <!-- MODAL REORDENAR E RENOMEAR SALAS -->
   <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-stone-200">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
         <div>
-          <h3 class="text-base font-black text-[#7a001e]">Reordenar Salas</h3>
+          <h3 class="text-base font-black text-[#7a001e]">Reordenar e Renomear Salas</h3>
           <p class="text-xs text-stone-500" id="reorderBlockLabel">Bloco</p>
         </div>
         <button onclick="closeReorderModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <p class="text-xs text-stone-500 mt-2 mb-3">Utilize as setas para mover as salas para a esquerda/direita (ordem na tabela):</p>
+      <p class="text-xs text-stone-500 mt-2 mb-3">Edite os nomes das salas diretamente nos campos abaixo ou use as setas para alterar a ordem:</p>
       <div id="reorderRoomsList" class="max-h-72 overflow-y-auto space-y-1.5 pr-1"></div>
       <div class="flex items-center justify-end gap-2 pt-4 mt-3 border-t border-stone-100">
         <button type="button" onclick="closeReorderModal()" class="px-3.5 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-        <button type="button" onclick="saveReorderRooms()" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg shadow-sm">Salvar Nova Ordem</button>
+        <button type="button" onclick="saveReorderRooms()" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg shadow-sm">Salvar Alterações</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL NOVO BLOCO -->
+  <!-- MODAL NOVO BLOCO (COM QUANTIDADE E RENOMEAÇÃO DE SALAS) -->
   <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
-      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-stone-200 max-h-[92vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100 shrink-0">
         <div>
           <h3 class="text-base font-black text-[#7a001e]">Adicionar Novo Bloco</h3>
           <p class="text-xs text-stone-500" id="newBlockCampusLabel">Campus</p>
@@ -903,16 +899,46 @@
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
-      <form id="newBlockForm" onsubmit="saveNewBlock(event)" class="mt-4 space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-stone-700 mb-1">Nome do Bloco</label>
-          <input type="text" id="newBlockNameInput" required placeholder="Ex: BLOCO 4, ANEXO B..." class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
+      <form id="newBlockForm" onsubmit="saveNewBlock(event)" class="mt-4 space-y-3 flex-1 overflow-hidden flex flex-col">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-stone-700 mb-1">Nome do Bloco</label>
+            <input type="text" id="newBlockNameInput" required placeholder="Ex: BLOCO 5, ANEXO..." class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Qtd. de Salas</label>
+            <input type="number" id="newBlockRoomCount" min="0" max="60" value="5" oninput="generateNewBlockRoomInputs(this.value)" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-black text-stone-900">
+          </div>
         </div>
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-stone-100">
+
+        <div class="pt-1 flex-1 overflow-hidden flex flex-col">
+          <div class="flex items-center justify-between mb-1.5 shrink-0">
+            <span class="text-[11px] font-black uppercase tracking-wider text-[#7a001e]">Configurar e Renomear Salas do Bloco</span>
+            <span class="text-[10px] text-stone-400 font-semibold">Máx. 13 salas por linha na tabela</span>
+          </div>
+          <div id="newBlockRoomsContainer" class="overflow-y-auto space-y-1.5 pr-1 max-h-60 border border-stone-100 rounded-xl p-2 bg-stone-50/50"></div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-stone-100 shrink-0">
           <button type="button" onclick="closeNewBlockModal()" class="px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-100 rounded-lg">Cancelar</button>
-          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Criar Bloco</button>
+          <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] hover:bg-[#620018] rounded-lg">Criar Bloco e Salas</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE CONFIRMAÇÃO PARA EXCLUIR BLOCO -->
+  <div id="deleteBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200 text-center">
+      <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="trash-2" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base font-black text-stone-900 mb-1">Excluir Bloco Inteiro?</h3>
+      <p class="text-xs text-stone-500 mb-4" id="deleteBlockConfirmDesc">Tem certeza que deseja excluir este bloco e todas as suas salas?</p>
+      <div class="flex items-center justify-center gap-2">
+        <button type="button" onclick="closeDeleteBlockModal()" class="px-3.5 py-1.5 text-xs font-semibold text-stone-600 hover:bg-stone-100 rounded-lg">Cancelar</button>
+        <button type="button" onclick="confirmDeleteBlock()" class="px-4 py-1.5 text-xs font-bold text-white bg-rose-700 hover:bg-rose-800 rounded-lg shadow-sm">Sim, Excluir Bloco</button>
+      </div>
     </div>
   </div>
 
@@ -944,145 +970,158 @@
   <!-- NOTIFICAÇÃO TOAST -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
 
-  <script>
+<script>
     const INITIAL_CAMPUS_1 = [
       {
-        "bloco": "CAMPUS 1 - 1º e 2º ANDAR",
+        "bloco": "CAMPUS 1 - COLÉGIO",
         "rooms": [
-          { "sala": "Sala 12", "andar": "1º andar", "subtitulo": "", "capacidade": "80", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Lab. 01", "andar": "2º andar", "subtitulo": "Informática", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Lab. 02", "andar": "2º andar", "subtitulo": "Informática", "capacidade": 45, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Lab. 03", "andar": "2º andar", "subtitulo": "Informática", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 22", "andar": "2º andar", "subtitulo": "", "capacidade": 48, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 23", "andar": "2º andar", "subtitulo": "", "capacidade": 44, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 24", "andar": "2º andar", "subtitulo": "", "capacidade": 62, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 25", "andar": "2º andar", "subtitulo": "", "capacidade": 79, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 26", "andar": "2º andar", "subtitulo": "", "capacidade": 62, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 27", "andar": "2º andar", "subtitulo": "", "capacidade": 63, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 28", "andar": "2º andar", "subtitulo": "", "capacidade": 47, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false }
+          { "sala": "Sala 13", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 12", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 11", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 10", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 09", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 08", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 07", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 06", "andar": "Térreo", "subtitulo": "", "capacidade": 52, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 05", "andar": "Térreo", "subtitulo": "", "capacidade": 52, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 04", "andar": "Térreo", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 03", "andar": "Térreo", "subtitulo": "", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       },
       {
-        "bloco": "CAMPUS 1 - 3º ANDAR",
+        "bloco": "CAMPUS 1 - TÉRREO E 1º ANDAR",
         "rooms": [
-          { "sala": "Sala 34", "andar": "3º Andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 36", "andar": "3º Andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 37", "andar": "3º Andar", "subtitulo": "", "capacidade": 65, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false }
+          { "sala": "Auditório", "andar": "1º andar", "subtitulo": "", "capacidade": 85, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 14", "andar": "1º andar", "subtitulo": "", "capacidade": 45, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 15", "andar": "1º andar", "subtitulo": "", "capacidade": 35, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 16", "andar": "1º andar", "subtitulo": "", "capacidade": 63, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 17", "andar": "1º andar", "subtitulo": "", "capacidade": 38, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 18", "andar": "1º andar", "subtitulo": "", "capacidade": 52, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 19", "andar": "1º andar", "subtitulo": "", "capacidade": 52, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 20", "andar": "1º andar", "subtitulo": "", "capacidade": 54, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 21", "andar": "Térreo", "subtitulo": "", "capacidade": 80, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 22", "andar": "Térreo", "subtitulo": "", "capacidade": 90, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 23", "andar": "Térreo", "subtitulo": "", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 24", "andar": "Térreo", "subtitulo": "", "capacidade": 58, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       }
     ];
 
     const INITIAL_CAMPUS_2 = [
       {
-        "bloco": "BLOCO 1 E 2",
+        "bloco": "BLOCO 1 - 1º ANDAR",
         "rooms": [
-          { "sala": "Sala 06", "andar": "Térreo", "subtitulo": "", "capacidade": "80", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 20", "andar": "2° andar", "subtitulo": "", "capacidade": "76", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 21", "andar": "2° andar", "subtitulo": "", "capacidade": "73", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 22", "andar": "2° andar", "subtitulo": "", "capacidade": "75", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 23", "andar": "2° andar", "subtitulo": "", "capacidade": "80", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 25", "andar": "2° andar", "subtitulo": "", "capacidade": "75", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 26", "andar": "2° andar", "subtitulo": "Metodologias Ativas", "capacidade": "54", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 29", "andar": "2° andar", "subtitulo": "", "capacidade": "76", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+          { "sala": "Lab. 01", "andar": "1º andar", "subtitulo": "Informática", "capacidade": 38, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Lab. 02", "andar": "1º andar", "subtitulo": "Informática", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 101", "andar": "1º andar", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 102", "andar": "1º andar", "subtitulo": "", "capacidade": 75, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 103", "andar": "1º andar", "subtitulo": "", "capacidade": 53, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 104", "andar": "1º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 105", "andar": "1º andar", "subtitulo": "", "capacidade": 65, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 106", "andar": "1º andar", "subtitulo": "", "capacidade": 40, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       },
       {
-        "bloco": "BLOCO 3 - 1° ANDAR",
+        "bloco": "BLOCO 1 - 2º ANDAR",
         "rooms": [
-          { "sala": "Sala 100", "andar": "Térreo", "subtitulo": "", "capacidade": "53", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 102", "andar": "Térreo", "subtitulo": "", "capacidade": "51", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 104", "andar": "Térreo", "subtitulo": "", "capacidade": "48", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 105", "andar": "Térreo", "subtitulo": "", "capacidade": "51", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 106", "andar": "Térreo", "subtitulo": "", "capacidade": "49", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 107", "andar": "Térreo", "subtitulo": "", "capacidade": "49", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 108", "andar": "Térreo", "subtitulo": "", "capacidade": "48", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 109", "andar": "Térreo", "subtitulo": "", "capacidade": "45", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+          { "sala": "Sala 200", "andar": "2º andar", "subtitulo": "", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 201", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 202", "andar": "2º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 203", "andar": "2º andar", "subtitulo": "", "capacidade": 75, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 204", "andar": "2º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 205", "andar": "2º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 206", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Lab. 03", "andar": "2º andar", "subtitulo": "Informática", "capacidade": 62, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       },
       {
-        "bloco": "BLOCO 3 - 2° ANDAR",
+        "bloco": "BLOCO 1 - 3º ANDAR",
         "rooms": [
-          { "sala": "Lab. Informática 01", "andar": "2° Andar", "subtitulo": "", "capacidade": "56", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Lab. Informática 02", "andar": "2° Andar", "subtitulo": "", "capacidade": "36", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Lab. Informática 03", "andar": "2° Andar", "subtitulo": "", "capacidade": "70", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 200", "andar": "2° Andar", "subtitulo": "", "capacidade": "45", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 203", "andar": "2° Andar", "subtitulo": "", "capacidade": "72", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 206", "andar": "2° Andar", "subtitulo": "", "capacidade": "56", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 207", "andar": "2° Andar", "subtitulo": "", "capacidade": "51", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 209", "andar": "2° Andar", "subtitulo": "", "capacidade": "56", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "LIJ", "andar": "2° Andar", "subtitulo": "Sala 208", "capacidade": "43", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+          { "sala": "Sala 301", "andar": "3º andar", "subtitulo": "", "capacidade": 65, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 302", "andar": "3º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 303", "andar": "3º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 304", "andar": "3º andar", "subtitulo": "", "capacidade": 66, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 305", "andar": "3º andar", "subtitulo": "", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 306", "andar": "3º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 307", "andar": "3º andar", "subtitulo": "", "capacidade": 83, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 308", "andar": "3º andar", "subtitulo": "", "capacidade": 75, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       },
       {
-        "bloco": "BLOCO 3 - 3° ANDAR",
+        "bloco": "BLOCO 2",
         "rooms": [
-          { "sala": "Sala 301", "andar": "3° Andar", "subtitulo": "", "capacidade": "47", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 302", "andar": "3° Andar", "subtitulo": "", "capacidade": "72", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 303", "andar": "3° Andar", "subtitulo": "", "capacidade": "76", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 304", "andar": "3° Andar", "subtitulo": "", "capacidade": "53", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 305", "andar": "3° Andar", "subtitulo": "", "capacidade": "70", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 306", "andar": "3° Andar", "subtitulo": "", "capacidade": "54", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 307", "andar": "3° Andar", "subtitulo": "", "capacidade": "52", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 308", "andar": "3° Andar", "subtitulo": "", "capacidade": "55", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 309", "andar": "3° Andar", "subtitulo": "", "capacidade": "54", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 310", "andar": "3° Andar", "subtitulo": "", "capacidade": "49", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 311", "andar": "3° Andar", "subtitulo": "", "capacidade": "50", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 313", "andar": "3° Andar", "subtitulo": "", "capacidade": "54", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+          { "sala": "Sala 401", "andar": "Térreo", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 402", "andar": "Térreo", "subtitulo": "Júri", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 410", "andar": "1º andar", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 411", "andar": "1º andar", "subtitulo": "", "capacidade": 68, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 412", "andar": "1º andar", "subtitulo": "", "capacidade": 68, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 413", "andar": "1º andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 414", "andar": "1º andar", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 415", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Lab. 04", "andar": "1º andar", "subtitulo": "Informática", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false }
         ]
       },
       {
-        "bloco": "BLOCO 3 - 4° ANDAR",
+        "bloco": "BLOCO 3",
         "rooms": [
-          { "sala": "Sala 400", "andar": "4° Andar", "subtitulo": "", "capacidade": "46", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 401", "andar": "4° Andar", "subtitulo": "", "capacidade": "41", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 402", "andar": "4° Andar", "subtitulo": "", "capacidade": "76", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 403", "andar": "4° Andar", "subtitulo": "", "capacidade": "69", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 404", "andar": "4° Andar", "subtitulo": "", "capacidade": "55", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 405", "andar": "4° Andar", "subtitulo": "", "capacidade": "48", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 406", "andar": "4° Andar", "subtitulo": "", "capacidade": "52", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 407", "andar": "4° Andar", "subtitulo": "", "capacidade": "45", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 408", "andar": "4° Andar", "subtitulo": "", "capacidade": "50", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 409", "andar": "4° Andar", "subtitulo": "", "capacidade": "54", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 410", "andar": "4° Andar", "subtitulo": "", "capacidade": "50", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 411", "andar": "4° Andar", "subtitulo": "", "capacidade": "60", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 413", "andar": "4° Andar", "subtitulo": "", "capacidade": "46", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
-          { "sala": "Sala 415", "andar": "4° Andar", "subtitulo": "", "capacidade": "55", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+          { "sala": "Sala 502", "andar": "Térreo", "subtitulo": "", "capacidade": 75, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 503", "andar": "Térreo", "subtitulo": "", "capacidade": 65, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 504", "andar": "Térreo", "subtitulo": "", "capacidade": 66, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 510", "andar": "1º andar", "subtitulo": "", "capacidade": 50, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 511", "andar": "1º andar", "subtitulo": "", "capacidade": 75, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 512", "andar": "1º andar", "subtitulo": "", "capacidade": 80, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 513", "andar": "1º andar", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 514", "andar": "1º andar", "subtitulo": "", "capacidade": 55, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
+          { "sala": "Sala 515", "andar": "1º andar", "subtitulo": "", "capacidade": 56, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false }
         ]
       },
       {
-        "bloco": "BLOCO 5",
+        "bloco": "BLOCO 4 - 1º ANDAR",
         "rooms": [
-          { "sala": "Sala 502", "andar": "Térreo", "subtitulo": "", "capacidade": "78", "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 510", "andar": "2° andar", "subtitulo": "", "capacidade": 64, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 511", "andar": "2° andar", "subtitulo": "", "capacidade": 68, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 512", "andar": "2° andar", "subtitulo": "", "capacidade": 77, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 513", "andar": "2° andar", "subtitulo": "", "capacidade": 76, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 514", "andar": "2° andar", "subtitulo": "", "capacidade": 70, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 515", "andar": "2° andar", "subtitulo": "", "capacidade": 78, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false },
-          { "sala": "Sala 516", "andar": "2° andar", "subtitulo": "", "capacidade": 78, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": false }
+          { "sala": "Sala 610", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 611", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 612", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 613", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 614", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 615", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 616", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 617", "andar": "1º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
+        ]
+      },
+      {
+        "bloco": "BLOCO 4 - 2º e 3º ANDAR",
+        "rooms": [
+          { "sala": "Sala 620", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 621", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 622", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 623", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 624", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 625", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 626", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 627", "andar": "2º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 630", "andar": "3º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 631", "andar": "3º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 632", "andar": "3º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true },
+          { "sala": "Sala 633", "andar": "3º andar", "subtitulo": "", "capacidade": 60, "schedule": { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" }, "pmr": {}, "acessibilidade": true }
         ]
       }
     ];
 
-    // PADRONIZAÇÃO DOS NOMES DOS CURSOS E TÍTULOS COMPLETOS PARA "SALAS POR CURSO"
+    // PADRONIZAÇÃO DOS NOMES DOS CURSOS DE SAQUAREMA
     const COURSE_STANDARD_NAMES = [
       { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'ADMINISTRAÇÃO' },
-      { regex: /an[aá]lise\s*de\s*sistemas|\bads\b/gi, label: 'Ads', fullTitle: 'ANÁLISE DE SISTEMAS' },
       { regex: /biomedicina/gi, label: 'Biomedicina', fullTitle: 'BIOMEDICINA' },
       { regex: /ci[eê]ncias\s*cont[aá]beis|cont[aá]beis/gi, label: 'Contábeis', fullTitle: 'CIÊNCIAS CONTÁBEIS' },
-      { regex: /direito/gi, label: 'Direito', fullTitle: 'DIREITO' },
       { regex: /educa[cç][aã]o\s*f[ií]sica|ed\.?\s*f[ií]sica/gi, label: 'Ed. Física', fullTitle: 'EDUCAÇÃO FÍSICA' },
       { regex: /enfermagem/gi, label: 'Enfermagem', fullTitle: 'ENFERMAGEM' },
       { regex: /engenharia\s*civil|\bcivil\b/gi, label: 'Civil', fullTitle: 'ENGENHARIA CIVIL' },
       { regex: /engenharia\s*de\s*software|\bsoftware\b/gi, label: 'Software', fullTitle: 'ENGENHARIA DE SOFTWARE' },
       { regex: /fisioterapia/gi, label: 'Fisioterapia', fullTitle: 'FISIOTERAPIA' },
-      { regex: /gastronomia/gi, label: 'Gastronomia', fullTitle: 'GASTRONOMIA' },
-      { regex: /gest[aã]o\s*ambiental|\bambiental\b/gi, label: 'Ambiental', fullTitle: 'GESTÃO AMBIENTAL' },
       { regex: /medicina\s*veterin[aá]ria|\bveterin[aá]ria\b/gi, label: 'Veterinária', fullTitle: 'MEDICINA VETERINÁRIA' },
       { regex: /nutri[cç][aã]o/gi, label: 'Nutrição', fullTitle: 'NUTRIÇÃO' },
+      { regex: /odontologia|\bodonto\b/gi, label: 'Odonto', fullTitle: 'ODONTOLOGIA' },
       { regex: /pedagogia/gi, label: 'Pedagogia', fullTitle: 'PEDAGOGIA' },
       { regex: /psicologia/gi, label: 'Psicologia', fullTitle: 'PSICOLOGIA' },
-      { regex: /recursos\s*humanos|\brh\b/gi, label: 'Rh', fullTitle: 'RECURSOS HUMANOS' },
       { regex: /servi[cç]o\s*social|\bseso\b/gi, label: 'Seso', fullTitle: 'SERVIÇO SOCIAL' },
       { regex: /terapia\s*ocupacional|\bt\.?o\.?\b/gi, label: 'T.o', fullTitle: 'TERAPIA OCUPACIONAL' }
     ];
@@ -1096,12 +1135,13 @@
       return result;
     }
 
-    // CHAVES DE ARMAZENAMENTO POR TURNO (Preserva v10 para o Noturno)
+    // CHAVES DE ARMAZENAMENTO POR TURNO (SAQUAREMA)
     const STORAGE_KEYS = {
-      NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10',
-      MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1'
+      NOITE: 'mapa_ensalamento_univassouras_saquarema_2027_1_noite_v1',
+      MANHA: 'mapa_ensalamento_univassouras_saquarema_2027_1_manha_integral_v1'
     };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
+    const MAX_ROOMS_PER_LINE = 13;
 
     function loadShiftDataset(shiftKey) {
       const storageKey = STORAGE_KEYS[shiftKey];
@@ -1344,11 +1384,11 @@
 
     // EXTRAÇÃO INTELIGENTE DAS ALOCAÇÕES DO MAPA PARA A VISÃO "SALAS POR CURSO"
     function formatShortRoomCode(roomName, campusKey) {
-      const cSuffix = campusKey === 'CAMPUS_1' ? 'C1' : (campusKey === 'CAMPUS_2' ? 'C2' : campusKey);
+      const cSuffix = campusKey === 'CAMPUS_1' ? 'C1' : (campusKey === 'CAMPUS_2' ? 'C3' : campusKey);
       const clean = (roomName || '').trim();
 
-      if (/^lij$/i.test(clean)) {
-        return `LIJ-${cSuffix}`;
+      if (/^audit[oó]rio$/i.test(clean)) {
+        return `AUD-${cSuffix}`;
       }
       const labMatch = clean.match(/lab(?:orat[oó]rio)?\.?\s*(?:de\s*)?(?:inform[aá]tica)?\s*0*(\d+)/i);
       if (labMatch) {
@@ -1506,13 +1546,14 @@
             <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg">
               <span class="font-black text-[#7a001e] uppercase mr-1">Legendas:</span>
               <span class="font-bold text-stone-700">C1:</span> <span class="text-stone-600 mr-1.5">Campus 1</span>
-              <span class="font-bold text-stone-700">C2:</span> <span class="text-stone-600">Campus 2</span>
+              <span class="font-bold text-stone-700">C3:</span> <span class="text-stone-600">Campus 3</span>
             </div>
             <div class="bg-stone-100 border border-stone-200 px-2.5 py-1 rounded-lg flex flex-wrap items-center gap-1.5">
-              <span class="font-black text-[#7a001e] uppercase">Blocos C2:</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">06 a 29: Bl. 1 e 2</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">100 a 415: Bl. 3</span>
-              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">501 a 516: Bl. 5</span>
+              <span class="font-black text-[#7a001e] uppercase">Blocos C3:</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">101 a 308: Bl. 1</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">401 a 415: Bl. 2</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">502 a 515: Bl. 3</span>
+              <span class="bg-white px-1.5 py-0.5 rounded border border-stone-200 font-semibold text-stone-700">610 a 633: Bl. 4</span>
             </div>
           </div>
         </div>
@@ -1633,7 +1674,7 @@
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11.5);
             doc.setTextColor(255, 255, 255);
-            doc.text(`ENSALAMENTO ${shiftTitle} - 2027.1 - MARICÁ`, 14, 14.5);
+            doc.text(`ENSALAMENTO ${shiftTitle} - 2027.1 - SAQUAREMA`, 14, 14.5);
             doc.setFontSize(8.5);
             doc.setTextColor(254, 240, 138);
             doc.text(`TURMAS ${shiftTitle} • SALAS POR CURSO`, 14, 20.5);
@@ -1646,9 +1687,9 @@
             doc.setFillColor(245, 245, 244);
             doc.rect(10, 25.5, 190, 7.5, 'F');
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(6.8);
+            doc.setFontSize(6.5);
             doc.setTextColor(122, 0, 30);
-            doc.text('LEGENDAS: C1: Campus 1 | C2: Campus 2   •   BLOCOS C2: Salas 06 a 29 (Blocos 1 e 2) | Salas 100 a 415 (Bloco 3) | Salas 501 a 516 (Bloco 5)', 14, 30.2);
+            doc.text('LEGENDAS: C1: Campus 1 | C3: Campus 3   •   BLOCOS C3: 101 a 308 (Bl. 1) | 401 a 415 (Bl. 2) | 502 a 515 (Bl. 3) | 610 a 633 (Bl. 4)', 14, 30.2);
           };
 
           drawPageHeader();
@@ -1742,11 +1783,11 @@
             doc.setPage(p);
             doc.setFontSize(7.5);
             doc.setTextColor(120, 113, 108);
-            doc.text(`Univassouras • FACMAR • Infraestrutura Acadêmica • Turno ${getShiftDisplayName()}`, 10, 290);
+            doc.text(`Univassouras Campus Saquarema • Infraestrutura Acadêmica • Turno ${getShiftDisplayName()}`, 10, 290);
             doc.text(`Página ${p} de ${totalPages}`, 200, 290, { align: 'right' });
           }
 
-          doc.save(`Ensalamento_Marica_2027.1_TURMAS_${getShiftShortSlug().toUpperCase()}_Por_Curso.pdf`);
+          doc.save(`Ensalamento_Saquarema_2027.1_TURMAS_${getShiftShortSlug().toUpperCase()}_Por_Curso.pdf`);
           showToast('PDF de Salas por Curso gerado com sucesso!');
         } catch (err) {
           console.error(err);
@@ -1875,7 +1916,7 @@
 
     function formatCampusDisplayName(key) {
       if (key === 'CAMPUS_1') return 'CAMPUS 1';
-      if (key === 'CAMPUS_2') return 'CAMPUS 2';
+      if (key === 'CAMPUS_2' || key === 'CAMPUS_3') return 'CAMPUS 3';
       return key.replace(/_/g, ' ').toUpperCase();
     }
 
@@ -1922,16 +1963,59 @@
       showToast(`Campus "${rawName}" criado com sucesso!`);
     }
 
+    // GESTÃO DE BLOCOS (CRIAR COM QTD DE SALAS + RENOMEAR + EXCLUIR BLOCO)
     function openNewBlockModal() {
       if (!isAdmin) return;
       document.getElementById('newBlockCampusLabel').innerText = formatCampusDisplayName(activeCampus);
       document.getElementById('newBlockNameInput').value = '';
+      document.getElementById('newBlockRoomCount').value = '5';
+      generateNewBlockRoomInputs(5);
       document.getElementById('newBlockModal').classList.remove('hidden');
       safeCreateIcons();
     }
 
     function closeNewBlockModal() {
       document.getElementById('newBlockModal').classList.add('hidden');
+    }
+
+    function generateNewBlockRoomInputs(countVal) {
+      const container = document.getElementById('newBlockRoomsContainer');
+      if (!container) return;
+      const count = Math.max(0, Math.min(60, parseInt(countVal) || 0));
+
+      const existingNames = Array.from(container.querySelectorAll('.nb-room-name')).map(el => el.value);
+      const existingAndares = Array.from(container.querySelectorAll('.nb-room-andar')).map(el => el.value);
+      const existingCaps = Array.from(container.querySelectorAll('.nb-room-cap')).map(el => el.value);
+
+      if (count === 0) {
+        container.innerHTML = '<p class="text-xs text-stone-400 text-center py-3">Bloco será criado vazio (0 salas).</p>';
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        const defaultName = existingNames[i] !== undefined ? existingNames[i] : `Sala ${String(i + 1).padStart(2, '0')}`;
+        const defaultAndar = existingAndares[i] !== undefined ? existingAndares[i] : '1º andar';
+        const defaultCap = existingCaps[i] !== undefined ? existingCaps[i] : '60';
+
+        html += `
+          <div class="grid grid-cols-12 gap-2 items-center bg-white p-1.5 rounded-lg border border-stone-200">
+            <div class="col-span-1 text-center">
+              <span class="w-5 h-5 rounded bg-stone-200 text-stone-700 text-[10px] font-black inline-flex items-center justify-center">${i + 1}</span>
+            </div>
+            <div class="col-span-5">
+              <input type="text" required value="${defaultName}" placeholder="Nome da Sala" class="nb-room-name w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] font-bold text-stone-800">
+            </div>
+            <div class="col-span-3">
+              <input type="text" value="${defaultAndar}" placeholder="Andar/Local" class="nb-room-andar w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] text-stone-700">
+            </div>
+            <div class="col-span-3">
+              <input type="number" value="${defaultCap}" placeholder="Capac." class="nb-room-cap w-full px-2 py-1 text-xs bg-stone-50 border border-stone-200 rounded focus:bg-white focus:border-[#7a001e] text-stone-700">
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
     }
 
     function saveNewBlock(e) {
@@ -1944,11 +2028,66 @@
         showToast('Já existe um bloco com esse nome neste campus!');
         return;
       }
-      blocks.push({ bloco: name, rooms: [] });
+
+      const container = document.getElementById('newBlockRoomsContainer');
+      const nameInputs = container ? Array.from(container.querySelectorAll('.nb-room-name')) : [];
+      const andarInputs = container ? Array.from(container.querySelectorAll('.nb-room-andar')) : [];
+      const capInputs = container ? Array.from(container.querySelectorAll('.nb-room-cap')) : [];
+
+      const newRooms = nameInputs.map((input, idx) => {
+        const rName = input.value.trim() || `Sala ${idx + 1}`;
+        const rAndar = (andarInputs[idx] && andarInputs[idx].value.trim()) || '';
+        const rCap = (capInputs[idx] && capInputs[idx].value) ? parseInt(capInputs[idx].value) : '';
+        const isTerr = rAndar.toLowerCase().includes('térreo') || rAndar.toLowerCase().includes('terreo');
+        return {
+          sala: rName,
+          subtitulo: '',
+          andar: rAndar,
+          capacidade: rCap,
+          acessibilidade: isTerr,
+          schedule: { "SEGUNDA": "", "TERÇA": "", "QUARTA": "", "QUINTA": "", "SEXTA": "", "SÁBADO": "" },
+          pmr: {}
+        };
+      });
+
+      blocks.push({ bloco: name, rooms: newRooms });
       saveToStorage();
       closeNewBlockModal();
       setFilter(name);
-      showToast(`Bloco "${name}" adicionado!`);
+      showToast(`Bloco "${name}" criado com ${newRooms.length} salas!`);
+    }
+
+    let currentDeleteBlockIdx = null;
+
+    function openDeleteBlockModal(blockIdx) {
+      if (!isAdmin) return;
+      const blocks = getActiveCampusBlocks();
+      const block = blocks[blockIdx];
+      if (!block) return;
+      currentDeleteBlockIdx = blockIdx;
+      document.getElementById('deleteBlockConfirmDesc').innerText = `Tem certeza que deseja excluir o bloco "${block.bloco}" (${block.rooms.length} salas) do ${formatCampusDisplayName(activeCampus)}?`;
+      document.getElementById('deleteBlockModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeDeleteBlockModal() {
+      document.getElementById('deleteBlockModal').classList.add('hidden');
+      currentDeleteBlockIdx = null;
+    }
+
+    function confirmDeleteBlock() {
+      if (!isAdmin || currentDeleteBlockIdx === null) return;
+      const blocks = getActiveCampusBlocks();
+      const removed = blocks.splice(currentDeleteBlockIdx, 1)[0];
+      selectedBlockFilter = 'ALL';
+      saveToStorage();
+      closeDeleteBlockModal();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+      if (removed) {
+        showToast(`Bloco "${removed.bloco}" excluído com sucesso!`);
+      }
     }
 
     function formatTurmaCardContent(rawContent) {
@@ -2447,7 +2586,7 @@
       safeCreateIcons();
     }
 
-    // MODAL REORDENAR SALAS
+    // MODAL REORDENAR E RENOMEAR SALAS
     let currentReorderBlockIdx = null;
     let tempReorderRooms = [];
 
@@ -2470,6 +2609,11 @@
       tempReorderRooms = [];
     }
 
+    function updateTempRoomField(idx, field, val) {
+      if (!tempReorderRooms[idx]) return;
+      tempReorderRooms[idx][field] = val;
+    }
+
     function renderReorderList() {
       const container = document.getElementById('reorderRoomsList');
       if (!tempReorderRooms || tempReorderRooms.length === 0) {
@@ -2481,17 +2625,16 @@
       tempReorderRooms.forEach((r, idx) => {
         const isFirst = idx === 0;
         const isLast = idx === tempReorderRooms.length - 1;
-        const isAcessivel = (r.acessibilidade === true);
+        const safeSala = (r.sala || '').replace(/"/g, '&quot;');
+        const safeAndar = (r.andar || '').replace(/"/g, '&quot;');
         html += `
-          <div class="flex items-center justify-between p-2 rounded-xl bg-stone-50 border border-stone-200">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-md bg-stone-200 text-stone-700 text-[10px] font-black flex items-center justify-center">${idx + 1}</span>
-              <span class="text-xs font-black text-[#7a001e]">${r.sala}</span>
-              ${isAcessivel ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[9px] font-black bg-blue-600 text-white uppercase"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> Acessibilidade</span>` : ''}
-              ${r.subtitulo ? `<span class="text-[11px] text-stone-500 font-semibold">(${r.subtitulo})</span>` : ''}
-              <span class="text-[10px] text-stone-400 font-bold ml-1">• ${r.andar || '—'}</span>
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-stone-50 border border-stone-200">
+            <div class="flex items-center gap-2 flex-1">
+              <span class="w-5 h-5 rounded-md bg-stone-200 text-stone-700 text-[10px] font-black flex items-center justify-center shrink-0">${idx + 1}</span>
+              <input type="text" value="${safeSala}" oninput="updateTempRoomField(${idx}, 'sala', this.value)" placeholder="Nome da Sala" class="w-full px-2 py-1 text-xs font-black text-[#7a001e] bg-white border border-stone-200 rounded focus:outline-none focus:border-[#7a001e]">
+              <input type="text" value="${safeAndar}" oninput="updateTempRoomField(${idx}, 'andar', this.value)" placeholder="Andar" class="w-24 px-2 py-1 text-[11px] font-semibold text-stone-600 bg-white border border-stone-200 rounded focus:outline-none focus:border-[#7a001e] shrink-0">
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 shrink-0">
               <button type="button" onclick="moveRoomInReorder(${idx}, -1)" ${isFirst ? 'disabled class="p-1 rounded text-stone-300 cursor-not-allowed"' : 'class="p-1 rounded hover:bg-stone-200 text-stone-700 transition-colors"'} title="Mover para cima / esquerda">
                 <i data-lucide="chevron-up" class="w-4 h-4"></i>
               </button>
@@ -2517,12 +2660,16 @@
     function saveReorderRooms() {
       if (!isAdmin || currentReorderBlockIdx === null) return;
       const blocks = getActiveCampusBlocks();
+      tempReorderRooms.forEach((r, idx) => {
+        r.sala = (r.sala || '').trim() || `Sala ${idx + 1}`;
+        r.andar = (r.andar || '').trim();
+      });
       blocks[currentReorderBlockIdx].rooms = tempReorderRooms;
       saveToStorage();
       closeReorderModal();
       renderActiveView();
       safeCreateIcons();
-      showToast('Ordem das salas atualizada com sucesso!');
+      showToast('Ordem e nomes das salas atualizados!');
     }
 
     function getActiveCampusBlocks() {
@@ -2569,10 +2716,10 @@
     }
 
     function getDaysForBlock(blockName) {
-      if (blockName.includes('3° ANDAR') || blockName.includes('4° ANDAR') || blockName.includes('3º ANDAR')) {
-        return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA'];
+      if (blockName.includes('BLOCO 1 - 1º ANDAR')) {
+        return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
       }
-      return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+      return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA'];
     }
 
     function renderTableSegment(block, originalBlockIdx, roomSlice, startIndex, days, subTitle = '') {
@@ -2699,11 +2846,10 @@
         const originalBlockIdx = blocks.findIndex(item => item.bloco === block.bloco);
         const campusBadge = formatCampusDisplayName(activeCampus);
         const days = getDaysForBlock(block.bloco);
-        const isBlock3Floor4 = block.bloco.includes('4° ANDAR') && block.rooms.length >= 14;
         
         html += `
           <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden mb-6">
-            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between">
+            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-2.5">
                 <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
                 <h3 class="text-sm sm:text-base font-black tracking-wide">${block.bloco}</h3>
@@ -2711,13 +2857,17 @@
               </div>
               <div class="flex items-center gap-2">
                 ${isAdmin ? `
-                  <button onclick="openReorderModal(${originalBlockIdx})" title="Alterar a ordem das salas deste bloco" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
+                  <button onclick="openReorderModal(${originalBlockIdx})" title="Renomear ou alterar a ordem das salas deste bloco" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
                     <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-amber-300"></i>
-                    <span class="hidden sm:inline">Reordenar</span>
+                    <span class="hidden sm:inline">Renomear / Ordem</span>
                   </button>
                   <button onclick="openNewRoomModal(${originalBlockIdx})" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-900 rounded-md transition-all shadow-xs">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                     <span>Nova Sala</span>
+                  </button>
+                  <button onclick="openDeleteBlockModal(${originalBlockIdx})" title="Excluir este bloco inteiro" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-rose-600/80 hover:bg-rose-600 text-white rounded-md border border-rose-400/30 transition-all">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-100"></i>
+                    <span class="hidden md:inline">Excluir Bloco</span>
                   </button>
                 ` : ''}
                 <span class="text-[10px] uppercase font-bold tracking-wider bg-black/20 px-2 py-1 rounded text-amber-200">${campusBadge} • ${getShiftDisplayName()}</span>
@@ -2725,12 +2875,20 @@
             </div>
         `;
 
-        if (isBlock3Floor4) {
-          const slice1 = block.rooms.slice(0, 7);
-          const slice2 = block.rooms.slice(7);
-          html += renderTableSegment(block, originalBlockIdx, slice1, 0, days, 'Parte 1 (Salas 400 a 406)');
-          html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
-          html += renderTableSegment(block, originalBlockIdx, slice2, 7, days, 'Parte 2 (Salas 407 a 415)');
+        if (block.rooms.length === 0) {
+          html += `<div class="p-6 text-center text-xs text-stone-400 italic">Nenhuma sala cadastrada neste bloco. ${isAdmin ? 'Clique em "Nova Sala" acima para adicionar.' : ''}</div>`;
+        } else if (block.rooms.length > MAX_ROOMS_PER_LINE) {
+          let partNum = 1;
+          for (let i = 0; i < block.rooms.length; i += MAX_ROOMS_PER_LINE) {
+            const slice = block.rooms.slice(i, i + MAX_ROOMS_PER_LINE);
+            const firstRoom = slice[0] ? slice[0].sala : '';
+            const lastRoom = slice[slice.length - 1] ? slice[slice.length - 1].sala : '';
+            if (i > 0) {
+              html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
+            }
+            html += renderTableSegment(block, originalBlockIdx, slice, i, days, `Parte ${partNum} (${firstRoom} a ${lastRoom})`);
+            partNum++;
+          }
         } else {
           html += renderTableSegment(block, originalBlockIdx, block.rooms, 0, days);
         }
@@ -2928,7 +3086,7 @@
       const downloadAnchor = document.createElement('a');
       const dateStr = new Date().toISOString().slice(0, 10);
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `backup_ensalamento_${getShiftShortSlug().toLowerCase()}_2027_1_${dateStr}.json`);
+      downloadAnchor.setAttribute("download", `backup_ensalamento_saquarema_${getShiftShortSlug().toLowerCase()}_2027_1_${dateStr}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
@@ -3017,17 +3175,25 @@
           let pageCount = 0;
 
           blocksToExport.forEach((block) => {
-            const isFloor4 = block.bloco.includes('4° ANDAR') && block.rooms.length >= 14;
+            if (!block.rooms || block.rooms.length === 0) return;
             const days = getDaysForBlock(block.bloco);
+            const slices = [];
 
-            const slices = isFloor4 
-              ? [
-                  { rooms: block.rooms.slice(0, 7), label: `${block.bloco} - PARTE 1 (SALAS 400 A 406)` },
-                  { rooms: block.rooms.slice(7), label: `${block.bloco} - PARTE 2 (SALAS 407 A 415)` }
-                ]
-              : [
-                  { rooms: block.rooms, label: block.bloco }
-                ];
+            if (block.rooms.length > MAX_ROOMS_PER_LINE) {
+              let partNum = 1;
+              for (let i = 0; i < block.rooms.length; i += MAX_ROOMS_PER_LINE) {
+                const roomChunk = block.rooms.slice(i, i + MAX_ROOMS_PER_LINE);
+                const firstR = roomChunk[0] ? roomChunk[0].sala : '';
+                const lastR = roomChunk[roomChunk.length - 1] ? roomChunk[roomChunk.length - 1].sala : '';
+                slices.push({
+                  rooms: roomChunk,
+                  label: `${block.bloco} - PARTE ${partNum} (${firstR.toUpperCase()} A ${lastR.toUpperCase()})`
+                });
+                partNum++;
+              }
+            } else {
+              slices.push({ rooms: block.rooms, label: block.bloco });
+            }
 
             slices.forEach((slice) => {
               if (pageCount > 0) doc.addPage('a4', 'landscape');
@@ -3038,7 +3204,7 @@
               doc.setFont('helvetica', 'bold');
               doc.setFontSize(11.5);
               doc.setTextColor(255, 255, 255);
-              doc.text('UNIVASSOURAS CAMPUS MARICÁ E FACMAR', 14, 15);
+              doc.text('UNIVASSOURAS CAMPUS SAQUAREMA', 14, 15);
               doc.setFontSize(8);
               doc.setFont('helvetica', 'normal');
               doc.text(`Quadro Integrado de Ensalamento (${shiftName} • ${campusName}) • Semestre 2027.1`, 14, 20);
@@ -3158,7 +3324,7 @@
 
               doc.setFontSize(7.5);
               doc.setTextColor(120, 113, 108);
-              doc.text(`Univassouras • FACMAR • Infraestrutura Acadêmica • ${campusName} (${shiftName})`, 10, 202);
+              doc.text(`Univassouras Campus Saquarema • Infraestrutura Acadêmica • ${campusName} (${shiftName})`, 10, 202);
             });
           });
 
@@ -3169,9 +3335,10 @@
           }
 
           const shiftSlug = getShiftShortSlug();
+          const campusSlug = formatCampusDisplayName(activeCampus).replace(/\s+/g, '_');
           const filename = exportAll 
-            ? `Ensalamento_${activeCampus}_${shiftSlug}_TODOS_BLOCOS_2027.1.pdf`
-            : `Ensalamento_${activeCampus}_${shiftSlug}_${(selectedBlockFilter.replace(/[^a-zA-Z0-9]/g, '_'))}_2027.1.pdf`;
+            ? `Ensalamento_Saquarema_${campusSlug}_${shiftSlug}_TODOS_BLOCOS_2027.1.pdf`
+            : `Ensalamento_Saquarema_${campusSlug}_${shiftSlug}_${(selectedBlockFilter.replace(/[^a-zA-Z0-9]/g, '_'))}_2027.1.pdf`;
 
           doc.save(filename);
           showToast('PDF gerado com sucesso!');
@@ -3218,7 +3385,8 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Ensalamento_${activeCampus}_${getShiftShortSlug()}_2027.1.csv`;
+      const campusSlug = formatCampusDisplayName(activeCampus).replace(/\s+/g, '_');
+      a.download = `Ensalamento_Saquarema_${campusSlug}_${getShiftShortSlug()}_2027.1.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
