@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- CDN Mais Estável para os Ícones -->
   <script>
     function safeCreateIcons() {
       if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -39,20 +38,9 @@
     ::-webkit-scrollbar-track { background: #f5f5f4; }
     ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #7a001e; }
-    .drag-over-cell {
-      background-color: #fef3c7 !important;
-      outline: 2px dashed #7a001e !important;
-      outline-offset: -2px;
-    }
-    .dragging-card {
-      opacity: 0.45;
-      transform: scale(0.96);
-    }
-    .copy-active-cell:hover {
-      background-color: #dbeafe !important;
-      outline: 2px dashed #2563eb !important;
-      outline-offset: -2px;
-    }
+    .drag-over-cell { background-color: #fef3c7 !important; outline: 2px dashed #7a001e !important; outline-offset: -2px; }
+    .dragging-card { opacity: 0.45; transform: scale(0.96); }
+    .copy-active-cell:hover { background-color: #dbeafe !important; outline: 2px dashed #2563eb !important; outline-offset: -2px; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#fafaf9]">
@@ -65,130 +53,83 @@
           <i data-lucide="building-2" class="w-6 h-6 text-amber-300"></i>
         </div>
         <div>
-          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
-            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
-          </span>
-          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
-            Portal Integrado de Ensalamento Acadêmico
-          </h1>
+          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
+          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">Portal Integrado de Ensalamento Acadêmico</h1>
         </div>
       </div>
-      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">
-        Semestre 2027.1
-      </span>
+      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">Semestre 2027.1</span>
     </div>
 
     <div class="max-w-4xl w-full mx-auto my-auto py-8 text-center">
       <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 mb-3">
-        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-        Selecione o Mapa que deseja acessar
+        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i> Selecione o Mapa que deseja acessar
       </span>
-      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">
-        Escolha o Turno de Ensalamento
-      </h2>
-      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">
-        Cada turno possui mapas de salas e relatórios independentes. Sincronizado na nuvem.
-      </p>
+      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">Escolha o Turno de Ensalamento</h2>
+      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">Cada turno possui mapas de salas e relatórios independentes. Sincronizado na nuvem.</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <!-- Turno Manhã -->
-        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <i data-lucide="sun" class="w-7 h-7 text-amber-600"></i>
-              </div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
-                Diurno
-              </span>
+              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="sun" class="w-7 h-7"></i></div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">Diurno</span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
-              Manhã / Integral
-            </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento matutino e cursos de horário integral. Contém mapeamento de salas e quadro de turmas por curso.
-            </p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Manhã / Integral</h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento matutino e cursos de horário integral.</p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryManha" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
-              <span>Acessar Mapa</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
           </div>
         </button>
 
-        <!-- Turno Noturno -->
-        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
+        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform">
-                <i data-lucide="moon-star" class="w-7 h-7 text-[#7a001e]"></i>
-              </div>
-              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">
-                Noturno
-              </span>
+              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center group-hover:scale-105 transition-transform"><i data-lucide="moon-star" class="w-7 h-7"></i></div>
+              <span class="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">Noturno</span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">
-              Noturno
-            </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento das turmas da noite nos Campi 1 e 2.
-            </p>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-1">Noturno</h3>
+            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">Grade de ensalamento das turmas da noite nos Campi 1 e 2.</p>
           </div>
           <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
             <span id="homeSummaryNoite" class="text-xs font-bold text-stone-500">Calculando salas...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
-              <span>Acessar Mapa</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform"><span>Acessar Mapa</span><i data-lucide="arrow-right" class="w-4 h-4"></i></span>
           </div>
         </button>
       </div>
     </div>
-
-    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
-      <span>Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
-      <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
-    </div>
   </div>
 
-  <!-- MENU FLUTUANTE DA TURMA (DUPLICAR / EXCLUIR) -->
+  <!-- MENU FLUTUANTE DA TURMA -->
   <div id="turmaActionMenu" class="hidden fixed z-50 w-44 bg-white rounded-xl shadow-xl border border-stone-200 py-1.5 text-xs">
     <div class="px-3 py-1 border-b border-stone-100 mb-1">
       <span id="turmaMenuTitle" class="block font-black text-[#7a001e] truncate">Turma</span>
       <span id="turmaMenuSubtitle" class="block text-[10px] text-stone-400 font-semibold">Dia</span>
     </div>
-    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors">
-      <i data-lucide="copy" class="w-3.5 h-3.5 text-blue-600"></i><span>Duplicar Turma</span>
-    </button>
-    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors">
-      <i data-lucide="edit-3" class="w-3.5 h-3.5 text-stone-500"></i><span>Editar Sala / Horário</span>
-    </button>
+    <button type="button" onclick="triggerCopyFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-50 flex items-center gap-2 transition-colors"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Duplicar Turma</button>
+    <button type="button" onclick="triggerEditFromMenu()" class="w-full text-left px-3 py-1.5 font-semibold text-stone-700 hover:bg-stone-100 flex items-center gap-2 transition-colors"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar Sala</button>
     <div class="my-1 border-t border-stone-100"></div>
-    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors">
-      <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-600"></i><span>Excluir deste Dia</span>
-    </button>
+    <button type="button" onclick="triggerDeleteFromMenu()" class="w-full text-left px-3 py-1.5 font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Excluir do Dia</button>
   </div>
 
   <div id="copyModeBanner" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-blue-950 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-3">
     <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center animate-pulse"><i data-lucide="copy" class="w-4 h-4 text-white"></i></div>
     <div class="text-xs">
-      <span class="text-blue-200 font-medium">Modo Duplicar:</span><strong id="copyBannerText" class="font-black text-white ml-1">Turma</strong>
-      <span class="hidden sm:inline text-blue-300 text-[11px] ml-1.5">• Clique nos dias para colar</span>
+      <span class="text-blue-200 font-medium">Modo Duplicar:</span><strong id="copyBannerText" class="font-black ml-1">Turma</strong>
+      <span class="hidden sm:inline text-blue-300 ml-1.5">• Clique nos dias para colar</span>
     </div>
-    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg transition-colors shadow-xs">Concluir (ESC)</button>
+    <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 hover:bg-blue-50 text-xs font-black rounded-lg">Concluir (ESC)</button>
   </div>
 
   <!-- CABEÇALHOS DO MAPA -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="w-full px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <button onclick="openHomeScreen()" title="Voltar à tela inicial" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
-          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i>
-          <span class="hidden md:inline">Início / Turnos</span>
+        <button onclick="openHomeScreen()" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all shrink-0">
+          <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i><span class="hidden md:inline">Início / Turnos</span>
         </button>
-        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center shrink-0"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
+        <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center"><i data-lucide="building-2" class="w-5 h-5 text-amber-300"></i></div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="block text-xs sm:text-[13px] font-black uppercase tracking-wider text-[#7a001e] leading-tight">UNIVASSOURAS CAMPUS MARICÁ E FACMAR</span>
@@ -208,8 +149,10 @@
 
         <div id="adminHeaderControls" class="hidden items-center gap-2">
           <button onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i><span>Distribuir</span></button>
-          <button onclick="downloadBackupJSON()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
-          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer"><i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Restaurar</span><input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)"></label>
+          <button onclick="downloadBackupJSON()" title="Salvar Backup Local" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs"><i data-lucide="download-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Backup</span></button>
+          <label title="Restaurar (Firebase)" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shadow-xs cursor-pointer">
+            <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i><span class="hidden md:inline">Restaurar</span><input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)">
+          </label>
           <button onclick="openClearConfirmModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg"><i data-lucide="eraser" class="w-3.5 h-3.5"></i><span class="hidden xl:inline">Limpar</span></button>
           <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white border border-stone-200 rounded-lg"><i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i><span class="hidden lg:inline">Excel</span></button>
           <button onclick="openChangePassModal()" class="inline-flex items-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg"><i data-lucide="key-round" class="w-3.5 h-3.5"></i></button>
@@ -347,7 +290,7 @@
 
   <script>
     // ==================================================================
-    // 1) CONFIGURAÇÃO DO FIREBASE (NÃO MEXER - JÁ ESTÁ CERTO)
+    // 1) CONFIGURAÇÃO DO FIREBASE
     // ==================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyClpvMrkfDmJp9RWtnlI7sVDlcgkIUKwFc",
@@ -398,23 +341,25 @@
     const STORAGE_KEYS = { NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10', MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1' };
     const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
     
-    // BLINDAGEM DE DADOS: Limpa qualquer lixo da memória local que não seja um objeto com NOITE e MANHA
-    function ensureDataIntegrity(data) {
-      if (!data || Array.isArray(data) || typeof data !== 'object') {
-        data = {};
-      }
-      if (!data.NOITE || Array.isArray(data.NOITE)) {
-        data.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
-      }
-      if (!data.MANHA || Array.isArray(data.MANHA)) {
-        data.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
-      }
-      if (!data.NOITE.CAMPUS_1) data.NOITE.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
-      if (!data.NOITE.CAMPUS_2) data.NOITE.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
-      if (!data.MANHA.CAMPUS_1) data.MANHA.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
-      if (!data.MANHA.CAMPUS_2) data.MANHA.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
-      return data;
+    // BLINDAGEM DE DADOS - Ignora lixo ou listas velhas no localStorage
+    function getSafeShiftData(rawData) {
+      if (!rawData || typeof rawData !== 'object' || Array.isArray(rawData)) return false;
+      if (!rawData.CAMPUS_1 || !Array.isArray(rawData.CAMPUS_1) || !rawData.CAMPUS_2 || !Array.isArray(rawData.CAMPUS_2)) return false;
+      return rawData;
     }
+
+    function ensureDataIntegrity(data) {
+      let safeData = { NOITE: null, MANHA: null };
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        safeData.NOITE = getSafeShiftData(data.NOITE);
+        safeData.MANHA = getSafeShiftData(data.MANHA);
+      }
+      if (!safeData.NOITE) safeData.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!safeData.MANHA) safeData.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      return safeData;
+    }
+
+    function getArray(val) { return Array.isArray(val) ? val : (val ? Object.values(val) : []); }
 
     let allShiftsData = ensureDataIntegrity({});
     let multiCampusData = null;
@@ -439,18 +384,16 @@
     });
 
     function loadLocalFallback() {
-      let temp = {};
-      ['NOITE', 'MANHA'].forEach(shift => {
-        const raw = localStorage.getItem(STORAGE_KEYS[shift]);
-        if (raw && raw.trim().startsWith('{')) { 
-          try { 
-            const parsed = JSON.parse(raw); 
-            if (!Array.isArray(parsed)) {
-              temp[shift] = parsed; 
-            }
-          } catch(e) {} 
-        }
-      });
+      let temp = { NOITE: null, MANHA: null };
+      try {
+        const rawNoite = localStorage.getItem(STORAGE_KEYS.NOITE);
+        if (rawNoite) temp.NOITE = JSON.parse(rawNoite);
+      } catch(e) {}
+      try {
+        const rawManha = localStorage.getItem(STORAGE_KEYS.MANHA);
+        if (rawManha) temp.MANHA = JSON.parse(rawManha);
+      } catch(e) {}
+      
       allShiftsData = ensureDataIntegrity(temp);
       finishDataLoad();
     }
@@ -494,50 +437,40 @@
               }
             }
           });
-        }).catch((err) => { console.warn("Firebase error:", err); });
+        }).catch((err) => { console.warn("Erro no Firebase:", err); });
       } catch(err) { console.warn("Erro ao iniciar Firebase:", err); }
     }
 
     function finishDataLoad() {
-      try {
-        Object.keys(allShiftsData).forEach(sKey => {
-          Object.keys(allShiftsData[sKey]).forEach(cKey => {
-            if (Array.isArray(allShiftsData[sKey][cKey])) {
-              allShiftsData[sKey][cKey].forEach(block => {
-                if (Array.isArray(block.rooms)) {
-                  block.rooms.forEach(room => {
-                    if (room.schedule) {
-                      Object.keys(room.schedule).forEach(day => {
-                        if (room.schedule[day]) room.schedule[day] = normalizeTurmaText(room.schedule[day]);
-                      });
-                    }
-                  });
-                }
-              });
-            }
+      ['NOITE', 'MANHA'].forEach(sKey => {
+        ['CAMPUS_1', 'CAMPUS_2'].forEach(cKey => {
+          getArray(allShiftsData[sKey][cKey]).forEach(block => {
+            getArray(block.rooms).forEach(room => {
+              if (room.schedule) {
+                Object.keys(room.schedule).forEach(day => {
+                  if (room.schedule[day]) room.schedule[day] = normalizeTurmaText(room.schedule[day]);
+                });
+              }
+            });
           });
         });
-      } catch(err) {
-        console.error("Erro na limpeza de dados:", err);
-      }
+      });
       multiCampusData = allShiftsData[activeShift];
       updateHomeSummaries(); updateAdminUI(); updateCampusUI(); renderTabs(); renderActiveView(); safeCreateIcons();
     }
 
     function countShiftStats(dataset) {
       let totalRooms = 0, allocatedSlots = 0;
-      Object.keys(dataset || {}).forEach(cKey => {
-        if (Array.isArray(dataset[cKey])) {
-          dataset[cKey].forEach(block => {
-            if (Array.isArray(block.rooms)) {
-              block.rooms.forEach(room => {
-                totalRooms++;
-                if (room.schedule) Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
-              });
-            }
+      if (dataset) {
+        ['CAMPUS_1', 'CAMPUS_2'].forEach(cKey => {
+          getArray(dataset[cKey]).forEach(block => {
+            getArray(block.rooms).forEach(room => {
+              totalRooms++;
+              if (room.schedule) Object.values(room.schedule).forEach(val => { if (val && val.trim() !== '') allocatedSlots++; });
+            });
           });
-        }
-      });
+        });
+      }
       return { totalRooms, allocatedSlots };
     }
 
@@ -546,13 +479,12 @@
       const statsNoite = countShiftStats(allShiftsData.NOITE);
       const elManha = document.getElementById('homeSummaryManha');
       const elNoite = document.getElementById('homeSummaryNoite');
-      if (elManha) elManha.innerText = `${statsManha.totalRooms} Salas • ${statsManha.allocatedSlots} turmas alocadas`;
-      if (elNoite) elNoite.innerText = `${statsNoite.totalRooms} Salas • ${statsNoite.allocatedSlots} turmas alocadas`;
+      if (elManha) elManha.innerText = `${statsManha.totalRooms} Salas • ${statsManha.allocatedSlots} turmas`;
+      if (elNoite) elNoite.innerText = `${statsNoite.totalRooms} Salas • ${statsNoite.allocatedSlots} turmas`;
     }
 
     function getShiftDisplayName(shift = activeShift) { return shift === 'MANHA' ? 'Manhã / Integral' : 'Noturno'; }
     function getShiftShortSlug(shift = activeShift) { return shift === 'MANHA' ? 'Manha_Integral' : 'Noite'; }
-    function getShiftUpperTitle(shift = activeShift) { return shift === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOITE'; }
 
     function openHomeScreen() {
       clearCopyPasteMode(); closeTurmaActionMenu(); updateHomeSummaries();
@@ -560,12 +492,8 @@
     }
 
     function selectShiftAndEnter(shiftKey) {
-      try {
-        switchShift(shiftKey);
-        document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
-      } catch(err) {
-        console.error("Erro ao entrar no turno:", err);
-      }
+      switchShift(shiftKey);
+      document.getElementById('homeScreen').classList.add('hidden'); safeCreateIcons();
     }
 
     function switchShift(shiftKey) {
@@ -585,14 +513,14 @@
         badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
         badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
         mainTitle.innerText = 'Mapa de Ensalamento Manhã / Integral';
-        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
-        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
+        if(btnQuickManha) btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        if(btnQuickNoite) btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       } else {
         badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
         badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
         mainTitle.innerText = 'Mapa de Ensalamento Noturno';
-        btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
-        btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
+        if(btnQuickNoite) btnQuickNoite.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        if(btnQuickManha) btnQuickManha.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600 hover:text-stone-900';
       }
       document.getElementById('headerCampusLabel').innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
     }
@@ -604,14 +532,14 @@
       const matricesEl = document.getElementById('matricesContainer'), coursesEl = document.getElementById('coursesViewContainer');
 
       if (mode === 'ROOMS') {
-        btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
-        btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
+        if(btnRooms) btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        if(btnCourses) btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
         roomNav.classList.replace('hidden', 'flex'); courseNav.classList.replace('flex', 'hidden');
         matricesEl.classList.remove('hidden'); coursesEl.classList.add('hidden');
         document.getElementById('pdfBtnLabel').innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
       } else {
-        btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
-        btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
+        if(btnCourses) btnCourses.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white shadow-xs';
+        if(btnRooms) btnRooms.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700 hover:text-stone-900';
         roomNav.classList.replace('flex', 'hidden'); courseNav.classList.replace('hidden', 'flex');
         matricesEl.classList.add('hidden'); coursesEl.classList.remove('hidden');
         document.getElementById('pdfBtnLabel').innerText = 'PDF (Salas por Curso)';
@@ -621,6 +549,8 @@
 
     function handlePrimaryPdfButton() { activeViewMode === 'COURSES' ? exportCoursesPDF() : exportNativePDF(selectedBlockFilter === 'ALL'); }
     function renderActiveView() { activeViewMode === 'COURSES' ? renderCoursesView() : renderMatrices(); }
+
+    function getActiveCampusBlocks() { return getArray(multiCampusData[activeCampus]); }
 
     function formatShortRoomCode(roomName, campusKey) {
       const cSuffix = campusKey === 'CAMPUS_1' ? 'C1' : (campusKey === 'CAMPUS_2' ? 'C2' : campusKey);
@@ -658,32 +588,28 @@
       
       if (!multiCampusData) return coursesMap;
       
-      Object.keys(multiCampusData).forEach(campusKey => {
-        if (Array.isArray(multiCampusData[campusKey])) {
-          multiCampusData[campusKey].forEach(block => {
-            if (Array.isArray(block.rooms)) {
-              block.rooms.forEach(room => {
-                const shortRoom = formatShortRoomCode(room.sala, campusKey);
-                daysOrder.forEach(day => {
-                  const cellContent = (room.schedule && room.schedule[day]) ? room.schedule[day].trim() : '';
-                  if (!cellContent) return;
-                  const cellHasPMR = !!(room.pmr && room.pmr[day]);
-                  cellContent.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(line => {
-                    const parsed = parseTurmaAllocationString(line);
-                    if (!parsed) return;
-                    const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
-                    if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
-                    if (!coursesMap[courseFullTitle][periodLabel]) coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
-                    const entry = coursesMap[courseFullTitle][periodLabel];
-                    if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
-                    if (cellHasPMR || inlinePMR) entry.hasPMR = true;
-                    if (!entry.days[day].includes(shortRoom)) entry.days[day].push(shortRoom);
-                  });
-                });
+      ['CAMPUS_1', 'CAMPUS_2'].forEach(campusKey => {
+        getArray(multiCampusData[campusKey]).forEach(block => {
+          getArray(block.rooms).forEach(room => {
+            const shortRoom = formatShortRoomCode(room.sala, campusKey);
+            daysOrder.forEach(day => {
+              const cellContent = (room.schedule && room.schedule[day]) ? room.schedule[day].trim() : '';
+              if (!cellContent) return;
+              const cellHasPMR = !!(room.pmr && room.pmr[day]);
+              cellContent.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(line => {
+                const parsed = parseTurmaAllocationString(line);
+                if (!parsed) return;
+                const { courseFullTitle, periodNum, suffix, periodLabel, studentCount, inlinePMR } = parsed;
+                if (!coursesMap[courseFullTitle]) coursesMap[courseFullTitle] = {};
+                if (!coursesMap[courseFullTitle][periodLabel]) coursesMap[courseFullTitle][periodLabel] = { periodLabel, periodNum, suffix, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
+                const entry = coursesMap[courseFullTitle][periodLabel];
+                if (studentCount && !entry.studentCount) entry.studentCount = studentCount;
+                if (cellHasPMR || inlinePMR) entry.hasPMR = true;
+                if (!entry.days[day].includes(shortRoom)) entry.days[day].push(shortRoom);
               });
-            }
+            });
           });
-        }
+        });
       });
 
       const filterSelect = document.getElementById('courseFilterSelect');
@@ -891,6 +817,198 @@
       updateHomeSummaries();
     }
 
+    function renderTabs() {
+      const tabsEl = document.getElementById('blockTabs');
+      const blocks = getActiveCampusBlocks();
+
+      let html = `<button onclick="setFilter('ALL')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${selectedBlockFilter === 'ALL' ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-200'}">Todos os Blocos</button>`;
+
+      blocks.forEach((b) => {
+        const isActive = selectedBlockFilter === b.bloco;
+        html += `<button onclick="setFilter('${b.bloco}')" class="px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider whitespace-nowrap transition-all ${isActive ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:bg-stone-200'}">${b.bloco}</button>`;
+      });
+
+      tabsEl.innerHTML = html;
+      if (activeViewMode === 'ROOMS') {
+        document.getElementById('pdfBtnLabel').innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos os Blocos)' : 'PDF (Bloco Atual)';
+      }
+    }
+
+    function setFilter(filter) {
+      selectedBlockFilter = filter;
+      closeTurmaActionMenu();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function getDaysForBlock(blockName) {
+      if (blockName.includes('3° ANDAR') || blockName.includes('4° ANDAR') || blockName.includes('3º ANDAR')) {
+        return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA'];
+      }
+      return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+    }
+
+    function renderTableSegment(block, originalBlockIdx, roomSlice, startIndex, days, subTitle = '') {
+      const copyModeClass = (isAdmin && copyClipboard) ? 'copy-active-cell' : '';
+
+      return `
+        <div class="overflow-x-auto ${subTitle ? 'pt-2' : ''}">
+          ${subTitle ? `<div class="px-5 py-2 bg-stone-100/90 text-xs font-bold text-stone-700 uppercase tracking-wide border-b border-stone-200 flex items-center gap-1.5"><i data-lucide="arrow-right-circle" class="w-3.5 h-3.5 text-[#7a001e]"></i><span>${subTitle}</span></div>` : ''}
+          <table class="w-full text-left border-collapse min-w-[700px] table-fixed">
+            <colgroup>
+              <col class="w-28">
+              ${roomSlice.map(() => `<col>`).join('')}
+            </colgroup>
+            <thead>
+              <tr class="bg-stone-100 border-b border-stone-200">
+                <th class="p-2.5 text-[10px] font-black uppercase text-stone-500 w-28 bg-stone-200/70 sticky left-0 z-10 border-r border-stone-300 text-center">Local</th>
+                ${roomSlice.map(r => `<th class="p-2 text-center text-[10px] font-bold text-stone-500 uppercase border-r border-stone-200">${r.andar || '—'}</th>`).join('')}
+              </tr>
+
+              <tr class="bg-white border-b-2 border-[#7a001e]">
+                <th class="p-3 text-xs font-black text-white uppercase bg-[#7a001e] sticky left-0 z-10 border-r border-[#620018] text-center">SALA</th>
+                ${roomSlice.map((r, idx) => {
+                  const actualRoomIdx = startIndex + idx;
+                  const isAcessivel = (r.acessibilidade === true);
+                  return `
+                    <th class="p-2.5 text-center border-r border-stone-200 bg-stone-50/50 align-bottom">
+                      <button onclick="openEditModal(${originalBlockIdx}, ${actualRoomIdx})" class="group w-full flex flex-col items-center justify-end text-center mx-auto focus:outline-none min-h-[50px] ${isAdmin ? 'cursor-pointer' : 'cursor-default'}">
+                        ${isAcessivel ? `<span class="inline-flex items-center justify-center gap-1 px-2 py-0.5 mb-1 rounded-full text-[9px] font-black bg-blue-600 text-white uppercase tracking-tight shadow-xs whitespace-nowrap" title="Sala com Acessibilidade"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i><span>Acessibilidade</span></span>` : ''}
+                        <div class="relative inline-flex items-center justify-center">
+                          <span class="text-xs sm:text-sm font-black text-[#7a001e] ${isAdmin ? 'group-hover:underline' : ''} leading-snug">${r.sala}</span>
+                          ${isAdmin ? `<i data-lucide="edit-2" class="w-3 h-3 text-stone-400 opacity-0 group-hover:opacity-100 transition-opacity absolute -right-4 top-1/2 -translate-y-1/2"></i>` : ''}
+                        </div>
+                        ${r.subtitulo ? `<span class="text-[11px] font-bold text-stone-600 leading-tight mt-0.5 text-center block w-full">${r.subtitulo}</span>` : ''}
+                      </button>
+                    </th>
+                  `;
+                }).join('')}
+              </tr>
+
+              <tr class="bg-stone-50 border-b border-stone-200">
+                <th class="p-2 text-[10px] font-black uppercase text-stone-600 bg-stone-100 sticky left-0 z-10 border-r border-stone-300 text-center">Capac.</th>
+                ${roomSlice.map(r => `
+                  <th class="p-1.5 text-center border-r border-stone-200">
+                    <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black bg-stone-900 text-amber-300">${r.capacidade || '—'}</span>
+                  </th>
+                `).join('')}
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-stone-200 text-xs">
+              ${days.map(day => `
+                <tr class="hover:bg-amber-50/40 transition-colors">
+                  <td class="p-3 font-black text-[11px] text-white uppercase bg-[#7a001e] sticky left-0 z-10 border-r border-[#620018] text-center">${day}</td>
+                  ${roomSlice.map((room, idx) => {
+                    const actualRoomIdx = startIndex + idx;
+                    const content = room.schedule[day] || '';
+                    const hasPMR = room.pmr && room.pmr[day];
+                    const isMatch = searchQuery && content.toLowerCase().includes(searchQuery);
+
+                    return `
+                      <td 
+                        onclick="handleCellClick(${originalBlockIdx}, ${actualRoomIdx}, '${day}')" 
+                        ondragover="handleDragOver(event)"
+                        ondragleave="handleDragLeave(event)"
+                        ondrop="handleDrop(event, ${originalBlockIdx}, ${actualRoomIdx}, '${day}')"
+                        class="p-2 text-center border-r border-stone-200 ${isAdmin ? 'cursor-pointer' : 'cursor-default'} align-middle transition-all ${copyModeClass} ${isMatch ? 'bg-amber-200 font-black' : ''}">
+                        ${content ? `
+                          <div 
+                            draggable="${isAdmin ? 'true' : 'false'}"
+                            ondragstart="handleDragStart(event, ${originalBlockIdx}, ${actualRoomIdx}, '${day}', false)"
+                            ondragend="handleDragEnd(event)"
+                            title="${isAdmin ? 'Arraste para mover (ou Ctrl + Arrastar para duplicar)' : ''}"
+                            class="turma-card group/card relative px-2 py-2 rounded-lg bg-white border ${hasPMR ? 'border-blue-400 ring-1 ring-blue-300' : 'border-stone-200/90'} ${isAdmin ? 'hover:border-[#7a001e] cursor-grab active:cursor-grabbing' : ''} shadow-2xs transition-all leading-snug flex flex-col items-center justify-center gap-0.5">
+                            
+                            ${isAdmin ? `
+                              <button 
+                                type="button" 
+                                onclick="openTurmaActionMenu(event, ${originalBlockIdx}, ${actualRoomIdx}, '${day}')" 
+                                title="Opções da turma"
+                                class="absolute top-1 right-1 w-4 h-4 rounded-md flex items-center justify-center text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition-all">
+                                <i data-lucide="chevron-down" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+                              </button>
+                            ` : ''}
+
+                            ${formatTurmaCardContent(content)}
+
+                            ${hasPMR ? `<span class="inline-flex items-center gap-0.5 px-1.5 py-0.2 mt-0.5 rounded text-[9px] font-black bg-blue-600 text-white uppercase tracking-tight"><i data-lucide="accessibility" class="w-2.5 h-2.5"></i> PMR</span>` : ''}
+                          </div>
+                        ` : (hasPMR ? `<div class="px-2 py-1 rounded bg-blue-50 border border-blue-200 inline-flex items-center gap-1 text-[10px] font-bold text-blue-700"><i data-lucide="accessibility" class="w-3 h-3"></i> PMR</div>` : `<span class="text-stone-300 text-xs select-none">—</span>`)}
+                      </td>
+                    `;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderMatrices() {
+      const container = document.getElementById('matricesContainer');
+      const blocks = getActiveCampusBlocks();
+      const filteredBlocks = selectedBlockFilter === 'ALL' ? blocks : blocks.filter(b => b.bloco === selectedBlockFilter);
+
+      let html = '';
+      filteredBlocks.forEach((block) => {
+        const originalBlockIdx = blocks.findIndex(item => item.bloco === block.bloco);
+        const campusBadge = formatCampusDisplayName(activeCampus);
+        const days = getDaysForBlock(block.bloco);
+        const roomsArray = getArray(block.rooms);
+        const isBlock3Floor4 = block.bloco.includes('4° ANDAR') && roomsArray.length >= 14;
+        
+        html += `
+          <div class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden mb-6">
+            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
+                <h3 class="text-sm sm:text-base font-black tracking-wide">${block.bloco}</h3>
+                <span class="text-xs text-amber-100/90 font-medium">• ${roomsArray.length} Salas Alocadas</span>
+              </div>
+              <div class="flex items-center gap-2">
+                ${isAdmin ? `
+                  <button onclick="openReorderModal(${originalBlockIdx})" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all"><i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-amber-300"></i><span class="hidden sm:inline">Reordenar</span></button>
+                  <button onclick="openNewRoomModal(${originalBlockIdx})" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-900 rounded-md transition-all shadow-xs"><i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Nova Sala</span></button>
+                ` : ''}
+                <span class="text-[10px] uppercase font-bold tracking-wider bg-black/20 px-2 py-1 rounded text-amber-200">${campusBadge} • ${getShiftDisplayName()}</span>
+              </div>
+            </div>
+        `;
+
+        if (isBlock3Floor4) {
+          html += renderTableSegment(block, originalBlockIdx, roomsArray.slice(0, 7), 0, days, 'Parte 1 (Salas 400 a 406)');
+          html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
+          html += renderTableSegment(block, originalBlockIdx, roomsArray.slice(7), 7, days, 'Parte 2 (Salas 407 a 415)');
+        } else {
+          html += renderTableSegment(block, originalBlockIdx, roomsArray, 0, days);
+        }
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function updateCampusUI() {
+      const container = document.getElementById('campusButtonsContainer');
+      const campusKeys = Object.keys(multiCampusData || {});
+      let html = '';
+      campusKeys.forEach(k => {
+        const isActive = activeCampus === k;
+        const dName = formatCampusDisplayName(k);
+        html += `<button onclick="switchCampus('${k}')" class="px-3.5 py-1 text-xs font-black rounded-lg transition-all ${isActive ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}">${dName}</button>`;
+      });
+      container.innerHTML = html;
+      if (activeViewMode === 'ROOMS') document.getElementById('headerCampusLabel').innerText = `| ${formatCampusDisplayName(activeCampus)}`;
+    }
+
     function exportCoursesPDF() {
       const btn = document.getElementById('btnExportPDF'); const originalHTML = btn.innerHTML;
       btn.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Gerando...`;
@@ -965,7 +1083,8 @@
 
           blocksToExport.forEach((block) => {
             const days = getDaysForBlock(block.bloco);
-            const slices = (block.bloco.includes('4° ANDAR') && block.rooms.length >= 14) ? [{ rooms: block.rooms.slice(0, 7), label: `${block.bloco} - PARTE 1` }, { rooms: block.rooms.slice(7), label: `${block.bloco} - PARTE 2` }] : [{ rooms: block.rooms, label: block.bloco }];
+            const roomsArray = getArray(block.rooms);
+            const slices = (block.bloco.includes('4° ANDAR') && roomsArray.length >= 14) ? [{ rooms: roomsArray.slice(0, 7), label: `${block.bloco} - PARTE 1` }, { rooms: roomsArray.slice(7), label: `${block.bloco} - PARTE 2` }] : [{ rooms: roomsArray, label: block.bloco }];
             slices.forEach((slice) => {
               if (pageCount > 0) doc.addPage('a4', 'landscape');
               pageCount++;
@@ -1028,7 +1147,7 @@
       const blocks = getActiveCampusBlocks();
       let csv = 'TURNO;CAMPUS;BLOCO;SALA;ACESSIBILIDADE;SUBTITULO;ANDAR;CAPACIDADE;SEGUNDA;TERÇA;QUARTA;QUINTA;SEXTA;SÁBADO\n';
       blocks.forEach(b => {
-        b.rooms.forEach(r => {
+        getArray(b.rooms).forEach(r => {
           const isAcessivel = (r.acessibilidade === true) ? 'SIM' : 'NÃO';
           csv += `"${getShiftDisplayName()}";"${formatCampusDisplayName(activeCampus)}";"${b.bloco}";"${r.sala}";"${isAcessivel}";"${r.subtitulo || ''}";"${r.andar || ''}";"${r.capacidade || ''}";"${normalizeTurmaText(r.schedule['SEGUNDA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['TERÇA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['QUARTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['QUINTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['SEXTA']||'').replace(/"/g, '""')}";"${normalizeTurmaText(r.schedule['SÁBADO']||'').replace(/"/g, '""')}"\n`;
         });
@@ -1041,6 +1160,17 @@
     function showToast(msg) {
       const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.remove('translate-y-20', 'opacity-0');
       setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+    }
+
+    function updateCampusUI() {
+      const container = document.getElementById('campusButtonsContainer');
+      let html = '';
+      ['CAMPUS_1', 'CAMPUS_2'].forEach(k => {
+        const isActive = activeCampus === k;
+        html += `<button onclick="switchCampus('${k}')" class="px-3.5 py-1 text-xs font-black rounded-lg transition-all ${isActive ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}">${formatCampusDisplayName(k)}</button>`;
+      });
+      container.innerHTML = html;
+      if (activeViewMode === 'ROOMS') document.getElementById('headerCampusLabel').innerText = `| ${formatCampusDisplayName(activeCampus)}`;
     }
 
     function getAdminPassword() { return localStorage.getItem(ADMIN_PASS_KEY) || 'admin'; }
@@ -1057,12 +1187,12 @@
     function verifyAdminPassword(e) {
       e.preventDefault();
       if (document.getElementById('adminPasswordInput').value === getAdminPassword()) {
-        isAdmin = true; closeAdminLoginModal(); updateAdminUI(); renderActiveView(); safeCreateIcons(); showToast('Modo Administrador desbloqueado!');
+        isAdmin = true; closeAdminLoginModal(); updateAdminUI(); renderActiveView(); safeCreateIcons(); showToast('Modo Admin liberado!');
       } else { document.getElementById('adminLoginError').classList.remove('hidden'); }
     }
     function openChangePassModal() { if (!isAdmin) return; document.getElementById('newAdminPassInput').value = ''; document.getElementById('changePassModal').classList.remove('hidden'); setTimeout(() => document.getElementById('newAdminPassInput').focus(), 50); }
     function closeChangePassModal() { document.getElementById('changePassModal').classList.add('hidden'); }
-    function saveNewAdminPassword(e) { e.preventDefault(); const newPass = document.getElementById('newAdminPassInput').value.trim(); if (!newPass) return; localStorage.setItem(ADMIN_PASS_KEY, newPass); closeChangePassModal(); showToast('Senha de administrador alterada com sucesso!'); }
+    function saveNewAdminPassword(e) { e.preventDefault(); const newPass = document.getElementById('newAdminPassInput').value.trim(); if (!newPass) return; localStorage.setItem(ADMIN_PASS_KEY, newPass); closeChangePassModal(); showToast('Senha alterada com sucesso!'); }
     
     function updateAdminUI() {
       const adminControls = document.getElementById('adminHeaderControls'), btnAdminToggle = document.getElementById('btnAdminToggle');
