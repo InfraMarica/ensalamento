@@ -33,97 +33,146 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased bg-[#fafaf9]">
 
-  <!-- HOMEPAGE: SELEÇÃO DE TURNO -->
-  <div id="homeScreen" class="fixed inset-0 z-50 bg-[#fafaf9] flex flex-col justify-between p-6 overflow-y-auto">
-    <div class="max-w-5xl w-full mx-auto pt-4 flex items-center justify-between border-b border-stone-200 pb-4">
-      <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] text-white flex items-center justify-center shadow-lg">
-          <i data-lucide="building-2" class="w-6 h-6 text-amber-300"></i>
+  <!-- ==================== HOMEPAGE: TEMA BORDÔ INSTITUCIONAL ==================== -->
+  <div id="homeScreen" class="fixed inset-0 z-50 bg-[#f5f2f0] flex flex-col justify-between overflow-y-auto">
+    
+    <!-- Banner Superior Bordô -->
+    <div class="w-full bg-gradient-to-br from-[#7a001e] via-[#5e0017] to-[#38000d] text-white shadow-xl border-b-4 border-amber-400">
+      <div class="max-w-6xl w-full mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner">
+            <i data-lucide="building-2" class="w-7 h-7 text-amber-300"></i>
+          </div>
+          <div>
+            <span class="block text-[11px] font-black uppercase tracking-widest text-amber-300">
+              UNIVASSOURAS CAMPUS MARICÁ & FACMAR
+            </span>
+            <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">
+              Portal Integrado de Ensalamento Acadêmico
+            </h1>
+          </div>
         </div>
-        <div>
-          <span class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
-            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 text-amber-200 border border-white/15">
+            <i data-lucide="cloud-check" class="w-4 h-4 text-amber-300"></i>
+            Sincronizado em Nuvem
           </span>
-          <h1 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
-            Portal Integrado de Ensalamento Acadêmico
-          </h1>
+          <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-amber-300 px-3.5 py-1.5 rounded-xl shadow-sm">
+            Semestre 2027.1
+          </span>
         </div>
       </div>
-      <span class="text-xs sm:text-sm font-black text-[#7a001e] bg-[#7a001e]/10 px-3 py-1 rounded-lg border border-[#7a001e]/20">
-        Semestre 2027.1
-      </span>
+
+      <!-- Faixa de Destaque Hero -->
+      <div class="max-w-6xl w-full mx-auto px-6 pt-4 pb-10 text-center">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-200 border border-amber-300/30 mb-3">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+          Gestão Multicampi de Salas, Blocos e Laboratórios
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight mb-2">
+          Selecione o Turno de Ensalamento
+        </h2>
+        <p class="text-xs sm:text-sm text-rose-100/80 max-w-xl mx-auto">
+          Acesse o mapeamento completo de salas dos Campi 1 e 2, utilize a alocação automática de turmas e exporte relatórios oficiais em PDF.
+        </p>
+      </div>
     </div>
 
-    <div class="max-w-4xl w-full mx-auto my-auto py-8 text-center">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200 mb-3">
-        <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-[#7a001e]"></i>
-        Selecione o Mapa que deseja acessar
-      </span>
-      <h2 class="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight mb-2">
-        Escolha o Turno de Ensalamento
-      </h2>
-      <p class="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto mb-8">
-        Cada turno possui mapas de salas e relatórios em PDF independentes. Sincronizado na nuvem.
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group bg-white hover:bg-amber-50/40 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
-          <div>
-            <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-amber-700 flex items-center justify-center">
+    <!-- Centro: Cartões de Turno -->
+    <div class="max-w-5xl w-full mx-auto px-6 -mt-6 my-auto pb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Card 1: Manhã / Integral -->
+        <button type="button" onclick="selectShiftAndEnter('MANHA')" class="group relative bg-white rounded-3xl p-7 border-2 border-stone-200/90 hover:border-[#7a001e] shadow-lg hover:shadow-2xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-500 to-[#7a001e]"></div>
+          
+          <div class="w-full">
+            <div class="flex items-start justify-between gap-4 mb-5 mt-1">
+              <div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center group-hover:bg-[#7a001e] group-hover:text-amber-300 group-hover:border-[#7a001e] transition-colors shrink-0">
                 <i data-lucide="sun" class="w-7 h-7"></i>
               </div>
-              <span class="text-xs font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full border border-amber-200">
+              <span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-amber-900 bg-amber-100 px-3.5 py-1.5 rounded-full border border-amber-300 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-700"></i>
                 Diurno
               </span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] mb-1">
-              Manhã / Integral
+
+            <h3 class="text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-2">
+              Turno Manhã / Integral
             </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento matutino e cursos de horário integral.
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-5">
+              Grade de ensalamento matutino e cursos de horário integral. Inclui controle de capacidade, acessibilidade (PMR) e visão por curso.
             </p>
+
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Campus 1 e 2</span>
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Mapa por Bloco</span>
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Quadro por Curso</span>
+            </div>
           </div>
-          <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
-            <span id="homeSummaryManha" class="text-xs font-bold text-stone-500">Carregando...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e]">
+
+          <div class="w-full mt-6 pt-4 border-t border-stone-200/80 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span id="homeSummaryManha" class="text-xs font-extrabold text-stone-700">Carregando salas...</span>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black text-white bg-[#7a001e] group-hover:bg-[#5e0017] shadow-sm transition-all">
               <span>Acessar Mapa</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </span>
           </div>
         </button>
 
-        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group bg-white hover:bg-rose-50/30 rounded-3xl p-6 sm:p-8 border-2 border-stone-200 hover:border-[#7a001e] shadow-md hover:shadow-xl transition-all flex flex-col justify-between text-left cursor-pointer">
-          <div>
-            <div class="flex items-center justify-between mb-5">
-              <div class="w-14 h-14 rounded-2xl bg-[#7a001e]/10 border border-[#7a001e]/20 text-[#7a001e] flex items-center justify-center">
+        <!-- Card 2: Noturno -->
+        <button type="button" onclick="selectShiftAndEnter('NOITE')" class="group relative bg-white rounded-3xl p-7 border-2 border-stone-200/90 hover:border-[#7a001e] shadow-lg hover:shadow-2xl transition-all duration-200 flex flex-col justify-between text-left cursor-pointer overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#7a001e] to-[#38000d]"></div>
+          
+          <div class="w-full">
+            <div class="flex items-start justify-between gap-4 mb-5 mt-1">
+              <div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-[#7a001e] flex items-center justify-center group-hover:bg-[#7a001e] group-hover:text-amber-300 group-hover:border-[#7a001e] transition-colors shrink-0">
                 <i data-lucide="moon-star" class="w-7 h-7"></i>
               </div>
-              <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100/80 px-3 py-1 rounded-full border border-rose-200">
+              <span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1.5 rounded-full border border-rose-300 shrink-0">
+                <i data-lucide="moon" class="w-3.5 h-3.5 text-[#7a001e]"></i>
                 Noturno
               </span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] mb-1">
-              Noturno
+
+            <h3 class="text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-2">
+              Turno Noturno
             </h3>
-            <p class="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Grade de ensalamento das turmas da noite nos Campi 1 e 2.
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed mb-5">
+              Grade principal de ensalamento das turmas da noite nos Campi 1 e 2, com distribuição automática de turmas e geração de PDF para murais.
             </p>
+
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Campus 1 e 2</span>
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Mapa por Bloco</span>
+              <span class="px-2.5 py-1 rounded-md text-[11px] font-bold bg-stone-100 text-stone-700">Quadro por Curso</span>
+            </div>
           </div>
-          <div class="mt-6 pt-4 border-t border-stone-100 flex items-center justify-between">
-            <span id="homeSummaryNoite" class="text-xs font-bold text-stone-500">Carregando...</span>
-            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e]">
+
+          <div class="w-full mt-6 pt-4 border-t border-stone-200/80 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#7a001e]"></span>
+              <span id="homeSummaryNoite" class="text-xs font-extrabold text-stone-700">Carregando salas...</span>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black text-white bg-[#7a001e] group-hover:bg-[#5e0017] shadow-sm transition-all">
               <span>Acessar Mapa</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </span>
           </div>
         </button>
+
       </div>
     </div>
 
-    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
-      <span>Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
-      <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
+    <!-- Rodapé Institucional -->
+    <div class="w-full bg-white border-t border-stone-200 py-4 px-6">
+      <div class="max-w-6xl w-full mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
+        <span class="font-semibold text-stone-600">Univassouras Campus Maricá & FACMAR • Infraestrutura Acadêmica</span>
+        <span>Elaborado por <strong class="text-[#7a001e] font-black">Jonas Florencio</strong></span>
+      </div>
     </div>
   </div>
 
@@ -153,6 +202,7 @@
     <div class="text-xs">
       <span class="text-blue-200">Modo Duplicar:</span>
       <strong id="copyBannerText" class="font-black ml-1">Turma</strong>
+      <span class="hidden sm:inline text-blue-300 ml-1">• Clique nas salas desejadas para colar</span>
     </div>
     <button onclick="clearCopyPasteMode()" class="ml-2 px-3 py-1 bg-white text-blue-950 text-xs font-black rounded-lg">
       Concluir (ESC)
@@ -163,7 +213,7 @@
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
     <div class="w-full px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <button onclick="openHomeScreen()" class="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 shrink-0">
+        <button onclick="openHomeScreen()" title="Voltar à tela inicial" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#7a001e]/10 hover:bg-[#7a001e]/20 text-[#7a001e] font-black text-xs border border-[#7a001e]/20 transition-all shrink-0">
           <i data-lucide="home" class="w-4 h-4 text-[#7a001e]"></i>
           <span class="hidden md:inline">Início / Turnos</span>
         </button>
@@ -187,4 +237,1911 @@
           </div>
           <h1 class="text-sm sm:text-base font-black tracking-tight text-stone-900">
             <span id="headerMainTitle">Mapa de Ensalamento Noturno</span>
-            <span id="headerCampusLabel" class="text-[#7a001e] font
+            <span id="headerCampusLabel" class="text-[#7a001e] font-bold">| Campus 2</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="relative hidden sm:block w-36 lg:w-44">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"></i>
+          <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Pesquisar..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:border-[#7a001e] focus:outline-none">
+        </div>
+
+        <!-- CONTROLES DO ADMINISTRADOR COM TEXTOS VISÍVEIS -->
+        <div id="adminHeaderControls" class="hidden items-center gap-1.5">
+          <button type="button" onclick="openAutoDistModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm transition-all shrink-0">
+            <i data-lucide="wand-2" class="w-3.5 h-3.5"></i>
+            <span>Distribuir Turma</span>
+          </button>
+
+          <button type="button" onclick="downloadBackupJSON()" title="Salvar Backup JSON" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shrink-0">
+            <i data-lucide="download-cloud" class="w-3.5 h-3.5 text-stone-600"></i>
+            <span class="hidden lg:inline">Salvar Backup</span>
+          </button>
+
+          <label title="Restaurar Backup JSON" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg cursor-pointer shrink-0">
+            <i data-lucide="upload-cloud" class="w-3.5 h-3.5 text-stone-600"></i>
+            <span class="hidden lg:inline">Restaurar</span>
+            <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importBackupJSON(event)">
+          </label>
+
+          <button type="button" onclick="openClearConfirmModal()" title="Limpar Alocações" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg shrink-0">
+            <i data-lucide="eraser" class="w-3.5 h-3.5 text-amber-700"></i>
+            <span class="hidden xl:inline">Limpar</span>
+          </button>
+
+          <button type="button" onclick="exportCSV()" title="Exportar Planilha Excel" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-stone-700 bg-white hover:bg-stone-50 border border-stone-200 rounded-lg shrink-0">
+            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-stone-500"></i>
+            <span class="hidden xl:inline">Excel</span>
+          </button>
+
+          <button type="button" onclick="openChangePassModal()" title="Alterar Senha Admin" class="inline-flex items-center p-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg shrink-0">
+            <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="relative inline-block text-left" id="pdfDropdownContainer">
+          <div class="inline-flex rounded-lg shadow-sm">
+            <button id="btnExportPDF" onclick="handlePrimaryPdfButton()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-white bg-[#7a001e] hover:bg-[#620018] rounded-l-lg">
+              <i data-lucide="file-down" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span id="pdfBtnLabel">PDF (Todos)</span>
+            </button>
+            <button onclick="togglePdfDropdown()" class="px-2 py-1.5 text-xs font-black text-white bg-[#620018] rounded-r-lg border-l border-white/20">
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div id="pdfDropdownMenu" class="hidden absolute right-0 mt-1 w-60 bg-white rounded-xl shadow-lg border border-stone-200 py-1.5 z-50 text-xs">
+            <button onclick="exportNativePDF(false); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 hover:bg-stone-100">Exportar Bloco Atual (Mapa)</button>
+            <button onclick="exportNativePDF(true); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 font-bold hover:bg-stone-100">Exportar Todos os Blocos (Mapa)</button>
+            <div class="my-1 border-t border-stone-100"></div>
+            <button onclick="exportCoursesPDF(); togglePdfDropdown();" class="w-full text-left px-3.5 py-2 text-[#7a001e] font-black hover:bg-rose-50">Exportar Salas por Curso (PDF)</button>
+          </div>
+        </div>
+
+        <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-lg shrink-0">
+          <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+          <span>Admin</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BARRA DE NAVEGAÇÃO SECUNDÁRIA -->
+    <div class="w-full px-4 sm:px-6 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3 py-2 bg-stone-50/80">
+      <div class="flex items-center gap-2.5 overflow-x-auto w-full sm:w-auto">
+        <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shrink-0">
+          <button id="btnQuickShiftManha" onclick="switchShift('MANHA')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600">
+            <i data-lucide="sun" class="w-3 h-3"></i> Manhã/Integral
+          </button>
+          <button id="btnQuickShiftNoite" onclick="switchShift('NOITE')" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white">
+            <i data-lucide="moon" class="w-3 h-3"></i> Noturno
+          </button>
+        </div>
+
+        <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
+
+        <div class="inline-flex items-center gap-1 p-1 bg-stone-200/90 rounded-xl shrink-0">
+          <button id="btnViewRooms" onclick="switchViewMode('ROOMS')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white">
+            <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-amber-300"></i> Mapa de Salas
+          </button>
+          <button id="btnViewCourses" onclick="switchViewMode('COURSES')" class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700">
+            <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-[#7a001e]"></i> Salas por Curso
+          </button>
+        </div>
+
+        <div class="h-6 w-px bg-stone-300 hidden sm:block"></div>
+
+        <div id="roomNavigationControls" class="flex items-center gap-2.5">
+          <div class="inline-flex items-center gap-1.5 p-1 bg-stone-200/80 rounded-xl shrink-0" id="campusButtonsContainer"></div>
+          <button id="btnNovoCampus" onclick="openNewCampusModal()" class="hidden items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#7a001e] bg-white rounded-lg border border-[#7a001e]/30 shrink-0">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Novo Campus
+          </button>
+          <div class="h-5 w-px bg-stone-300 hidden sm:block"></div>
+          <div class="flex items-center gap-1.5" id="blockTabs"></div>
+          <button id="btnNovoBloco" onclick="openNewBlockModal()" class="hidden items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-stone-700 bg-white rounded-lg border border-stone-200 shrink-0">
+            <i data-lucide="folder-plus" class="w-3.5 h-3.5 text-[#7a001e]"></i> Novo Bloco
+          </button>
+        </div>
+
+        <div id="courseNavigationControls" class="hidden items-center gap-2">
+          <span class="text-xs font-bold text-stone-500">Filtrar Curso:</span>
+          <select id="courseFilterSelect" onchange="setCourseFilter(this.value)" class="px-3 py-1 text-xs font-bold bg-white border border-stone-200 rounded-lg">
+            <option value="ALL">Todos os Cursos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ÁREA PRINCIPAL -->
+  <main class="flex-1 w-full p-4 sm:p-6 max-w-[1920px] mx-auto">
+    <div id="matricesContainer" class="space-y-8"></div>
+    <div id="coursesViewContainer" class="hidden max-w-5xl mx-auto space-y-5"></div>
+  </main>
+
+  <!-- MODAL LOGIN ADMIN -->
+  <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <div class="flex justify-between pb-3 border-b">
+        <h3 class="font-black text-[#7a001e]">Acesso Administrador</h3>
+        <button onclick="closeAdminLoginModal()"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form onsubmit="verifyAdminPassword(event)" class="mt-4 space-y-3">
+        <input type="password" id="adminPasswordInput" required placeholder="Digite a senha (padrão: admin)..." class="w-full p-2 text-xs border rounded-lg font-bold">
+        <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600">Senha incorreta.</p>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAdminLoginModal()" class="px-3 py-1.5 text-xs text-stone-500">Cancelar</button>
+          <button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Desbloquear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ALTERAR SENHA -->
+  <div id="changePassModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <div class="flex justify-between pb-3 border-b">
+        <h3 class="font-black text-[#7a001e]">Alterar Senha Admin</h3>
+        <button onclick="closeChangePassModal()"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form onsubmit="saveNewAdminPassword(event)" class="mt-4 space-y-3">
+        <input type="password" id="newAdminPassInput" required minlength="3" placeholder="Nova senha..." class="w-full p-2 text-xs border rounded-lg font-bold">
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeChangePassModal()" class="px-3 py-1.5 text-xs text-stone-500">Cancelar</button>
+          <button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DISTRIBUIÇÃO AUTOMÁTICA COMPLETO -->
+  <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-amber-400 text-amber-950 flex items-center justify-center font-black">
+            <i data-lucide="wand-2" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-[#7a001e]">Alocação Automática de Turma</h3>
+            <p class="text-xs text-stone-500">Distribuição inteligente otimizando capacidade e restrições</p>
+          </div>
+        </div>
+        <button onclick="closeAutoDistModal()"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div id="autoDistErrorBox" class="hidden mt-3 p-3 bg-rose-50 border border-rose-300 rounded-xl text-xs text-rose-900">
+        <strong class="block font-black">Não foi possível alocar esta turma:</strong>
+        <span id="autoDistErrorMsg"></span>
+      </div>
+
+      <form onsubmit="executeAutoDistribution(event)" class="mt-4 space-y-3.5">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">Período</label>
+            <select id="distPeriodo" class="w-full px-2 py-1.5 text-xs bg-stone-50 border rounded-lg font-semibold">
+              <option value="1º">1º Período</option><option value="2º">2º Período</option>
+              <option value="3º">3º Período</option><option value="4º">4º Período</option>
+              <option value="5º">5º Período</option><option value="6º">6º Período</option>
+              <option value="7º">7º Período</option><option value="8º">8º Período</option>
+              <option value="9º">9º Período</option><option value="10º">10º Período</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold mb-1">Curso</label>
+            <select id="distCurso" required class="w-full px-2 py-1.5 text-xs bg-stone-50 border rounded-lg font-bold">
+              <option value="" disabled selected>Selecione o Curso...</option>
+              <option value="Adm">Administração (Adm)</option>
+              <option value="Ads">Análise de Sistemas (Ads)</option>
+              <option value="Biomedicina">Biomedicina</option>
+              <option value="Contábeis">Ciências Contábeis (Contábeis)</option>
+              <option value="Direito">Direito</option>
+              <option value="Ed. Física">Educação Física (Ed. Física)</option>
+              <option value="Enfermagem">Enfermagem</option>
+              <option value="Civil">Engenharia Civil (Civil)</option>
+              <option value="Software">Engenharia de Software (Software)</option>
+              <option value="Fisioterapia">Fisioterapia</option>
+              <option value="Gastronomia">Gastronomia</option>
+              <option value="Ambiental">Gestão Ambiental (Ambiental)</option>
+              <option value="Veterinária">Medicina Veterinária (Veterinária)</option>
+              <option value="Nutrição">Nutrição</option>
+              <option value="Pedagogia">Pedagogia</option>
+              <option value="Psicologia">Psicologia</option>
+              <option value="Rh">Recursos Humanos (Rh)</option>
+              <option value="Seso">Serviço Social (Seso)</option>
+              <option value="T.o">Terapia Ocupacional (T.o)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">Turma (Letra)</label>
+            <select id="distTurmaLetra" class="w-full px-2 py-1.5 text-xs bg-stone-50 border rounded-lg font-semibold">
+              <option value="">Única</option>
+              <option value="A">Turma A</option><option value="B">Turma B</option>
+              <option value="C">Turma C</option><option value="A/B">Turma A/B</option>
+              <option value="B/C">Turma B/C</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">Qtd. de Alunos</label>
+            <input type="number" id="distQtdAlunos" required min="1" max="150" placeholder="Ex: 50" class="w-full px-3 py-1.5 text-xs bg-stone-50 border rounded-lg font-black">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">Campus Desejado</label>
+            <select id="distCampusPref" class="w-full px-2 py-1.5 text-xs bg-stone-50 border rounded-lg font-semibold">
+              <option value="ONLY_C2">Apenas Campus 2</option>
+              <option value="ONLY_C1">Apenas Campus 1</option>
+              <option value="PREF_C2">Preferencialmente Campus 2</option>
+              <option value="PREF_C1">Preferencialmente Campus 1</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">Mobilidade Reduzida</label>
+            <label class="flex items-center gap-2 p-1.5 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer h-[34px]">
+              <input type="checkbox" id="distAcessibilidade" class="w-4 h-4">
+              <span class="text-xs font-bold text-blue-900">Aluno PMR</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-stone-700">Preferência de Local / Restrição (Opcional)</label>
+            <span class="text-[10px] text-stone-400">Ex: bloco 5, só 4º andar, apenas térreo...</span>
+          </div>
+          <input type="text" id="distPreferencia" placeholder="Digite preferência de bloco/andar ou deixe vazio..." class="w-full px-3 py-1.5 text-xs bg-stone-50 border rounded-lg">
+        </div>
+
+        <div>
+          <span class="block text-xs font-black uppercase text-[#7a001e] mb-2">Dias de Aula e Laboratórios</span>
+          <div id="distDaysContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeAutoDistModal()" class="px-4 py-1.5 text-xs font-semibold text-stone-500">Cancelar</button>
+          <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 rounded-lg shadow-sm">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            <span>Executar Distribuição</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR SALA -->
+  <div id="editModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border">
+      <div class="flex items-center justify-between pb-3 border-b">
+        <div>
+          <h3 class="text-base font-black text-[#7a001e]">Editar Sala & Alocações</h3>
+          <p class="text-xs text-stone-500" id="modalBlocoSubtitle">Bloco</p>
+        </div>
+        <button onclick="closeModal()"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form id="editForm" onsubmit="saveModalData(event)" class="mt-4 space-y-3">
+        <input type="hidden" id="editBlockIdx">
+        <input type="hidden" id="editRoomIdx">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="flex justify-between mb-1">
+              <label class="text-xs font-bold">Nome da Sala</label>
+              <button type="button" id="btnAcessibilidadeRoom" onclick="toggleRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-black bg-stone-200 text-stone-600">Acessibilidade</button>
+              <input type="hidden" id="editRoomAcessibilidade" value="false">
+            </div>
+            <input type="text" id="editRoomName" required class="w-full px-3 py-1.5 text-xs border rounded-lg font-bold">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">Capacidade</label>
+            <input type="number" id="editCapacity" class="w-full px-3 py-1.5 text-xs border rounded-lg">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold mb-1">Andar / Local</label>
+            <input type="text" id="editAndar" class="w-full px-3 py-1.5 text-xs border rounded-lg">
+          </div>
+          <div>
+            <label class="block text-xs font-bold mb-1">Subtítulo</label>
+            <input type="text" id="editSubtitulo" class="w-full px-3 py-1.5 text-xs border rounded-lg">
+          </div>
+        </div>
+        <div class="pt-2">
+          <span class="block text-[11px] font-black uppercase text-[#7a001e] mb-2">Turmas por Dia (Ex: 4º Direito A (50))</span>
+          <div id="editDaysContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+        </div>
+        <div class="flex justify-between pt-4 border-t">
+          <button type="button" onclick="deleteRoomFromModal()" class="px-3 py-1.5 text-xs font-bold text-rose-700 bg-rose-50 rounded-lg">Excluir Sala</button>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded-lg">Cancelar</button>
+            <button type="submit" class="px-4 py-1.5 text-xs font-bold text-white bg-[#7a001e] rounded-lg">Salvar Alterações</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAIS AUXILIARES -->
+  <div id="newRoomModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <div class="flex justify-between pb-3 border-b">
+        <h3 class="font-black text-[#7a001e]">Nova Sala</h3>
+        <button onclick="closeNewRoomModal()"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <form onsubmit="saveNewRoom(event)" class="mt-3 space-y-3">
+        <input type="hidden" id="newRoomBlockIdx">
+        <div>
+          <div class="flex justify-between mb-1">
+            <label class="text-xs font-bold">Nome da Sala</label>
+            <button type="button" id="btnNewRoomAcessibilidade" onclick="toggleNewRoomAcessibilidade()" class="px-2 py-0.5 rounded text-[10px] font-bold bg-stone-200 text-stone-600">Acessibilidade</button>
+            <input type="hidden" id="newRoomAcessibilidade" value="false">
+          </div>
+          <input type="text" id="newRoomName" placeholder="Ex: Sala 30" class="w-full text-xs p-2 border rounded-lg" required>
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1">Subtítulo</label>
+          <input type="text" id="newRoomSubtitulo" placeholder="Opcional..." class="w-full text-xs p-2 border rounded-lg">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="block text-xs font-bold mb-1">Andar</label><input type="text" id="newRoomAndar" class="w-full text-xs p-2 border rounded-lg"></div>
+          <div><label class="block text-xs font-bold mb-1">Capacidade</label><input type="number" id="newRoomCap" class="w-full text-xs p-2 border rounded-lg"></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeNewRoomModal()" class="px-3 py-1.5 text-xs text-stone-500">Cancelar</button>
+          <button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="clearConfirmModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm text-center shadow-2xl">
+      <h3 class="font-black text-stone-900 mb-2">Limpar Todas as Alocações?</h3>
+      <p class="text-xs text-stone-500 mb-4" id="clearConfirmDesc">As salas deste campus ficarão livres.</p>
+      <div class="flex justify-center gap-2">
+        <button onclick="closeClearConfirmModal()" class="px-3 py-1.5 text-xs bg-stone-100 rounded-lg font-bold">Cancelar</button>
+        <button onclick="confirmClearAllocations()" class="px-4 py-1.5 text-xs bg-amber-700 text-white rounded-lg font-bold">Sim, Limpar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="newBlockModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <div class="flex justify-between pb-3 border-b"><h3 class="font-black text-[#7a001e]">Novo Bloco</h3><button onclick="closeNewBlockModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <form onsubmit="saveNewBlock(event)" class="mt-3 space-y-3">
+        <input type="text" id="newBlockNameInput" placeholder="Nome do bloco..." class="w-full text-xs p-2 border rounded-lg" required>
+        <div class="flex justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Criar Bloco</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="newCampusModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <div class="flex justify-between pb-3 border-b"><h3 class="font-black text-[#7a001e]">Novo Campus</h3><button onclick="closeNewCampusModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <form onsubmit="saveNewCampus(event)" class="mt-3 space-y-3">
+        <input type="text" id="newCampusNameInput" placeholder="Nome do campus..." class="w-full text-xs p-2 border rounded-lg" required>
+        <div class="flex justify-end pt-2"><button type="submit" class="bg-[#7a001e] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Criar Campus</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="reorderRoomsModal" class="fixed inset-0 z-50 bg-stone-900/50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl">
+      <div class="flex justify-between pb-3 border-b"><h3 class="font-black text-[#7a001e]">Reordenar Salas</h3><button onclick="closeReorderModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+      <div id="reorderRoomsList" class="mt-3 max-h-60 overflow-y-auto space-y-1.5"></div>
+      <div class="flex justify-end gap-2 pt-4 mt-2 border-t">
+        <button type="button" onclick="closeReorderModal()" class="px-3 py-1.5 text-xs text-stone-500">Cancelar</button>
+        <button type="button" onclick="saveReorderRooms()" class="bg-[#7a001e] text-white px-4 py-1.5 text-xs font-bold rounded-lg">Salvar Ordem</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
+
+  <script>
+    // CONFIGURAÇÃO DO FIREBASE
+    const firebaseConfig = {
+      apiKey: "AIzaSyClpvMrkfDmJp9RWtnlI7sVDlcgkIUKwFc",
+      authDomain: "salas-univassouras-marica.firebaseapp.com",
+      projectId: "salas-univassouras-marica",
+      storageBucket: "salas-univassouras-marica.firebasestorage.app",
+      messagingSenderId: "881760866715",
+      appId: "1:881760866715:web:bc3778b5bca1ec8dfe513e",
+      measurementId: "G-340011RLRW",
+      databaseURL: "https://salas-univassouras-marica-default-rtdb.firebaseio.com"
+    };
+
+    const R = (sala, andar, capacidade, acessibilidade = true, subtitulo = "") => ({
+      sala, andar, subtitulo, capacidade, schedule: {}, pmr: {}, acessibilidade
+    });
+
+    const IC1 = [
+      {
+        bloco: "CAMPUS 1 - 1º e 2º ANDAR",
+        rooms: [
+          R("Sala 12", "1º andar", 80, true),
+          R("Lab. 01", "2º andar", 60, false, "Informática"),
+          R("Lab. 02", "2º andar", 45, false, "Informática"),
+          R("Lab. 03", "2º andar", 60, false, "Informática"),
+          R("Sala 22", "2º andar", 48, false),
+          R("Sala 23", "2º andar", 44, false),
+          R("Sala 24", "2º andar", 62, false),
+          R("Sala 25", "2º andar", 79, false),
+          R("Sala 26", "2º andar", 62, false),
+          R("Sala 27", "2º andar", 63, false),
+          R("Sala 28", "2º andar", 47, false)
+        ]
+      },
+      {
+        bloco: "CAMPUS 1 - 3º ANDAR",
+        rooms: [
+          R("Sala 34", "3º Andar", 70, false),
+          R("Sala 36", "3º Andar", 60, false),
+          R("Sala 37", "3º Andar", 65, false)
+        ]
+      }
+    ];
+
+    const IC2 = [
+      {
+        bloco: "BLOCO 1 E 2",
+        rooms: [
+          R("Sala 06", "Térreo", 80), R("Sala 20", "2° andar", 76),
+          R("Sala 21", "2° andar", 73), R("Sala 22", "2° andar", 75),
+          R("Sala 23", "2° andar", 80), R("Sala 25", "2° andar", 75),
+          R("Sala 26", "2° andar", 54, true, "Metodologias Ativas"),
+          R("Sala 29", "2° andar", 76)
+        ]
+      },
+      {
+        bloco: "BLOCO 3 - 1° ANDAR",
+        rooms: [
+          R("Sala 100", "Térreo", 53), R("Sala 102", "Térreo", 51),
+          R("Sala 104", "Térreo", 48), R("Sala 105", "Térreo", 51),
+          R("Sala 106", "Térreo", 49), R("Sala 107", "Térreo", 49),
+          R("Sala 108", "Térreo", 48), R("Sala 109", "Térreo", 45)
+        ]
+      },
+      {
+        bloco: "BLOCO 3 - 2° ANDAR",
+        rooms: [
+          R("Lab. Informática 01", "2° Andar", 56),
+          R("Lab. Informática 02", "2° Andar", 36),
+          R("Lab. Informática 03", "2° Andar", 70),
+          R("Sala 200", "2° Andar", 45), R("Sala 203", "2° Andar", 72),
+          R("Sala 206", "2° Andar", 56), R("Sala 207", "2° Andar", 51),
+          R("Sala 209", "2° Andar", 56), R("LIJ", "2° Andar", 43, true, "Sala 208")
+        ]
+      },
+      {
+        bloco: "BLOCO 3 - 3° ANDAR",
+        rooms: [
+          R("Sala 301", "3° Andar", 47), R("Sala 302", "3° Andar", 72),
+          R("Sala 303", "3° Andar", 76), R("Sala 304", "3° Andar", 53),
+          R("Sala 305", "3° Andar", 70), R("Sala 306", "3° Andar", 54),
+          R("Sala 307", "3° Andar", 52), R("Sala 308", "3° Andar", 55),
+          R("Sala 309", "3° Andar", 54), R("Sala 310", "3° Andar", 49),
+          R("Sala 311", "3° Andar", 50), R("Sala 313", "3° Andar", 54)
+        ]
+      },
+      {
+        bloco: "BLOCO 3 - 4° ANDAR",
+        rooms: [
+          R("Sala 400", "4° Andar", 46), R("Sala 401", "4° Andar", 41),
+          R("Sala 402", "4° Andar", 76), R("Sala 403", "4° Andar", 69),
+          R("Sala 404", "4° Andar", 55), R("Sala 405", "4° Andar", 48),
+          R("Sala 406", "4° Andar", 52), R("Sala 407", "4° Andar", 45),
+          R("Sala 408", "4° Andar", 50), R("Sala 409", "4° Andar", 54),
+          R("Sala 410", "4° Andar", 50), R("Sala 411", "4° Andar", 60),
+          R("Sala 413", "4° Andar", 46), R("Sala 415", "4° Andar", 55)
+        ]
+      },
+      {
+        bloco: "BLOCO 5",
+        rooms: [
+          R("Sala 502", "Térreo", 78, false), R("Sala 510", "2° andar", 64, false),
+          R("Sala 511", "2° andar", 68, false), R("Sala 512", "2° andar", 77, false),
+          R("Sala 513", "2° andar", 76, false), R("Sala 514", "2° andar", 70, false),
+          R("Sala 515", "2° andar", 78, false), R("Sala 516", "2° andar", 78, false)
+        ]
+      }
+    ];
+
+    const COURSE_STANDARD_NAMES = [
+      { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'ADMINISTRAÇÃO' },
+      { regex: /an[aá]lise\s*de\s*sistemas|\bads\b/gi, label: 'Ads', fullTitle: 'ANÁLISE DE SISTEMAS' },
+      { regex: /biomedicina/gi, label: 'Biomedicina', fullTitle: 'BIOMEDICINA' },
+      { regex: /ci[eê]ncias\s*cont[aá]beis|cont[aá]beis/gi, label: 'Contábeis', fullTitle: 'CIÊNCIAS CONTÁBEIS' },
+      { regex: /direito/gi, label: 'Direito', fullTitle: 'DIREITO' },
+      { regex: /educa[cç][aã]o\s*f[ií]sica|ed\.?\s*f[ií]sica/gi, label: 'Ed. Física', fullTitle: 'EDUCAÇÃO FÍSICA' },
+      { regex: /enfermagem/gi, label: 'Enfermagem', fullTitle: 'ENFERMAGEM' },
+      { regex: /engenharia\s*civil|\bcivil\b/gi, label: 'Civil', fullTitle: 'ENGENHARIA CIVIL' },
+      { regex: /engenharia\s*de\s*software|\bsoftware\b/gi, label: 'Software', fullTitle: 'ENGENHARIA DE SOFTWARE' },
+      { regex: /fisioterapia/gi, label: 'Fisioterapia', fullTitle: 'FISIOTERAPIA' },
+      { regex: /gastronomia/gi, label: 'Gastronomia', fullTitle: 'GASTRONOMIA' },
+      { regex: /gest[aã]o\s*ambiental|\bambiental\b/gi, label: 'Ambiental', fullTitle: 'GESTÃO AMBIENTAL' },
+      { regex: /medicina\s*veterin[aá]ria|\bveterin[aá]ria\b/gi, label: 'Veterinária', fullTitle: 'MEDICINA VETERINÁRIA' },
+      { regex: /nutri[cç][aã]o/gi, label: 'Nutrição', fullTitle: 'NUTRIÇÃO' },
+      { regex: /pedagogia/gi, label: 'Pedagogia', fullTitle: 'PEDAGOGIA' },
+      { regex: /psicologia/gi, label: 'Psicologia', fullTitle: 'PSICOLOGIA' },
+      { regex: /recursos\s*humanos|\brh\b/gi, label: 'Rh', fullTitle: 'RECURSOS HUMANOS' },
+      { regex: /servi[cç]o\s*social|\bseso\b/gi, label: 'Seso', fullTitle: 'SERVIÇO SOCIAL' },
+      { regex: /terapia\s*ocupacional|\bt\.?o\.?\b/gi, label: 'T.o', fullTitle: 'TERAPIA OCUPACIONAL' }
+    ];
+
+    function normalizeTurmaText(t) {
+      if (!t) return '';
+      let r = t;
+      COURSE_STANDARD_NAMES.forEach(i => { r = r.replace(i.regex, i.label); });
+      return r;
+    }
+
+    const DAYS_CONFIG = [
+      { key: 'Seg', label: 'Segunda-feira', full: 'SEGUNDA' },
+      { key: 'Ter', label: 'Terça-feira', full: 'TERÇA' },
+      { key: 'Qua', label: 'Quarta-feira', full: 'QUARTA' },
+      { key: 'Qui', label: 'Quinta-feira', full: 'QUINTA' },
+      { key: 'Sex', label: 'Sexta-feira', full: 'SEXTA' },
+      { key: 'Sab', label: 'Sábado', full: 'SÁBADO' }
+    ];
+
+    function buildModalDayFields() {
+      const editCont = document.getElementById('editDaysContainer');
+      if (editCont) {
+        editCont.innerHTML = DAYS_CONFIG.map(d => `
+          <div class="bg-stone-50 p-2 rounded-lg border border-stone-200" ${d.key === 'Sab' ? 'id="fieldSabadoContainer"' : ''}>
+            <div class="flex justify-between mb-1">
+              <label class="text-[11px] font-bold text-stone-700">${d.label}</label>
+              <button type="button" onclick="togglePMR('${d.key}')" id="btnPmr${d.key}" class="px-1.5 py-0.5 text-[10px] font-bold bg-stone-200 text-stone-600 rounded">PMR</button>
+            </div>
+            <div class="relative flex items-center">
+              <input type="text" id="edit${d.key}" class="w-full pl-2 pr-6 py-1 text-xs bg-white border border-stone-200 rounded">
+              <button type="button" onclick="clearModalDayInput('${d.key}')" class="absolute right-1.5 text-rose-500 hover:text-rose-700">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            <input type="hidden" id="pmr${d.key}" value="false">
+          </div>
+        `).join('');
+      }
+
+      const distCont = document.getElementById('distDaysContainer');
+      if (distCont) {
+        distCont.innerHTML = DAYS_CONFIG.map(d => `
+          <div class="p-2.5 rounded-xl border border-stone-200 bg-stone-50 flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="chkDia${d.key}" onchange="toggleDistDay('${d.key}')" class="w-4 h-4">
+              <span class="text-xs font-bold text-stone-800">${d.label}</span>
+            </label>
+            <label id="lblLab${d.key}" class="hidden items-center gap-1.5 text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded cursor-pointer">
+              <input type="checkbox" id="chkLab${d.key}" class="w-3.5 h-3.5">
+              <span>Lab. Info</span>
+            </label>
+          </div>
+        `).join('');
+      }
+    }
+
+    const STORAGE_KEYS = {
+      NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10',
+      MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1'
+    };
+    const ADMIN_PASS_KEY = 'mapa_ensalamento_univassouras_admin_pass';
+
+    function getArray(v) {
+      return Array.isArray(v) ? v : (v && typeof v === 'object' ? Object.values(v) : []);
+    }
+
+    function ensureDataIntegrity(data) {
+      let s = { NOITE: null, MANHA: null };
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        if (data.NOITE && !Array.isArray(data.NOITE)) s.NOITE = data.NOITE;
+        if (data.MANHA && !Array.isArray(data.MANHA)) s.MANHA = data.MANHA;
+      }
+      if (!s.NOITE) s.NOITE = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!s.MANHA) s.MANHA = { CAMPUS_1: JSON.parse(JSON.stringify(IC1)), CAMPUS_2: JSON.parse(JSON.stringify(IC2)) };
+      if (!s.NOITE.CAMPUS_1) s.NOITE.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
+      if (!s.NOITE.CAMPUS_2) s.NOITE.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
+      if (!s.MANHA.CAMPUS_1) s.MANHA.CAMPUS_1 = JSON.parse(JSON.stringify(IC1));
+      if (!s.MANHA.CAMPUS_2) s.MANHA.CAMPUS_2 = JSON.parse(JSON.stringify(IC2));
+
+      ['NOITE', 'MANHA'].forEach(sf => {
+        Object.keys(s[sf]).forEach(cKey => {
+          s[sf][cKey] = getArray(s[sf][cKey]).map(b => {
+            b.rooms = getArray(b.rooms).map(r => {
+              if (!r.schedule || typeof r.schedule !== 'object') r.schedule = {};
+              if (!r.pmr || typeof r.pmr !== 'object') r.pmr = {};
+              Object.keys(r.schedule).forEach(d => {
+                if (r.schedule[d]) r.schedule[d] = normalizeTurmaText(r.schedule[d]);
+              });
+              return r;
+            });
+            return b;
+          });
+        });
+      });
+      return s;
+    }
+
+    let allShiftsData = ensureDataIntegrity({});
+    let multiCampusData = allShiftsData.NOITE;
+    let activeShift = 'NOITE';
+    let activeCampus = 'CAMPUS_2';
+    let activeViewMode = 'ROOMS';
+    let selectedBlockFilter = 'ALL';
+    let selectedCourseFilter = 'ALL';
+    let searchQuery = '';
+    let dragSource = null;
+    let copyClipboard = null;
+    let activeMenuTarget = null;
+    let isAdmin = false;
+    let dbRef = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      buildModalDayFields();
+      loadLocalFallback();
+      initFirebaseData();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (copyClipboard) clearCopyPasteMode();
+        closeTurmaActionMenu();
+      }
+    });
+
+    function loadLocalFallback() {
+      let t = { NOITE: null, MANHA: null };
+      try {
+        const rN = localStorage.getItem(STORAGE_KEYS.NOITE);
+        if (rN && rN.trim().startsWith('{')) t.NOITE = JSON.parse(rN);
+      } catch (e) {}
+      try {
+        const rM = localStorage.getItem(STORAGE_KEYS.MANHA);
+        if (rM && rM.trim().startsWith('{')) t.MANHA = JSON.parse(rM);
+      } catch (e) {}
+      allShiftsData = ensureDataIntegrity(t);
+      finishDataLoad();
+    }
+
+    function initFirebaseData() {
+      try {
+        firebase.initializeApp(firebaseConfig);
+        dbRef = firebase.database().ref('ensalamento_2027_1_oficial');
+        firebase.database().ref(".info/connected").on("value", (s) => {
+          const b = document.getElementById('firebaseStatusBadge');
+          if (b) {
+            s.val() === true ? b.classList.replace('hidden', 'inline-flex') : b.classList.replace('inline-flex', 'hidden');
+          }
+        });
+        dbRef.once('value').then((sn) => {
+          if (sn.exists()) {
+            allShiftsData = ensureDataIntegrity(sn.val());
+            localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+            localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+            finishDataLoad();
+          } else {
+            dbRef.set(allShiftsData);
+          }
+          dbRef.on('value', (s) => {
+            if (s.exists() && activeShift) {
+              const nd = ensureDataIntegrity(s.val());
+              if (JSON.stringify(allShiftsData) !== JSON.stringify(nd)) {
+                allShiftsData = nd;
+                localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+                localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+                multiCampusData = allShiftsData[activeShift];
+                updateHomeSummaries();
+                if (document.getElementById('homeScreen').classList.contains('hidden')) {
+                  renderActiveView();
+                  safeCreateIcons();
+                }
+              }
+            }
+          });
+        }).catch(err => console.warn("Firebase aviso:", err));
+      } catch (err) {
+        console.warn("Firebase init aviso:", err);
+      }
+    }
+
+    function finishDataLoad() {
+      multiCampusData = allShiftsData[activeShift];
+      updateHomeSummaries();
+      updateAdminUI();
+      updateCampusUI();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function countShiftStats(ds) {
+      let totalRooms = 0, allocatedSlots = 0;
+      if (ds) {
+        Object.keys(ds).forEach(c => {
+          getArray(ds[c]).forEach(b => {
+            getArray(b.rooms).forEach(r => {
+              totalRooms++;
+              if (r.schedule) {
+                Object.values(r.schedule).forEach(v => { if (v && v.trim() !== '') allocatedSlots++; });
+              }
+            });
+          });
+        });
+      }
+      return { totalRooms, allocatedSlots };
+    }
+
+    function updateHomeSummaries() {
+      const m = countShiftStats(allShiftsData.MANHA);
+      const n = countShiftStats(allShiftsData.NOITE);
+      const em = document.getElementById('homeSummaryManha');
+      const en = document.getElementById('homeSummaryNoite');
+      if (em) em.innerText = `${m.totalRooms} Salas • ${m.allocatedSlots} aulas alocadas`;
+      if (en) en.innerText = `${n.totalRooms} Salas • ${n.allocatedSlots} aulas alocadas`;
+    }
+
+    function formatCampusDisplayName(k) {
+      if (k === 'CAMPUS_1') return 'CAMPUS 1';
+      if (k === 'CAMPUS_2') return 'CAMPUS 2';
+      return k.replace(/_/g, ' ').toUpperCase();
+    }
+
+    function getShiftDisplayName(s = activeShift) { return s === 'MANHA' ? 'Manhã / Integral' : 'Noturno'; }
+    function getShiftShortSlug(s = activeShift) { return s === 'MANHA' ? 'Manha_Integral' : 'Noite'; }
+    function getShiftUpperTitle(s = activeShift) { return s === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOITE'; }
+
+    function openHomeScreen() {
+      clearCopyPasteMode();
+      closeTurmaActionMenu();
+      updateHomeSummaries();
+      document.getElementById('homeScreen').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function selectShiftAndEnter(shiftKey) {
+      switchShift(shiftKey);
+      document.getElementById('homeScreen').classList.add('hidden');
+      safeCreateIcons();
+    }
+
+    function switchShift(shiftKey) {
+      activeShift = shiftKey;
+      multiCampusData = allShiftsData[activeShift];
+      activeCampus = 'CAMPUS_2';
+      selectedBlockFilter = 'ALL';
+      selectedCourseFilter = 'ALL';
+      searchQuery = '';
+      const s = document.getElementById('searchInput');
+      if (s) s.value = '';
+      clearCopyPasteMode();
+      closeTurmaActionMenu();
+      updateShiftUI();
+      updateCampusUI();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function switchCampus(campusKey) {
+      activeCampus = campusKey;
+      selectedBlockFilter = 'ALL';
+      searchQuery = '';
+      const s = document.getElementById('searchInput');
+      if (s) s.value = '';
+      closeTurmaActionMenu();
+      updateCampusUI();
+      renderTabs();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function updateShiftUI() {
+      const badge = document.getElementById('shiftHeaderBadge');
+      const mt = document.getElementById('headerMainTitle');
+      const bm = document.getElementById('btnQuickShiftManha');
+      const bn = document.getElementById('btnQuickShiftNoite');
+      if (activeShift === 'MANHA') {
+        if (badge) {
+          badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300';
+          badge.innerHTML = `<i data-lucide="sun" class="w-3 h-3 text-amber-600"></i> Manhã / Integral`;
+        }
+        if (mt) mt.innerText = 'Mapa de Ensalamento Manhã / Integral';
+        if (bm) bm.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white';
+        if (bn) bn.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600';
+      } else {
+        if (badge) {
+          badge.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-100 text-[#7a001e] border border-rose-200';
+          badge.innerHTML = `<i data-lucide="moon" class="w-3 h-3 text-[#7a001e]"></i> Noturno`;
+        }
+        if (mt) mt.innerText = 'Mapa de Ensalamento Noturno';
+        if (bn) bn.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg bg-[#7a001e] text-white';
+        if (bm) bm.className = 'inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg text-stone-600';
+      }
+      const lbl = document.getElementById('headerCampusLabel');
+      if (lbl) {
+        lbl.innerText = activeViewMode === 'COURSES' ? `| Salas por Curso (${getShiftDisplayName()})` : `| ${formatCampusDisplayName(activeCampus)}`;
+      }
+    }
+
+    function updateCampusUI() {
+      const c = document.getElementById('campusButtonsContainer');
+      const keys = Object.keys(multiCampusData || { CAMPUS_1: [], CAMPUS_2: [] });
+      let h = '';
+      keys.forEach(k => {
+        const iA = activeCampus === k;
+        h += `<button type="button" onclick="switchCampus('${k}')" class="px-3.5 py-1 text-xs font-black rounded-lg transition-all ${iA ? 'bg-[#7a001e] text-white shadow-xs' : 'text-stone-600 hover:text-stone-900'}">${formatCampusDisplayName(k)}</button>`;
+      });
+      if (c) c.innerHTML = h;
+      const l = document.getElementById('headerCampusLabel');
+      if (activeViewMode === 'ROOMS' && l) l.innerText = `| ${formatCampusDisplayName(activeCampus)}`;
+    }
+
+    function switchViewMode(mode) {
+      activeViewMode = mode;
+      closeTurmaActionMenu();
+      const br = document.getElementById('btnViewRooms');
+      const bc = document.getElementById('btnViewCourses');
+      const rn = document.getElementById('roomNavigationControls');
+      const cn = document.getElementById('courseNavigationControls');
+      const m = document.getElementById('matricesContainer');
+      const c = document.getElementById('coursesViewContainer');
+      const p = document.getElementById('pdfBtnLabel');
+      if (mode === 'ROOMS') {
+        if (br) br.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white';
+        if (bc) bc.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700';
+        if (rn) rn.classList.replace('hidden', 'flex');
+        if (cn) cn.classList.replace('flex', 'hidden');
+        if (m) m.classList.remove('hidden');
+        if (c) c.classList.add('hidden');
+        if (p) p.innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos)' : 'PDF (Bloco)';
+      } else {
+        if (bc) bc.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-[#7a001e] text-white';
+        if (br) br.className = 'inline-flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg text-stone-700';
+        if (rn) rn.classList.replace('flex', 'hidden');
+        if (cn) cn.classList.replace('hidden', 'flex');
+        if (m) m.classList.add('hidden');
+        if (c) c.classList.remove('hidden');
+        if (p) p.innerText = 'PDF (Cursos)';
+      }
+      updateShiftUI();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function handlePrimaryPdfButton() { activeViewMode === 'COURSES' ? exportCoursesPDF() : exportNativePDF(selectedBlockFilter === 'ALL'); }
+    function renderActiveView() { activeViewMode === 'COURSES' ? renderCoursesView() : renderMatrices(); }
+
+    function getActiveCampusBlocks() {
+      if (!multiCampusData || !activeCampus) return [];
+      if (!Array.isArray(multiCampusData[activeCampus])) {
+        multiCampusData[activeCampus] = getArray(multiCampusData[activeCampus]);
+      }
+      return multiCampusData[activeCampus];
+    }
+
+    function formatShortRoomCode(r, cK) {
+      const s = cK === 'CAMPUS_1' ? 'C1' : (cK === 'CAMPUS_2' ? 'C2' : cK);
+      const c = (r || '').trim();
+      if (/^lij$/i.test(c)) return `LIJ-${s}`;
+      const l = c.match(/lab(?:orat[oó]rio)?\.?\s*(?:de\s*)?(?:inform[aá]tica)?\s*0*(\d+)/i);
+      if (l) return `LAB${l[1]}-${s}`;
+      const sM = c.match(/^sala\s*(\d+[a-z]?)$/i);
+      if (sM) return `${sM[1]}-${s}`;
+      return `${c}-${s}`;
+    }
+
+    function parseTurmaAllocationString(rl) {
+      const cM = rl.match(/\(\s*(\d+)\s*(?:alunos?)?\s*\)/i);
+      const sc = cM ? cM[1] : null;
+      const iP = /\[PMR\]/i.test(rl);
+      let c = rl.replace(/\(\s*\d+\s*(?:alunos?)?\s*\)/gi, '').replace(/\[PMR\]/gi, '').trim();
+      if (!c) return null;
+      let mC = null;
+      for (const i of COURSE_STANDARD_NAMES) {
+        i.regex.lastIndex = 0;
+        if (i.regex.test(c)) { mC = i; break; }
+      }
+      const pM = c.match(/(\d+)\s*[º°]/);
+      const pN = pM ? parseInt(pM[1], 10) : 99;
+      let fT = mC ? mC.fullTitle : 'OUTROS CURSOS';
+      let r = c;
+      if (mC) { mC.regex.lastIndex = 0; r = r.replace(mC.regex, ' '); }
+      if (pM) r = r.replace(pM[0], ' ');
+      r = r.replace(/\bper[ií]odo\b/gi, ' ').replace(/\bturma\b/gi, ' ').replace(/\s+/g, ' ').trim();
+      let pL = pN !== 99 ? (r ? `${pN}º Período ${r.toUpperCase()}` : `${pN}º Período`) : (r ? r : c);
+      return { courseFullTitle: fT, periodNum: pN, suffix: r.toUpperCase(), periodLabel: pL, studentCount: sc, inlinePMR: iP };
+    }
+
+    function buildCoursesDataFromMap() {
+      const dO = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+      const cM = {};
+      [...COURSE_STANDARD_NAMES].sort((a, b) => a.fullTitle.localeCompare(b.fullTitle, 'pt-BR')).forEach(c => cM[c.fullTitle] = {});
+      if (!multiCampusData) return cM;
+      Object.keys(multiCampusData).forEach(cK => {
+        getArray(multiCampusData[cK]).forEach(b => {
+          getArray(b.rooms).forEach(r => {
+            const sR = formatShortRoomCode(r.sala, cK);
+            dO.forEach(d => {
+              const cC = (r.schedule && r.schedule[d]) ? r.schedule[d].trim() : '';
+              if (!cC) return;
+              const cHP = !!(r.pmr && r.pmr[d]);
+              cC.split(/\n+/).map(l => l.trim()).filter(Boolean).forEach(l => {
+                const p = parseTurmaAllocationString(l);
+                if (!p) return;
+                const { courseFullTitle: f, periodNum: pN, suffix: s, periodLabel: pL, studentCount: sC, inlinePMR: iP } = p;
+                if (!cM[f]) cM[f] = {};
+                if (!cM[f][pL]) {
+                  cM[f][pL] = { periodLabel: pL, periodNum: pN, suffix: s, studentCount: null, hasPMR: false, days: { SEGUNDA: [], TERÇA: [], QUARTA: [], QUINTA: [], SEXTA: [], SÁBADO: [] } };
+                }
+                const e = cM[f][pL];
+                if (sC && !e.studentCount) e.studentCount = sC;
+                if (cHP || iP) e.hasPMR = true;
+                if (!e.days[d].includes(sR)) e.days[d].push(sR);
+              });
+            });
+          });
+        });
+      });
+      const fs = document.getElementById('courseFilterSelect');
+      if (fs) {
+        const cv = fs.value || 'ALL';
+        let oh = `<option value="ALL">Todos os Cursos</option>`;
+        Object.keys(cM).forEach(t => { oh += `<option value="${t}" ${cv === t ? 'selected' : ''}>${t}</option>`; });
+        fs.innerHTML = oh;
+      }
+      return cM;
+    }
+
+    function setCourseFilter(v) { selectedCourseFilter = v; renderCoursesView(); safeCreateIcons(); }
+
+    function renderCoursesView() {
+      const container = document.getElementById('coursesViewContainer');
+      const cM = buildCoursesDataFromMap();
+      const dO = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+      let html = `
+        <div class="bg-white rounded-2xl border p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-[#7a001e]/10 text-[#7a001e] flex items-center justify-center font-black">
+              <i data-lucide="info" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs sm:text-sm font-black text-stone-900 uppercase">Quadro de Salas por Curso • ${getShiftDisplayName()}</h2>
+              <p class="text-[11px] text-stone-500">Sincronizado automaticamente com o Mapa de Salas</p>
+            </div>
+          </div>
+          <div class="bg-stone-100 border px-2.5 py-1 rounded-lg text-[11px]">
+            <span class="font-black text-[#7a001e] mr-1">Legendas:</span>
+            <span class="font-bold">C1:</span> Campus 1 • <span class="font-bold">C2:</span> Campus 2
+          </div>
+        </div>
+      `;
+      Object.keys(cM).filter(c => selectedCourseFilter === 'ALL' || c === selectedCourseFilter).forEach(cT => {
+        let r = Object.values(cM[cT]);
+        if (searchQuery && !cT.toLowerCase().includes(searchQuery)) {
+          r = r.filter(x => x.periodLabel.toLowerCase().includes(searchQuery) || dO.some(d => x.days[d].join(' ').toLowerCase().includes(searchQuery)));
+        }
+        r.sort((a, b) => a.periodNum !== b.periodNum ? a.periodNum - b.periodNum : a.periodLabel.localeCompare(b.periodLabel, 'pt-BR'));
+        html += `
+          <div class="bg-white rounded-2xl border shadow-xs overflow-hidden mt-4">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse min-w-[620px] table-fixed">
+                <colgroup><col class="w-44 sm:w-52"><col><col><col><col><col><col></colgroup>
+                <thead>
+                  <tr class="bg-[#7a001e] text-white border-b border-[#620018]">
+                    <th class="py-2.5 px-3 text-xs sm:text-sm font-black uppercase text-center bg-[#620018]">${cT}</th>
+                    ${dO.map(d => `<th class="py-2.5 px-2 text-center text-xs font-black uppercase border-r border-white/15">${d}</th>`).join('')}
+                  </tr>
+                </thead>
+                <tbody class="divide-y text-xs">
+                  ${r.length > 0 ? r.map((rw, i) => `
+                    <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-stone-50/70'} hover:bg-amber-50/50">
+                      <td class="py-2.5 px-2.5 border-r text-center bg-stone-100/80 align-middle">
+                        <div class="flex flex-col items-center justify-center gap-1">
+                          <span class="font-black text-[13px] text-stone-900">${rw.periodLabel}</span>
+                          ${(rw.studentCount || rw.hasPMR) ? `
+                            <div class="inline-flex flex-wrap items-center justify-center gap-1">
+                              ${rw.studentCount ? `<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-stone-200/90">${rw.studentCount} alunos</span>` : ''}
+                              ${rw.hasPMR ? `<span class="px-1.5 py-0.2 rounded text-[9.5px] font-black bg-blue-600 text-white uppercase"><i data-lucide="accessibility" class="w-2.5 h-2.5 inline"></i> PMR</span>` : ''}
+                            </div>
+                          ` : ''}
+                        </div>
+                      </td>
+                      ${dO.map(d => {
+                        const rL = rw.days[d];
+                        const hR = rL && rL.length > 0;
+                        return `<td class="py-2 px-1.5 text-center border-r align-middle ${hR ? 'text-stone-900' : 'text-stone-400'}">
+                          ${hR ? rL.map(rm => `<span class="inline-block px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-300 text-[#7a001e] font-black sm:text-[15px]">${rm}</span>`).join('<div class="h-1"></div>') : '<span class="font-bold text-stone-400">X</span>'}
+                        </td>`;
+                      }).join('')}
+                    </tr>
+                  `).join('') : `<tr><td colspan="7" class="p-3.5 text-center text-xs text-stone-400 italic">Nenhuma turma alocada.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function formatTurmaCardContent(rC) {
+      if (!rC) return '';
+      const n = normalizeTurmaText(rC.trim());
+      const m = n.match(/^(.*?)\s*\((\d+)\s*(?:alunos?)?\)\s*$/i);
+      const pR = isAdmin ? 'pr-3' : '';
+      if (m) {
+        return `<span class="font-bold text-[11px] text-stone-800 block w-full ${pR}">${m[1].trim().replace(/\n/g, '<br>')}</span>
+                <span class="inline-block text-[9.5px] font-bold text-stone-600 bg-stone-100 border px-1.5 py-0.2 rounded-md mt-0.5">${m[2]} alunos</span>`;
+      }
+      return `<span class="font-bold text-[11px] text-stone-800 block w-full ${pR}">${n.replace(/\n/g, '<br>')}</span>`;
+    }
+
+    function openTurmaActionMenu(e, bI, rI, day) {
+      e.stopPropagation();
+      if (!isAdmin) return;
+      const r = getActiveCampusBlocks()[bI].rooms[rI];
+      activeMenuTarget = { blockIdx: bI, roomIdx: rI, day: day };
+      const m = document.getElementById('turmaActionMenu');
+      document.getElementById('turmaMenuTitle').innerText = normalizeTurmaText(r.schedule[day] || '');
+      document.getElementById('turmaMenuSubtitle').innerText = `${r.sala} • ${day}`;
+      m.classList.remove('hidden');
+      const rt = e.currentTarget.getBoundingClientRect();
+      let l = rt.right - 176, t = rt.bottom + 4;
+      if (l < 10) l = 10;
+      if (t + 135 > window.innerHeight) t = rt.top - 135;
+      m.style.left = `${l}px`;
+      m.style.top = `${t}px`;
+      safeCreateIcons();
+    }
+
+    function closeTurmaActionMenu() {
+      const m = document.getElementById('turmaActionMenu');
+      if (m) m.classList.add('hidden');
+      activeMenuTarget = null;
+    }
+
+    function triggerCopyFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx: bI, roomIdx: rI, day: d } = activeMenuTarget;
+      closeTurmaActionMenu();
+      const r = getActiveCampusBlocks()[bI].rooms[rI];
+      const t = normalizeTurmaText(r.schedule[d] || '');
+      if (!t) return;
+      copyClipboard = { turma: t, pmr: !!(r.pmr && r.pmr[d]) };
+      document.getElementById('copyBannerText').innerText = t;
+      document.getElementById('copyModeBanner').classList.remove('hidden');
+      renderActiveView();
+      safeCreateIcons();
+      showToast(`Modo Duplicar ativo: clique nas salas para colar!`);
+    }
+
+    function triggerEditFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx: bI, roomIdx: rI } = activeMenuTarget;
+      closeTurmaActionMenu();
+      openEditModal(bI, rI);
+    }
+
+    function triggerDeleteFromMenu() {
+      if (!isAdmin || !activeMenuTarget) return;
+      const { blockIdx: bI, roomIdx: rI, day: d } = activeMenuTarget;
+      closeTurmaActionMenu();
+      const r = getActiveCampusBlocks()[bI].rooms[rI];
+      r.schedule[d] = '';
+      if (r.pmr) r.pmr[d] = false;
+      saveToStorage();
+      renderActiveView();
+      safeCreateIcons();
+      showToast(`Turma removida!`);
+    }
+
+    function openEditModal(bI, rI) {
+      if (!isAdmin) {
+        showToast('Clique no botão "Admin" (topo direito) para editar salas!');
+        return;
+      }
+      const b = getActiveCampusBlocks()[bI];
+      const r = b.rooms[rI];
+      r.pmr = r.pmr || {};
+      r.schedule = r.schedule || {};
+      document.getElementById('editBlockIdx').value = bI;
+      document.getElementById('editRoomIdx').value = rI;
+      document.getElementById('modalBlocoSubtitle').innerText = `${b.bloco} • ${formatCampusDisplayName(activeCampus)}`;
+      document.getElementById('editRoomName').value = r.sala;
+      document.getElementById('editSubtitulo').value = r.subtitulo || '';
+      document.getElementById('editAndar').value = r.andar || '';
+      document.getElementById('editCapacity').value = r.capacidade || '';
+      setRoomAcessibilidadeUI(r.acessibilidade === true);
+
+      DAYS_CONFIG.forEach(d => {
+        document.getElementById(`edit${d.key}`).value = normalizeTurmaText(r.schedule[d.full] || '');
+        setPMRUIState(d.key, !!r.pmr[d.full]);
+      });
+
+      const days = getDaysForBlock(b.bloco);
+      const sC = document.getElementById('fieldSabadoContainer');
+      if (sC) {
+        days.includes('SÁBADO') ? sC.classList.remove('hidden') : sC.classList.add('hidden');
+      }
+      document.getElementById('editModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeModal() { document.getElementById('editModal').classList.add('hidden'); }
+
+    function saveModalData(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      const bI = parseInt(document.getElementById('editBlockIdx').value);
+      const rI = parseInt(document.getElementById('editRoomIdx').value);
+      const rm = getActiveCampusBlocks()[bI].rooms[rI];
+      rm.sala = document.getElementById('editRoomName').value.trim();
+      rm.subtitulo = document.getElementById('editSubtitulo').value.trim();
+      rm.andar = document.getElementById('editAndar').value.trim();
+      rm.capacidade = document.getElementById('editCapacity').value;
+      rm.acessibilidade = document.getElementById('editRoomAcessibilidade').value === 'true';
+      rm.schedule = {};
+      rm.pmr = {};
+      DAYS_CONFIG.forEach(d => {
+        rm.schedule[d.full] = normalizeTurmaText(document.getElementById(`edit${d.key}`).value);
+        rm.pmr[d.full] = document.getElementById(`pmr${d.key}`).value === 'true';
+      });
+      saveToStorage();
+      closeModal();
+      renderActiveView();
+      safeCreateIcons();
+      showToast('Sala salva com sucesso!');
+    }
+
+    function deleteRoomFromModal() {
+      if (!isAdmin) return;
+      const bI = parseInt(document.getElementById('editBlockIdx').value);
+      const rI = parseInt(document.getElementById('editRoomIdx').value);
+      getActiveCampusBlocks()[bI].rooms.splice(rI, 1);
+      saveToStorage();
+      closeModal();
+      renderActiveView();
+      safeCreateIcons();
+      showToast('Sala excluída!');
+    }
+
+    // DISTRIBUIÇÃO AUTOMÁTICA COM SUPORTE A PREFERÊNCIA DE LOCAL
+    function openAutoDistModal() {
+      if (!isAdmin) return;
+      document.getElementById('autoDistErrorBox').classList.add('hidden');
+      document.getElementById('distCurso').value = '';
+      document.getElementById('distQtdAlunos').value = '';
+      document.getElementById('distPreferencia').value = '';
+      document.getElementById('distAcessibilidade').checked = false;
+      DAYS_CONFIG.forEach(d => {
+        document.getElementById(`chkDia${d.key}`).checked = false;
+        document.getElementById(`chkLab${d.key}`).checked = false;
+        document.getElementById(`lblLab${d.key}`).classList.replace('inline-flex', 'hidden');
+      });
+      document.getElementById('autoDistModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeAutoDistModal() { document.getElementById('autoDistModal').classList.add('hidden'); }
+
+    function toggleDistDay(key) {
+      const chk = document.getElementById(`chkDia${key}`).checked;
+      const lbl = document.getElementById(`lblLab${key}`);
+      if (chk) {
+        lbl.classList.replace('hidden', 'inline-flex');
+      } else {
+        lbl.classList.replace('inline-flex', 'hidden');
+        document.getElementById(`chkLab${key}`).checked = false;
+      }
+    }
+
+    function matchesLocationPref(room, blockName, prefText) {
+      if (!prefText) return true;
+      const target = `${blockName || ''} ${room.sala || ''} ${room.andar || ''} ${room.subtitulo || ''}`.toLowerCase();
+      const cleanPref = prefText.replace(/\b(apenas|só|so|somente|exclusivamente|no|na|em|do|da)\b/gi, '').trim();
+      if (!cleanPref) return true;
+      return target.includes(cleanPref);
+    }
+
+    function executeAutoDistribution(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      const errBox = document.getElementById('autoDistErrorBox');
+      const errMsg = document.getElementById('autoDistErrorMsg');
+      errBox.classList.add('hidden');
+
+      const periodo = document.getElementById('distPeriodo').value;
+      const curso = document.getElementById('distCurso').value;
+      const letra = document.getElementById('distTurmaLetra').value;
+      const qtd = parseInt(document.getElementById('distQtdAlunos').value) || 0;
+      const campusPref = document.getElementById('distCampusPref').value;
+      const reqPmr = document.getElementById('distAcessibilidade').checked;
+      const prefText = (document.getElementById('distPreferencia').value || '').trim().toLowerCase();
+
+      const activeDays = DAYS_CONFIG.filter(d => document.getElementById(`chkDia${d.key}`).checked).map(d => ({
+        day: d.full,
+        needsLab: document.getElementById(`chkLab${d.key}`).checked
+      }));
+
+      if (activeDays.length === 0) {
+        errBox.classList.remove('hidden');
+        errMsg.innerText = 'Selecione pelo menos um dia da semana.';
+        return;
+      }
+
+      const turmaNome = `${letra ? `${periodo} ${curso} ${letra}` : `${periodo} ${curso}`} (${qtd})`;
+      let campusOrder = campusPref === 'ONLY_C2' ? ['CAMPUS_2'] : (campusPref === 'ONLY_C1' ? ['CAMPUS_1'] : (campusPref === 'PREF_C2' ? ['CAMPUS_2', 'CAMPUS_1'] : ['CAMPUS_1', 'CAMPUS_2']));
+
+      const isLab = r => (`${r.sala} ${r.subtitulo || ''}`).toLowerCase().includes('lab');
+      const hasCap = r => !r.capacidade || (parseInt(r.capacidade) || 0) >= qtd;
+      const isAcc = r => !reqPmr || r.acessibilidade === true || (r.andar || '').toLowerCase().includes('térreo');
+      const isStrictPref = prefText !== '' && /(apenas|só|so|somente|exclusiv)/i.test(prefText);
+
+      let chosenCampus = null, dayAllocations = {};
+
+      for (const cK of campusOrder) {
+        const allRooms = [];
+        getArray(multiCampusData[cK]).forEach(b => getArray(b.rooms).forEach(r => {
+          r._blockName = b.bloco;
+          allRooms.push(r);
+        }));
+        const regDays = activeDays.filter(d => !d.needsLab).map(d => d.day);
+        const labDays = activeDays.filter(d => d.needsLab).map(d => d.day);
+
+        let regRoom = null;
+        if (regDays.length > 0) {
+          let elig = allRooms.filter(r => !isLab(r) && isAcc(r) && hasCap(r));
+          if (isStrictPref) elig = elig.filter(r => matchesLocationPref(r, r._blockName, prefText));
+          elig.sort((a, b) => {
+            if (prefText && !isStrictPref) {
+              const mA = matchesLocationPref(a, a._blockName, prefText) ? 1 : 0;
+              const mB = matchesLocationPref(b, b._blockName, prefText) ? 1 : 0;
+              if (mA !== mB) return mB - mA;
+            }
+            return (parseInt(a.capacidade) || 999) - (parseInt(b.capacidade) || 999);
+          });
+          regRoom = elig.find(r => regDays.every(d => !r.schedule || !r.schedule[d]));
+          if (!regRoom) continue;
+        }
+
+        let labMap = {}, labOk = true;
+        if (labDays.length > 0) {
+          const eligLabs = allRooms.filter(r => isLab(r) && isAcc(r) && hasCap(r)).sort((a, b) => (parseInt(a.capacidade) || 999) - (parseInt(b.capacidade) || 999));
+          for (const d of labDays) {
+            const fl = eligLabs.find(r => !r.schedule || !r.schedule[d]);
+            if (fl) labMap[d] = fl; else { labOk = false; break; }
+          }
+          if (!labOk) continue;
+        }
+
+        chosenCampus = cK;
+        regDays.forEach(d => dayAllocations[d] = regRoom);
+        labDays.forEach(d => dayAllocations[d] = labMap[d]);
+        break;
+      }
+
+      if (!chosenCampus) {
+        errBox.classList.remove('hidden');
+        errMsg.innerText = `Nenhuma sala livre comporta ${qtd} alunos com os critérios escolhidos.`;
+        return;
+      }
+
+      Object.keys(dayAllocations).forEach(d => {
+        const rm = dayAllocations[d];
+        rm.schedule = rm.schedule || {};
+        rm.schedule[d] = turmaNome;
+        if (reqPmr) { rm.pmr = rm.pmr || {}; rm.pmr[d] = true; }
+      });
+
+      saveToStorage();
+      closeAutoDistModal();
+      switchCampus(chosenCampus);
+      showToast(`Turma "${turmaNome}" alocada no ${formatCampusDisplayName(chosenCampus)}!`);
+    }
+
+    function handleDragStart(e, bI, rI, d, fD = false) {
+      if (!isAdmin) { e.preventDefault(); return; }
+      e.stopPropagation();
+      closeTurmaActionMenu();
+      dragSource = { campus: activeCampus, blockIdx: bI, roomIdx: rI, day: d, forceDuplicate: fD || e.ctrlKey || e.altKey };
+      e.dataTransfer.effectAllowed = 'copyMove';
+      e.dataTransfer.setData('text/plain', `${bI}:${rI}:${d}`);
+      setTimeout(() => (e.currentTarget.closest('.turma-card') || e.currentTarget).classList.add('dragging-card'), 0);
+    }
+
+    function handleDragEnd(e) {
+      (e.currentTarget.closest('.turma-card') || e.currentTarget).classList.remove('dragging-card');
+      document.querySelectorAll('.drag-over-cell').forEach(el => el.classList.remove('drag-over-cell'));
+    }
+
+    function handleDragOver(e) { if (isAdmin) { e.preventDefault(); e.currentTarget.classList.add('drag-over-cell'); } }
+    function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over-cell'); }
+
+    function handleDrop(e, tBI, tRI, tD) {
+      if (!isAdmin) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.currentTarget.classList.remove('drag-over-cell');
+      if (!dragSource || dragSource.campus !== activeCampus) return;
+      const { blockIdx: sB, roomIdx: sR, day: sD, forceDuplicate: fD } = dragSource;
+      if (sB === tBI && sR === tRI && sD === tD) { dragSource = null; return; }
+      const b = getActiveCampusBlocks();
+      const sRm = b[sB].rooms[sR], dRm = b[tBI].rooms[tRI];
+      sRm.pmr = sRm.pmr || {}; dRm.pmr = dRm.pmr || {};
+      const sT = sRm.schedule[sD] || '', sP = !!sRm.pmr[sD];
+      const dT = dRm.schedule[tD] || '', dP = !!dRm.pmr[tD];
+      if (fD || e.ctrlKey || e.altKey) {
+        dRm.schedule[tD] = sT; dRm.pmr[tD] = sP;
+        showToast(`Turma duplicada!`);
+      } else {
+        dRm.schedule[tD] = sT; dRm.pmr[tD] = sP;
+        sRm.schedule[sD] = dT; sRm.pmr[sD] = dP;
+        showToast(dT ? 'Turmas trocadas!' : 'Turma movida!');
+      }
+      dragSource = null;
+      saveToStorage();
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function clearCopyPasteMode() {
+      copyClipboard = null;
+      const b = document.getElementById('copyModeBanner');
+      if (b) b.classList.add('hidden');
+      renderActiveView();
+      safeCreateIcons();
+    }
+
+    function handleCellClick(bI, rI, d) {
+      if (!isAdmin) {
+        showToast('Clique no botão "Admin" (topo direito) para editar salas!');
+        return;
+      }
+      closeTurmaActionMenu();
+      if (copyClipboard) {
+        const r = getActiveCampusBlocks()[bI].rooms[rI];
+        r.schedule[d] = copyClipboard.turma;
+        r.pmr = r.pmr || {};
+        r.pmr[d] = copyClipboard.pmr;
+        saveToStorage();
+        renderActiveView();
+        safeCreateIcons();
+        showToast(`Turma colada na ${r.sala}!`);
+        return;
+      }
+      openEditModal(bI, rI);
+    }
+
+    function saveToStorage() {
+      allShiftsData[activeShift] = multiCampusData;
+      localStorage.setItem(STORAGE_KEYS.NOITE, JSON.stringify(allShiftsData.NOITE));
+      localStorage.setItem(STORAGE_KEYS.MANHA, JSON.stringify(allShiftsData.MANHA));
+      if (dbRef) {
+        dbRef.set(allShiftsData).catch(() => showToast("Aviso: falha ao sincronizar na nuvem."));
+      }
+      updateHomeSummaries();
+    }
+
+    function renderTabs() {
+      const t = document.getElementById('blockTabs');
+      const b = getActiveCampusBlocks();
+      let h = `<button type="button" onclick="setFilter('ALL')" class="px-3 py-1 text-xs font-black uppercase rounded-lg ${selectedBlockFilter === 'ALL' ? 'bg-[#7a001e] text-white' : 'text-stone-600'}">Todos os Blocos</button>`;
+      b.forEach(x => {
+        h += `<button type="button" onclick="setFilter('${x.bloco}')" class="px-3 py-1 text-xs font-black uppercase rounded-lg whitespace-nowrap ${selectedBlockFilter === x.bloco ? 'bg-[#7a001e] text-white' : 'text-stone-600'}">${x.bloco}</button>`;
+      });
+      if (t) t.innerHTML = h;
+      const p = document.getElementById('pdfBtnLabel');
+      if (activeViewMode === 'ROOMS' && p) p.innerText = selectedBlockFilter === 'ALL' ? 'PDF (Todos)' : 'PDF (Bloco)';
+    }
+
+    function setFilter(f) { selectedBlockFilter = f; closeTurmaActionMenu(); renderTabs(); renderActiveView(); safeCreateIcons(); }
+    function handleSearch(v) { searchQuery = v.trim().toLowerCase(); renderActiveView(); safeCreateIcons(); }
+
+    function getDaysForBlock(n) {
+      if (!n) return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+      if (n.includes('3°') || n.includes('4°') || n.includes('3º')) return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA'];
+      return ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+    }
+
+    function renderTableSegment(b, oBI, rS, sI, d, sT = '') {
+      const cC = (isAdmin && copyClipboard) ? 'copy-active-cell' : '';
+      return `
+        <div class="overflow-x-auto ${sT ? 'pt-2' : ''}">
+          ${sT ? `<div class="px-5 py-2 bg-stone-100 text-xs font-bold uppercase"><i data-lucide="arrow-right-circle" class="w-3 h-3 inline text-[#7a001e]"></i> ${sT}</div>` : ''}
+          <table class="w-full text-left border-collapse min-w-[700px] table-fixed">
+            <colgroup><col class="w-28">${rS.map(() => `<col>`).join('')}</colgroup>
+            <thead>
+              <tr class="bg-stone-100 border-b">
+                <th class="p-2 text-[10px] font-black uppercase sticky left-0 z-10 border-r text-center bg-stone-200/70">Local</th>
+                ${rS.map(r => `<th class="p-2 text-center text-[10px] font-bold uppercase border-r">${r.andar || '—'}</th>`).join('')}
+              </tr>
+              <tr class="bg-white border-b-2 border-[#7a001e]">
+                <th class="p-3 text-xs font-black text-white uppercase bg-[#7a001e] sticky left-0 z-10 border-r text-center">SALA</th>
+                ${rS.map((r, i) => {
+                  const aRI = sI + i;
+                  return `<th class="p-2 text-center border-r bg-stone-50/50 align-bottom">
+                    <button type="button" onclick="openEditModal(${oBI},${aRI})" class="group w-full flex flex-col items-center justify-end focus:outline-none min-h-[50px] cursor-pointer">
+                      ${r.acessibilidade ? `<span class="px-2 py-0.5 mb-1 rounded-full text-[9px] font-black bg-blue-600 text-white uppercase"><i data-lucide="accessibility" class="w-2.5 h-2.5 inline"></i> Acessibilidade</span>` : ''}
+                      <div class="relative">
+                        <span class="text-sm font-black text-[#7a001e] group-hover:underline">${r.sala}</span>
+                      </div>
+                      ${r.subtitulo ? `<span class="text-[11px] font-bold text-stone-600">${r.subtitulo}</span>` : ''}
+                    </button>
+                  </th>`;
+                }).join('')}
+              </tr>
+              <tr class="bg-stone-50 border-b">
+                <th class="p-2 text-[10px] font-black uppercase sticky left-0 z-10 border-r text-center bg-stone-100">Capac.</th>
+                ${rS.map(r => `<th class="p-1.5 text-center border-r"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-stone-900 text-amber-300">${r.capacidade || '—'}</span></th>`).join('')}
+              </tr>
+            </thead>
+            <tbody class="divide-y text-xs">
+              ${d.map(day => `
+                <tr class="hover:bg-amber-50/40">
+                  <td class="p-3 font-black text-[11px] text-white uppercase bg-[#7a001e] sticky left-0 z-10 border-r text-center">${day}</td>
+                  ${rS.map((r, i) => {
+                    const aRI = sI + i;
+                    const c = (r.schedule && r.schedule[day]) ? r.schedule[day] : '';
+                    const hP = (r.pmr && r.pmr[day]);
+                    const iM = searchQuery && c.toLowerCase().includes(searchQuery);
+                    return `<td onclick="handleCellClick(${oBI},${aRI},'${day}')" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,${oBI},${aRI},'${day}')" class="p-2 text-center border-r cursor-pointer align-middle transition-all ${cC} ${iM ? 'bg-amber-200 font-black' : ''}">
+                      ${c ? `
+                        <div draggable="${isAdmin ? 'true' : 'false'}" ondragstart="handleDragStart(event,${oBI},${aRI},'${day}',false)" ondragend="handleDragEnd(event)" class="turma-card relative px-2 py-2 rounded-lg bg-white border ${hP ? 'border-blue-400 ring-1 ring-blue-300' : 'border-stone-200'} shadow-2xs">
+                          ${isAdmin ? `<button type="button" onclick="openTurmaActionMenu(event,${oBI},${aRI},'${day}')" class="absolute top-1 right-1 text-stone-400 hover:text-stone-900 p-0.5 rounded"><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></button>` : ''}
+                          ${formatTurmaCardContent(c)}
+                          ${hP ? `<span class="inline-flex mt-0.5 px-1.5 py-0.2 rounded text-[9px] font-black bg-blue-600 text-white uppercase"><i data-lucide="accessibility" class="w-2.5 h-2.5 inline"></i> PMR</span>` : ''}
+                        </div>
+                      ` : (hP ? `<div class="px-2 py-1 rounded bg-blue-50 border border-blue-200 inline-flex font-bold text-blue-700 text-[10px]">PMR</div>` : `<span class="text-stone-300 text-xs">—</span>`)}
+                    </td>`;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderMatrices() {
+      const c = document.getElementById('matricesContainer');
+      if (!c) return;
+      const b = getActiveCampusBlocks();
+      const f = selectedBlockFilter === 'ALL' ? b : b.filter(x => x.bloco === selectedBlockFilter);
+      let h = '';
+      f.forEach(x => {
+        const oI = b.findIndex(i => i.bloco === x.bloco);
+        const rA = getArray(x.rooms);
+        const bN = x.bloco || '';
+        const isB4 = bN.includes('4°') && rA.length >= 14;
+        h += `
+          <div class="bg-white rounded-2xl border mb-6 overflow-hidden">
+            <div class="px-5 py-3 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
+                <h3 class="text-sm font-black">${bN}</h3>
+                <span class="text-xs text-amber-100/90">• ${rA.length} Salas</span>
+              </div>
+              <div class="flex items-center gap-2">
+                ${isAdmin ? `
+                  <button type="button" onclick="openReorderModal(${oI})" class="px-2 py-1 text-[11px] font-bold uppercase bg-white/10 rounded border border-white/20">Reordenar</button>
+                  <button type="button" onclick="openNewRoomModal(${oI})" class="px-2 py-1 text-[11px] font-black uppercase bg-amber-400 text-stone-900 rounded">+ Nova Sala</button>
+                ` : ''}
+                <span class="text-[10px] font-bold bg-black/20 px-2 py-1 rounded text-amber-200">${formatCampusDisplayName(activeCampus)} • ${getShiftDisplayName()}</span>
+              </div>
+            </div>
+        `;
+        const d = getDaysForBlock(bN);
+        if (isB4) {
+          h += renderTableSegment(x, oI, rA.slice(0, 7), 0, d, 'Parte 1 (Salas 400 a 406)');
+          h += `<div class="h-3 bg-stone-100 border-y border-stone-200"></div>`;
+          h += renderTableSegment(x, oI, rA.slice(7), 7, d, 'Parte 2 (Salas 407 a 415)');
+        } else {
+          h += renderTableSegment(x, oI, rA, 0, d);
+        }
+        h += `</div>`;
+      });
+      c.innerHTML = h;
+    }
+
+    function exportCoursesPDF() {
+      const b = document.getElementById('btnExportPDF');
+      const oH = b.innerHTML;
+      b.innerHTML = `Gerando...`;
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+          const cM = buildCoursesDataFromMap();
+          const dO = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
+          const sT = getShiftUpperTitle();
+          const dH = () => {
+            doc.setFillColor(122, 0, 30); doc.rect(10, 8, 190, 16, 'F');
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(255, 255, 255);
+            doc.text(`ENSALAMENTO ${sT} - 2027.1`, 14, 14.5);
+            doc.setFontSize(8.5); doc.setTextColor(254, 240, 138);
+            doc.text(`TURMAS ${sT} • SALAS POR CURSO`, 14, 20.5);
+          };
+          dH(); let cY = 28;
+          Object.keys(cM).filter(c => selectedCourseFilter === 'ALL' || c === selectedCourseFilter).forEach(cT => {
+            let r = Object.values(cM[cT]);
+            r.sort((a, b) => a.periodNum !== b.periodNum ? a.periodNum - b.periodNum : a.periodLabel.localeCompare(b.periodLabel, 'pt-BR'));
+            if (cY + 10 + Math.max(r.length, 1) * 8.5 > 280) { doc.addPage(); dH(); cY = 28; }
+            const bD = r.length > 0 ? r.map(x => {
+              let lC = x.periodLabel;
+              const e = [];
+              if (x.studentCount) e.push(`${x.studentCount} alunos`);
+              if (x.hasPMR) e.push('PMR');
+              if (e.length > 0) lC += `\n(${e.join(' • ')})`;
+              return [lC, ...dO.map(d => (x.days[d] && x.days[d].length > 0) ? x.days[d].join('\n') : 'X')];
+            }) : [['Sem turmas alocadas', 'X', 'X', 'X', 'X', 'X', 'X']];
+            doc.autoTable({
+              startY: cY, margin: { left: 10, right: 10 }, head: [[cT, ...dO]], body: bD,
+              styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 2, valign: 'middle', halign: 'center' },
+              headStyles: { fillColor: [122, 0, 30], textColor: [255, 255, 255], fontStyle: 'bold' },
+              columnStyles: { 0: { cellWidth: 42, fillColor: [245, 245, 244], textColor: [28, 25, 23], fontStyle: 'bold' } }
+            });
+            cY = doc.lastAutoTable.finalY + 5;
+          });
+          doc.save(`Ensalamento_${getShiftShortSlug()}_Por_Curso.pdf`);
+          showToast('PDF por Curso gerado!');
+        } catch (err) { showToast('Erro ao gerar PDF.'); } finally { b.innerHTML = oH; safeCreateIcons(); }
+      }, 50);
+    }
+
+    function exportNativePDF(eA = false) {
+      const btn = document.getElementById('btnExportPDF');
+      const oH = btn.innerHTML;
+      btn.innerHTML = `Gerando...`;
+      setTimeout(() => {
+        try {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+          const b = getActiveCampusBlocks();
+          const cN = formatCampusDisplayName(activeCampus);
+          const sN = getShiftDisplayName();
+          const bE = eA ? b : (selectedBlockFilter === 'ALL' ? b : b.filter(x => x.bloco === selectedBlockFilter));
+          let pC = 0;
+          bE.forEach(blk => {
+            const d = getDaysForBlock(blk.bloco);
+            const rA = getArray(blk.rooms);
+            const s = (blk.bloco.includes('4°') && rA.length >= 14) ? [{ rooms: rA.slice(0, 7), l: `${blk.bloco} - P1` }, { rooms: rA.slice(7), l: `${blk.bloco} - P2` }] : [{ rooms: rA, l: blk.bloco }];
+            s.forEach(sl => {
+              if (pC > 0) doc.addPage('a4', 'landscape');
+              pC++;
+              doc.setFillColor(122, 0, 30); doc.rect(10, 8, 277, 16, 'F');
+              doc.setFont('helvetica', 'bold'); doc.setFontSize(11.5); doc.setTextColor(255, 255, 255);
+              doc.text(`UNIVASSOURAS MARICÁ • ${sl.l} (${cN} - ${sN})`, 14, 17);
+              const h1 = ['LOCAL', ...sl.rooms.map(r => (r.andar || '—').toUpperCase())];
+              const h2 = ['SALA', ...sl.rooms.map(r => `${r.acessibilidade ? '[ACESS.]\n' : ''}${r.sala}${r.subtitulo ? `\n(${r.subtitulo})` : ''}`)];
+              const h3 = ['CAPAC.', ...sl.rooms.map(r => String(r.capacidade || '—'))];
+              const bd = d.map(dy => [dy, ...sl.rooms.map(r => {
+                const t = normalizeTurmaText((r.schedule && r.schedule[dy]) ? r.schedule[dy] : '—');
+                return (r.pmr && r.pmr[dy]) ? `${t}\n[PMR]` : t;
+              })]);
+              doc.autoTable({
+                startY: 27, margin: { left: 10, right: 10 }, head: [h1, h2, h3], body: bd,
+                styles: { font: 'helvetica', fontSize: 8, cellPadding: 2, valign: 'middle', halign: 'center' },
+                headStyles: { fillColor: [122, 0, 30], textColor: [255, 255, 255] }
+              });
+            });
+          });
+          doc.save(`Ensalamento_${activeCampus}_${getShiftShortSlug()}.pdf`);
+          showToast('PDF gerado!');
+        } catch (err) { showToast('Erro no PDF.'); } finally { btn.innerHTML = oH; safeCreateIcons(); }
+      }, 50);
+    }
+
+    function togglePdfDropdown() {
+      const m = document.getElementById('pdfDropdownMenu');
+      if (m) m.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const c = document.getElementById('pdfDropdownContainer'), m = document.getElementById('pdfDropdownMenu');
+      if (c && !c.contains(e.target) && m) m.classList.add('hidden');
+      const a = document.getElementById('turmaActionMenu');
+      if (a && !a.contains(e.target)) closeTurmaActionMenu();
+    });
+
+    function exportCSV() {
+      if (!isAdmin) return;
+      const b = getActiveCampusBlocks();
+      let c = 'TURNO;CAMPUS;BLOCO;SALA;ACESSIBILIDADE;SUBTITULO;ANDAR;CAPACIDADE;SEGUNDA;TERÇA;QUARTA;QUINTA;SEXTA;SÁBADO\n';
+      b.forEach(x => {
+        getArray(x.rooms).forEach(r => {
+          const iA = (r.acessibilidade === true) ? 'SIM' : 'NÃO';
+          c += `"${getShiftDisplayName()}";"${formatCampusDisplayName(activeCampus)}";"${x.bloco}";"${r.sala}";"${iA}";"${r.subtitulo || ''}";"${r.andar || ''}";"${r.capacidade || ''}";"${normalizeTurmaText((r.schedule && r.schedule['SEGUNDA']) || '')}";"${normalizeTurmaText((r.schedule && r.schedule['TERÇA']) || '')}";"${normalizeTurmaText((r.schedule && r.schedule['QUARTA']) || '')}";"${normalizeTurmaText((r.schedule && r.schedule['QUINTA']) || '')}";"${normalizeTurmaText((r.schedule && r.schedule['SEXTA']) || '')}";"${normalizeTurmaText((r.schedule && r.schedule['SÁBADO']) || '')}"\n`;
+        });
+      });
+      const bl = new Blob(["\uFEFF" + c], { type: 'text/csv;charset=utf-8;' });
+      const u = URL.createObjectURL(bl);
+      const a = document.createElement('a');
+      a.href = u; a.download = `Ensalamento_${activeCampus}_${getShiftShortSlug()}.csv`; a.click();
+    }
+
+    function showToast(m) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.innerText = m;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => { t.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+    }
+
+    function toggleRoomAcessibilidade() {
+      const i = document.getElementById('editRoomAcessibilidade');
+      setRoomAcessibilidadeUI(i.value !== 'true');
+    }
+
+    function setRoomAcessibilidadeUI(ac) {
+      const i = document.getElementById('editRoomAcessibilidade'), b = document.getElementById('btnAcessibilidadeRoom');
+      i.value = ac ? 'true' : 'false';
+      b.className = ac ? 'px-2 py-0.5 rounded text-[10px] font-black bg-blue-600 text-white' : 'px-2 py-0.5 rounded text-[10px] font-bold bg-stone-200 text-stone-600';
+    }
+
+    function toggleNewRoomAcessibilidade() {
+      const i = document.getElementById('newRoomAcessibilidade'), b = document.getElementById('btnNewRoomAcessibilidade');
+      const next = i.value !== 'true';
+      i.value = next ? 'true' : 'false';
+      b.className = next ? 'px-2 py-0.5 rounded text-[10px] font-black bg-blue-600 text-white' : 'px-2 py-0.5 rounded text-[10px] font-bold bg-stone-200 text-stone-600';
+    }
+
+    function togglePMR(dK) {
+      const i = document.getElementById(`pmr${dK}`);
+      setPMRUIState(dK, i.value !== 'true');
+    }
+
+    function setPMRUIState(dK, ac) {
+      const i = document.getElementById(`pmr${dK}`), b = document.getElementById(`btnPmr${dK}`);
+      if (!i || !b) return;
+      i.value = ac ? 'true' : 'false';
+      b.className = ac ? 'px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-600 text-white' : 'px-1.5 py-0.5 rounded text-[10px] font-bold bg-stone-200 text-stone-600';
+    }
+
+    function clearModalDayInput(dK) {
+      document.getElementById(`edit${dK}`).value = '';
+      setPMRUIState(dK, false);
+    }
+
+    function getAdminPassword() { return localStorage.getItem(ADMIN_PASS_KEY) || 'admin'; }
+
+    function handleAdminButtonClick() {
+      if (isAdmin) {
+        isAdmin = false;
+        clearCopyPasteMode();
+        closeTurmaActionMenu();
+        updateAdminUI();
+        renderActiveView();
+        safeCreateIcons();
+        showToast('Modo Administrador bloqueado.');
+      } else {
+        const p = document.getElementById('adminPasswordInput'), e = document.getElementById('adminLoginError'), m = document.getElementById('adminLoginModal');
+        if (p) p.value = '';
+        if (e) e.classList.add('hidden');
+        if (m) m.classList.remove('hidden');
+        setTimeout(() => { if (p) p.focus(); }, 50);
+      }
+    }
+
+    function closeAdminLoginModal() { document.getElementById('adminLoginModal').classList.add('hidden'); }
+
+    function verifyAdminPassword(e) {
+      e.preventDefault();
+      const p = document.getElementById('adminPasswordInput');
+      if (p && p.value === getAdminPassword()) {
+        isAdmin = true;
+        closeAdminLoginModal();
+        updateAdminUI();
+        renderActiveView();
+        safeCreateIcons();
+        showToast('Modo Administrador desbloqueado!');
+      } else {
+        document.getElementById('adminLoginError').classList.remove('hidden');
+      }
+    }
+
+    function openChangePassModal() {
+      if (!isAdmin) return;
+      document.getElementById('newAdminPassInput').value = '';
+      document.getElementById('changePassModal').classList.remove('hidden');
+    }
+
+    function closeChangePassModal() { document.getElementById('changePassModal').classList.add('hidden'); }
+
+    function saveNewAdminPassword(e) {
+      e.preventDefault();
+      const nP = document.getElementById('newAdminPassInput').value.trim();
+      if (!nP) return;
+      localStorage.setItem(ADMIN_PASS_KEY, nP);
+      closeChangePassModal();
+      showToast('Senha alterada!');
+    }
+
+    function openNewRoomModal(bI) {
+      if (!isAdmin) return;
+      document.getElementById('newRoomBlockIdx').value = bI;
+      document.getElementById('newRoomName').value = '';
+      document.getElementById('newRoomSubtitulo').value = '';
+      document.getElementById('newRoomAndar').value = '';
+      document.getElementById('newRoomCap').value = '';
+      document.getElementById('newRoomModal').classList.remove('hidden');
+    }
+
+    function closeNewRoomModal() { document.getElementById('newRoomModal').classList.add('hidden'); }
+
+    function saveNewRoom(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      const bI = parseInt(document.getElementById('newRoomBlockIdx').value);
+      const n = document.getElementById('newRoomName').value.trim();
+      const sub = document.getElementById('newRoomSubtitulo').value.trim();
+      const and = document.getElementById('newRoomAndar').value.trim();
+      const cap = document.getElementById('newRoomCap').value;
+      const acc = document.getElementById('newRoomAcessibilidade').value === 'true';
+      getActiveCampusBlocks()[bI].rooms.push(R(n, and, cap ? parseInt(cap) : '', acc, sub));
+      saveToStorage();
+      closeNewRoomModal();
+      renderActiveView();
+      safeCreateIcons();
+      showToast(`Sala "${n}" criada!`);
+    }
+
+    function openClearConfirmModal() { if (isAdmin) document.getElementById('clearConfirmModal').classList.remove('hidden'); }
+    function closeClearConfirmModal() { document.getElementById('clearConfirmModal').classList.add('hidden'); }
+
+    function confirmClearAllocations() {
+      if (!isAdmin) return;
+      getActiveCampusBlocks().forEach(blk => {
+        getArray(blk.rooms).forEach(r => { r.schedule = {}; r.pmr = {}; });
+      });
+      saveToStorage();
+      closeClearConfirmModal();
+      renderActiveView();
+      showToast('Alocações limpas!');
+    }
+
+    function openNewBlockModal() { if (isAdmin) { document.getElementById('newBlockNameInput').value = ''; document.getElementById('newBlockModal').classList.remove('hidden'); } }
+    function closeNewBlockModal() { document.getElementById('newBlockModal').classList.add('hidden'); }
+
+    function saveNewBlock(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      const n = document.getElementById('newBlockNameInput').value.trim().toUpperCase();
+      getActiveCampusBlocks().push({ bloco: n, rooms: [] });
+      saveToStorage();
+      closeNewBlockModal();
+      setFilter(n);
+      showToast('Bloco criado!');
+    }
+
+    function openNewCampusModal() { if (isAdmin) { document.getElementById('newCampusNameInput').value = ''; document.getElementById('newCampusModal').classList.remove('hidden'); } }
+    function closeNewCampusModal() { document.getElementById('newCampusModal').classList.add('hidden'); }
+
+    function saveNewCampus(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+      const n = document.getElementById('newCampusNameInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '_');
+      if (!multiCampusData[n]) multiCampusData[n] = [];
+      saveToStorage();
+      closeNewCampusModal();
+      switchCampus(n);
+      showToast('Campus criado!');
+    }
+
+    let tRR = [], cRBI = null;
+    function openReorderModal(bI) {
+      if (!isAdmin) return;
+      cRBI = bI;
+      tRR = JSON.parse(JSON.stringify(getActiveCampusBlocks()[bI].rooms));
+      rRL();
+      document.getElementById('reorderRoomsModal').classList.remove('hidden');
+    }
+
+    function closeReorderModal() { document.getElementById('reorderRoomsModal').classList.add('hidden'); cRBI = null; tRR = []; }
+
+    function rRL() {
+      const c = document.getElementById('reorderRoomsList');
+      c.innerHTML = tRR.map((r, i) => `
+        <div class="flex justify-between items-center p-2 border bg-stone-50 rounded-lg">
+          <span class="text-xs font-black text-[#7a001e]">${i + 1}. ${r.sala}</span>
+          <div class="flex gap-1">
+            <button type="button" onclick="mRI(${i},-1)" class="p-1 hover:bg-stone-200 rounded"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>
+            <button type="button" onclick="mRI(${i},1)" class="p-1 hover:bg-stone-200 rounded"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      `).join('');
+      safeCreateIcons();
+    }
+
+    function mRI(f, d) {
+      const t = f + d;
+      if (t < 0 || t >= tRR.length) return;
+      const i = tRR.splice(f, 1)[0];
+      tRR.splice(t, 0, i);
+      rRL();
+    }
+
+    function saveReorderRooms() {
+      if (!isAdmin || cRBI === null) return;
+      getActiveCampusBlocks()[cRBI].rooms = tRR;
+      saveToStorage();
+      closeReorderModal();
+      renderActiveView();
+      showToast('Ordem salva!');
+    }
+
+    function downloadBackupJSON() {
+      if (!isAdmin) return;
+      const d = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(multiCampusData, null, 2));
+      const a = document.createElement('a');
+      a.href = d; a.download = `backup_${getShiftShortSlug()}.json`; a.click();
+      showToast('Backup baixado!');
+    }
+
+    function importBackupJSON(e) {
+      if (!isAdmin) return;
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = function(ev) {
+        try {
+          const p = JSON.parse(ev.target.result);
+          if (p.NOITE || p.MANHA) {
+            allShiftsData = ensureDataIntegrity(p);
+          } else if (p.CAMPUS_1 || p.CAMPUS_2) {
+            allShiftsData[activeShift] = p;
+            allShiftsData = ensureDataIntegrity(allShiftsData);
+          } else if (Array.isArray(p)) {
+            multiCampusData[activeCampus] = p;
+            allShiftsData = ensureDataIntegrity(allShiftsData);
+          }
+          multiCampusData = allShiftsData[activeShift];
+          saveToStorage();
+          updateCampusUI();
+          renderTabs();
+          renderActiveView();
+          safeCreateIcons();
+          showToast('Backup restaurado e sincronizado!');
+        } catch (err) { showToast('Erro ao ler JSON.'); }
+      };
+      r.readAsText(f);
+      e.target.value = '';
+    }
+
+    function updateAdminUI() {
+      const aC = document.getElementById('adminHeaderControls');
+      const bAT = document.getElementById('btnAdminToggle');
+      const rB = document.getElementById('roleStatusBadge');
+      const bNC = document.getElementById('btnNovoCampus');
+      const bNB = document.getElementById('btnNovoBloco');
+      if (isAdmin) {
+        if (aC) aC.classList.replace('hidden', 'flex');
+        if (bNC) bNC.classList.replace('hidden', 'inline-flex');
+        if (bNB) bNB.classList.replace('hidden', 'inline-flex');
+        if (bAT) {
+          bAT.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-900 bg-emerald-100 border border-emerald-300 rounded-lg shrink-0';
+          bAT.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5"></i><span>Bloquear</span>`;
+        }
+        if (rB) {
+          rB.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300';
+          rB.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3"></i> Modo Admin`;
+        }
+      } else {
+        if (aC) aC.classList.replace('flex', 'hidden');
+        if (bNC) bNC.classList.replace('inline-flex', 'hidden');
+        if (bNB) bNB.classList.replace('inline-flex', 'hidden');
+        if (bAT) {
+          bAT.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-700 bg-stone-100 border border-stone-300 rounded-lg shrink-0';
+          bAT.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5"></i><span>Admin</span>`;
+        }
+        if (rB) {
+          rB.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200';
+          rB.innerHTML = `<i data-lucide="eye" class="w-3 h-3"></i> Somente Leitura`;
+        }
+      }
+      safeCreateIcons();
+    }
+  </script>
+</body>
+</html>
