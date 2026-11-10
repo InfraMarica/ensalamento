@@ -208,7 +208,10 @@
       </div>
     `;
 
-    form.onsubmit = window.verifyAdminPassword;
+    form.removeAttribute('onsubmit');
+    form.onsubmit = function (event) {
+      return window.verifyAdminPassword(event);
+    };
   }
 
   function refreshApp() {
