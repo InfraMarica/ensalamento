@@ -1,6 +1,3 @@
-/* Integração Firebase para o Portal de Ensalamento
-   Salve este arquivo como firebase-adapter.js, na mesma pasta do index.html.
-*/
 (() => {
   'use strict';
 
@@ -15,40 +12,47 @@
   };
 
   const ADMIN_UID = 'RjTmK1rV6ueGsm4xQ8E77WYZSpl2';
+  const ADMIN_EMAIL = 'inframaricaunivassouras@gmail.com';
   const LEGACY_STORAGE_KEYS = {
     NOITE: 'mapa_ensalamento_univassouras_2027_1_oficial_v10',
     MANHA: 'mapa_ensalamento_univassouras_2027_1_manha_integral_v1'
   };
 
-  let auth = null;
-  let db = null;
+  let auth;
+  let db;
   let firebaseReady = false;
-  let firebaseWriteQueue = Promise.resolve();
+  let writeQueue = Promise.resolve();
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const existing = [...document.scripts].find(script => script.src === src);
       if (existing) {
-        resolve();
+        if (existing.dataset.loaded === 'true') {
+          resolve();
+        } else {
+          existing.addEventListener('load', resolve, { once: true });
+          existing.addEventListener('error', () => reject(new Error(`Falha ao carregar ${src}`)), { once: true });
+        }
         return;
       }
 
       const script = document.createElement('script');
       script.src = src;
-      script.onload = resolve;
+      script.onload = () => {
+        script.dataset.loaded = 'true';
+        resolve();
+      };
       script.onerror = () => reject(new Error(`Falha ao carregar ${src}`));
       document.head.appendChild(script);
     });
   }
 
-  async function loadFirebaseSDK() {
+  async function initializeFirebase() {
     await loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
     await loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js');
     await loadScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js');
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(FIREBASE_CONFIG);
-    }
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
 
     auth = firebase.auth();
     db = firebase.firestore();
@@ -58,7 +62,7 @@
     return JSON.parse(JSON.stringify(data));
   }
 
-  function createDefaultDataset() {
+  function defaultDataset() {
     return {
       CAMPUS_1: cloneData(INITIAL_CAMPUS_1),
       CAMPUS_2: cloneData(INITIAL_CAMPUS_2)
@@ -86,51 +90,73 @@
     return data;
   }
 
-  function loadLegacyDataset(shiftKey) {
+  function readLegacyDataset(shiftKey) {
     try {
       const raw = localStorage.getItem(LEGACY_STORAGE_KEYS[shiftKey]);
-      if (!raw) return null;
-      return normalizeDataset(JSON.parse(raw));
+      return raw ? normalizeDataset(JSON.parse(raw)) : null;
     } catch (error) {
-      console.warn(`Não foi possível ler os dados locais do turno ${shiftKey}.`, error);
+      console.warn(`Não foi possível ler os dados locais de ${shiftKey}.`, error);
       return null;
     }
   }
 
-  async function loadAllShiftData(isAuthorizedAdmin) {
+  async function loadShiftData(isAdminUser) {
     for (const shiftKey of ['NOITE', 'MANHA']) {
       const ref = db.doc(`ensalamento/${shiftKey}`);
       const snapshot = await ref.get();
 
       if (snapshot.exists) {
         const saved = snapshot.data() || {};
-        allShiftsData[shiftKey] = normalizeDataset(saved.dataset || saved) || createDefaultDataset();
+        allShiftsData[shiftKey] =
+          normalizeDataset(saved.dataset || saved) || defaultDataset();
         continue;
       }
 
-      // Se ainda não há dados na nuvem, aproveita os dados locais deste navegador.
-      const data = loadLegacyDataset(shiftKey) || createDefaultDataset();
+      const data = readLegacyDataset(shiftKey) || defaultDataset();
       allShiftsData[shiftKey] = data;
 
-      // Somente o administrador autenticado pode criar os documentos iniciais.
-      if (isAuthorizedAdmin) {
-        await ref.set(data);
-      }
+      if (isAdminUser) await ref.set(data);
     }
 
     multiCampusData = allShiftsData[activeShift];
     firebaseReady = true;
   }
 
-  function setLoginError(message) {
-    const errorElement = document.getElementById('adminLoginError');
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.classList.remove('hidden');
-    }
+  function errorMessage(error) {
+    const code = error && error.code ? error.code : '';
+
+    const messages = {
+      'auth/unauthorized-domain':
+        'Este domínio do site não está autorizado no Firebase. Adicione o domínio do GitHub Pages em Authentication > Configurações > Domínios autorizados.',
+      'auth/operation-not-allowed':
+        'O login por e-mail e senha está desativado. Ative E-mail/senha nos métodos de login do Firebase Authentication.',
+      'auth/invalid-credential':
+        'O Firebase recusou as credenciais. Confira o e-mail e a senha da conta cadastrada neste projeto Firebase.',
+      'auth/wrong-password':
+        'A senha não corresponde a essa conta. Confira se a senha foi alterada para o usuário deste projeto Firebase.',
+      'auth/user-not-found':
+        'Esse e-mail não foi encontrado no Authentication deste projeto Firebase.',
+      'auth/invalid-email':
+        'O formato do e-mail está inválido.',
+      'auth/too-many-requests':
+        'Foram feitas muitas tentativas. Aguarde um pouco e tente novamente.',
+      'auth/network-request-failed':
+        'Falha de conexão com o Firebase. Confira a internet e tente novamente.',
+      'auth/invalid-api-key':
+        'A chave do projeto Firebase não foi aceita. Confira a configuração Firebase no arquivo auxiliar.'
+    };
+
+    return messages[code] || `Falha no Firebase (${code || 'erro sem código'}). Abra o console do navegador para ver os detalhes.`;
   }
 
-  function prepareFirebaseLoginForm() {
+  function setLoginError(message) {
+    const element = document.getElementById('adminLoginError');
+    if (!element) return;
+    element.textContent = message;
+    element.classList.remove('hidden');
+  }
+
+  function prepareLoginForm() {
     const form = document.querySelector('#adminLoginModal form');
     if (!form) return;
 
@@ -145,7 +171,7 @@
             id="firebaseAdminEmail"
             required
             autocomplete="username"
-            value="inframaricaunivassouras@gmail.com"
+            value="${ADMIN_EMAIL}"
             class="w-full px-3 py-2 text-xs bg-stone-50 border border-stone-200 rounded-lg
                    focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-stone-900">
         </div>
@@ -185,7 +211,7 @@
     form.onsubmit = window.verifyAdminPassword;
   }
 
-  function renderApplication() {
+  function refreshApp() {
     if (typeof updateHomeSummaries === 'function') updateHomeSummaries();
     if (typeof updateShiftUI === 'function') updateShiftUI();
     if (typeof updateAdminUI === 'function') updateAdminUI();
@@ -195,30 +221,29 @@
     if (typeof safeCreateIcons === 'function') safeCreateIcons();
   }
 
-  function installAdminAuthentication() {
-    // O login agora é feito pela conta Firebase, não pela antiga senha local.
+  function installAuthenticationHandlers() {
     window.handleAdminButtonClick = function () {
       if (isAdmin) {
         auth.signOut().catch(error => {
-          console.error('Erro ao sair da conta Firebase:', error);
+          console.error('Erro ao sair do Firebase:', error);
           showToast('Não foi possível sair da conta.');
         });
         return;
       }
 
-      const passwordInput = document.getElementById('firebaseAdminPassword');
-      const emailInput = document.getElementById('firebaseAdminEmail');
-      const errorElement = document.getElementById('adminLoginError');
+      const email = document.getElementById('firebaseAdminEmail');
+      const password = document.getElementById('firebaseAdminPassword');
+      const error = document.getElementById('adminLoginError');
 
-      if (emailInput) emailInput.value = 'inframaricaunivassouras@gmail.com';
-      if (passwordInput) passwordInput.value = '';
-      if (errorElement) {
-        errorElement.textContent = '';
-        errorElement.classList.add('hidden');
+      if (email) email.value = ADMIN_EMAIL;
+      if (password) password.value = '';
+      if (error) {
+        error.textContent = '';
+        error.classList.add('hidden');
       }
 
       document.getElementById('adminLoginModal').classList.remove('hidden');
-      setTimeout(() => passwordInput && passwordInput.focus(), 50);
+      setTimeout(() => password && password.focus(), 50);
       if (typeof safeCreateIcons === 'function') safeCreateIcons();
     };
 
@@ -237,37 +262,29 @@
 
         if (!result.user || result.user.uid !== ADMIN_UID) {
           await auth.signOut();
-          setLoginError('Essa conta não está autorizada a administrar os mapas.');
-          return;
+          setLoginError('A conta entrou, mas não tem permissão de administrador neste site.');
         }
-
-        window.closeAdminLoginModal();
       } catch (error) {
-        console.error('Falha no login do administrador:', error);
-        setLoginError('E-mail ou senha incorretos, ou login por e-mail/senha ainda não ativado no Firebase.');
+        console.error('Erro detalhado de autenticação Firebase:', error);
+        setLoginError(errorMessage(error));
       }
     };
 
-    // A senha de administrador deixa de ser guardada no navegador ou no Firestore.
     window.openChangePassModal = function () {
-      showToast('A senha é gerenciada na conta do Firebase Authentication.');
+      showToast('A senha da conta é gerenciada no Firebase Authentication.');
     };
 
     window.saveNewAdminPassword = function (event) {
       event.preventDefault();
-      showToast('Altere a senha pela conta Firebase, não por este site.');
+      showToast('Altere a senha da conta pelo Firebase Authentication.');
     };
 
-    // Grava os dados do turno atual no Firestore.
     window.saveToStorage = function () {
       allShiftsData[activeShift] = multiCampusData;
-
-      if (typeof updateHomeSummaries === 'function') {
-        updateHomeSummaries();
-      }
+      if (typeof updateHomeSummaries === 'function') updateHomeSummaries();
 
       if (!firebaseReady || !db) {
-        showToast('O Firebase ainda está carregando. Tente novamente em instantes.');
+        showToast('O Firebase ainda está carregando. Tente novamente.');
         return;
       }
 
@@ -279,55 +296,51 @@
       const shiftKey = activeShift;
       const snapshot = cloneData(multiCampusData);
 
-      firebaseWriteQueue = firebaseWriteQueue
+      writeQueue = writeQueue
         .then(() => db.doc(`ensalamento/${shiftKey}`).set(snapshot))
-        .then(() => {
-          showToast('Alterações salvas no Firebase.');
-        })
+        .then(() => showToast('Alterações salvas no Firebase.'))
         .catch(error => {
-          console.error(`Erro ao salvar o turno ${shiftKey}:`, error);
-          showToast('Não foi possível salvar no Firebase. Confira a conexão e as regras.');
+          console.error('Erro ao salvar no Firestore:', error);
+          showToast(`Falha ao salvar: ${error.code || 'verifique as regras do Firestore'}.`);
         });
     };
 
-    // O botão antigo de troca de senha não é mais necessário.
-    const oldChangePasswordButton = document.querySelector(
+    const oldPasswordButton = document.querySelector(
       '#adminHeaderControls button[onclick="openChangePassModal()"]'
     );
-    if (oldChangePasswordButton) oldChangePasswordButton.remove();
+    if (oldPasswordButton) oldPasswordButton.remove();
   }
 
   async function start() {
-    prepareFirebaseLoginForm();
-    installAdminAuthentication();
+    prepareLoginForm();
+    installAuthenticationHandlers();
 
     try {
-      await loadFirebaseSDK();
+      await initializeFirebase();
 
       auth.onAuthStateChanged(async user => {
-        const isAuthorizedAdmin = Boolean(user && user.uid === ADMIN_UID);
-        isAdmin = isAuthorizedAdmin;
+        const isAdminUser = Boolean(user && user.uid === ADMIN_UID);
+        isAdmin = isAdminUser;
 
         try {
-          await loadAllShiftData(isAuthorizedAdmin);
-          renderApplication();
+          await loadShiftData(isAdminUser);
+          refreshApp();
 
-          if (isAuthorizedAdmin) {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            showToast('Administrador conectado. Alterações serão salvas no Firebase.');
-          } else if (user) {
-            showToast('Esta conta não tem permissão para editar os mapas.');
+          if (isAdminUser) {
+            const modal = document.getElementById('adminLoginModal');
+            if (modal) modal.classList.add('hidden');
+            showToast('Administrador conectado. Os mapas serão salvos no Firebase.');
           }
         } catch (error) {
-          console.error('Erro ao carregar dados do Firestore:', error);
+          console.error('Erro ao carregar os mapas do Firestore:', error);
           firebaseReady = false;
-          renderApplication();
-          showToast('Não foi possível carregar o Firestore. Confira as regras do banco.');
+          refreshApp();
+          showToast(`Falha ao carregar os mapas: ${error.code || 'verifique as regras do Firestore'}.`);
         }
       });
     } catch (error) {
       console.error('Erro ao iniciar Firebase:', error);
-      showToast('Não foi possível iniciar o Firebase. Confira a configuração do projeto.');
+      showToast(errorMessage(error));
     }
   }
 
