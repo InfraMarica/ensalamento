@@ -18,6 +18,79 @@
         lucide.createIcons();
       }
     }
+
+    // Recorta automaticamente a parte escrita inferior das logos verticais, deixando apenas o brasão do mesmo tamanho
+    function cropLogoToCrestOnly(imgEl) {
+      if (!imgEl || imgEl.dataset.cropped === 'true') return;
+      try {
+        const w = imgEl.naturalWidth;
+        const h = imgEl.naturalHeight;
+        if (!w || !h) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(imgEl, 0, 0);
+
+        const imgData = ctx.getImageData(0, 0, w, h).data;
+        const rowCounts = new Array(h).fill(0);
+
+        for (let y = 0; y < h; y++) {
+          let count = 0;
+          for (let x = 0; x < w; x++) {
+            if (imgData[(y * w + x) * 4 + 3] > 25) count++;
+          }
+          rowCounts[y] = count;
+        }
+
+        let topY = 0;
+        while (topY < h && rowCounts[topY] === 0) topY++;
+        let bottomY = h - 1;
+        while (bottomY > topY && rowCounts[bottomY] === 0) bottomY--;
+
+        const contentH = bottomY - topY + 1;
+        if (contentH <= 10) return;
+
+        // Localiza o espaço vazio entre o brasão (topo) e o texto escrito (base)
+        let crestBottomY = topY + Math.floor(contentH * 0.76);
+        const searchStart = topY + Math.floor(contentH * 0.48);
+        const searchEnd = topY + Math.floor(contentH * 0.90);
+
+        for (let y = searchStart; y <= searchEnd; y++) {
+          if (rowCounts[y] <= 1) {
+            crestBottomY = y - 1;
+            break;
+          }
+        }
+
+        // Encontra as bordas laterais exatas apenas do brasão (ignorando a largura do texto)
+        let minX = w, maxX = 0;
+        for (let y = topY; y <= crestBottomY; y++) {
+          for (let x = 0; x < w; x++) {
+            if (imgData[(y * w + x) * 4 + 3] > 25) {
+              if (x < minX) minX = x;
+              if (x > maxX) maxX = x;
+            }
+          }
+        }
+
+        if (maxX <= minX) return;
+
+        const cropW = maxX - minX + 1;
+        const cropH = crestBottomY - topY + 1;
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = cropW;
+        outCanvas.height = cropH;
+        outCanvas.getContext('2d').drawImage(canvas, minX, topY, cropW, cropH, 0, 0, cropW, cropH);
+
+        imgEl.dataset.cropped = 'true';
+        imgEl.classList.remove('crest-css-fallback');
+        imgEl.src = outCanvas.toDataURL('image/png');
+      } catch (err) {
+        // Caso aberto localmente via file://, mantém o recorte via CSS
+      }
+    }
   </script>
   <!-- Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" onload="safeCreateIcons()"></script>
@@ -32,6 +105,12 @@
     ::-webkit-scrollbar-track { background: #f5f5f4; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
     ::-webkit-scrollbar-thumb:hover { background: #7a001e; }
+
+    /* Fallback de recorte via CSS caso aberto fora do servidor */
+    .crest-css-fallback {
+      clip-path: inset(0 0 23% 0);
+      transform: translateY(10%);
+    }
 
     /* Fundo Bordô Sofisticado com Textura Dupla para a Tela Inicial */
     .bordeaux-luxury-bg {
@@ -95,23 +174,25 @@
 
   <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS ==================== -->
   <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print">
-    <!-- Topo Institucional com as Logos Univassouras e FACMAR do Mesmo Tamanho -->
+    <!-- Topo Institucional com Apenas os Brasões da Univassouras e FACMAR do Mesmo Tamanho -->
     <div class="max-w-5xl w-full mx-auto pt-2 flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5">
       <div class="flex items-center gap-4">
-        <div class="flex items-center gap-3.5 shrink-0">
+        <div class="flex items-center gap-4 shrink-0">
           <img 
             src="Univassouras%20Vertical%20Branca.png" 
-            alt="Universidade de Vassouras" 
-            class="h-14 sm:h-16 w-auto object-contain drop-shadow-md"
+            onload="cropLogoToCrestOnly(this)"
+            alt="Brasão Univassouras" 
+            class="h-16 sm:h-[74px] w-auto object-contain drop-shadow-md crest-css-fallback"
           >
           <img 
             src="vetical%20branca%20facmar.png" 
-            onerror="this.onerror=null; this.src='vertical%20branca%20facmar.png';"
-            alt="FACMAR" 
-            class="h-14 sm:h-16 w-auto object-contain drop-shadow-md"
+            onload="cropLogoToCrestOnly(this)"
+            onerror="if(!this.dataset. fallbackTried){this.dataset.fallbackTried='true'; this.src='vertical%20branca%20facmar.png';}"
+            alt="Brasão FACMAR" 
+            class="h-16 sm:h-[74px] w-auto object-contain drop-shadow-md crest-css-fallback"
           >
         </div>
-        <div class="h-10 w-px bg-white/20 hidden sm:block"></div>
+        <div class="h-12 w-px bg-white/20 hidden sm:block"></div>
         <div>
           <span class="block text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
             SISTEMA ACADÊMICO INTEGRADO
