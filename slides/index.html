@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Digital TV - Ensalamento | Univassouras</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Newsreader (Serifa Requintada) & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    function safeCreateIcons() {
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" onload="safeCreateIcons()"></script>
+
+  <style>
+    :root {
+      --bg-cream: #f5f2eb;
+      --card-ivory: #fbf9f5;
+      --row-warm: #f3efe6;
+      --row-alt: #ede8dc;
+      --border-sand: #e2dacb;
+      --bordeaux: #7c1d24;
+      --bordeaux-dark: #5e1319;
+      --ink-dark: #1e1b18;
+      --ink-muted: #78716c;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-cream);
+      background-image: 
+        radial-gradient(circle at 12% 0%, rgba(124, 29, 36, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 88% 100%, rgba(180, 140, 80, 0.05) 0%, transparent 50%);
+      color: var(--ink-dark);
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .font-editorial {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+
+    /* Escala fluida para manter a localização grande em 1 única linha */
+    .footer-single-line {
+      font-size: clamp(11px, 0.94vw, 17.5px);
+    }
+
+    /* Transição suave entre slides */
+    .slide-fade {
+      animation: fadeSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Barra de controle superior auto-oculta */
+    #tvControlBar {
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    #tvControlBar.hidden-bar {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="h-screen w-screen flex flex-col justify-between relative">
+
+  <!-- BARRA FINA DE PROGRESSO DO SLIDE NO TOPO -->
+  <div class="fixed top-0 left-0 right-0 h-1 bg-[#e5dec9] z-40">
+    <div id="slideProgressBar" class="h-full bg-gradient-to-r from-[#7c1d24] to-[#b4833e] transition-all duration-100" style="width: 0%;"></div>
+  </div>
+
+  <!-- ==================== BARRA FLUTUANTE DE CONTROLE (OCULTA NA TV) ==================== -->
+  <div id="tvControlBar" class="fixed top-0 left-0 right-0 z-50 bg-[#1e1b18]/95 backdrop-blur-md text-white px-5 py-2.5 shadow-2xl border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div class="flex items-center gap-2.5 flex-wrap">
+      <span class="inline-flex items-center gap-1.5 font-black text-amber-300 uppercase tracking-wider mr-1">
+        <i data-lucide="tv" class="w-4 h-4"></i> Controle TV
+      </span>
+
+      <!-- Seletor de Unidade: Maricá vs Saquarema -->
+      <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
+        <span class="text-stone-400 font-bold">Unidade:</span>
+        <select id="ctrlUnit" onchange="handleUnitChange(this.value)" class="bg-transparent text-white font-black focus:outline-none cursor-pointer">
+          <option value="MARICA" class="text-stone-900">Maricá e FACMAR</option>
+          <option value="SAQUAREMA" class="text-stone-900">Saquarema</option>
+        </select>
+      </div>
+
+      <!-- Seletor de Turno: Noturno vs Manhã -->
+      <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
+        <span class="text-stone-400 font-bold">Turno:</span>
+        <select id="ctrlShift" onchange="handleShiftChange(this.value)" class="bg-transparent text-white font-black focus:outline-none cursor-pointer">
+          <option value="NOITE" class="text-stone-900">Noturno</option>
+          <option value="MANHA" class="text-stone-900">Manhã / Integral</option>
+        </select>
+      </div>
+
+      <!-- Seletor de Campus -->
+      <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
+        <span class="text-stone-400 font-bold">Campus:</span>
+        <select id="ctrlCampus" onchange="handleCampusChange(this.value)" class="bg-transparent text-white font-black focus:outline-none cursor-pointer">
+          <option value="CAMPUS_2" class="text-stone-900">Campus 2</option>
+          <option value="CAMPUS_1" class="text-stone-900">Campus 1</option>
+        </select>
+      </div>
+
+      <!-- Seletor de Dia da Semana -->
+      <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
+        <span class="text-stone-400 font-bold">Dia:</span>
+        <select id="ctrlDay" onchange="handleDayChange(this.value)" class="bg-transparent text-amber-300 font-black focus:outline-none cursor-pointer">
+          <option value="SEGUNDA" class="text-stone-900">Segunda-feira</option>
+          <option value="TERÇA" class="text-stone-900">Terça-feira</option>
+          <option value="QUARTA" class="text-stone-900">Quarta-feira</option>
+          <option value="QUINTA" class="text-stone-900">Quinta-feira</option>
+          <option value="SEXTA" class="text-stone-900">Sexta-feira</option>
+          <option value="SÁBADO" class="text-stone-900">Sábado</option>
+        </select>
+      </div>
+
+      <!-- Tempo de Rotação -->
+      <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
+        <span class="text-stone-400 font-bold">Slide:</span>
+        <select id="ctrlInterval" onchange="handleIntervalChange()" class="bg-transparent text-amber-300 font-black focus:outline-none cursor-pointer">
+          <option value="10" class="text-stone-900">10s</option>
+          <option value="15" selected class="text-stone-900">15s</option>
+          <option value="20" class="text-stone-900">20s</option>
+          <option value="0" class="text-stone-900">Fixo</option>
+        </select>
+      </div>
+
+      <div id="slideButtonsContainer" class="flex items-center gap-1 bg-white/10 p-1 rounded-xl">
+        <!-- Botões Parte 1 / Parte 2 gerados via JS -->
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span id="roleStatusBadge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/10 text-stone-300 border border-white/15">
+        <i data-lucide="eye" class="w-3 h-3"></i> Leitura
+      </span>
+
+      <button id="btnAddExtraTurma" onclick="openNewAllocationModal()" class="hidden items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black transition">
+        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+        <span>Turma Extra</span>
+      </button>
+
+      <button id="btnAdminToggle" onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-900 bg-stone-100 hover:bg-white rounded-xl transition shrink-0">
+        <i data-lucide="lock" class="w-3.5 h-3.5 text-stone-700"></i>
+        <span>Admin</span>
+      </button>
+
+      <button onclick="toggleFullScreen()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#7c1d24] hover:bg-[#991b22] text-white font-black border border-rose-400/30 transition">
+        <i data-lucide="maximize" class="w-3.5 h-3.5 text-amber-300"></i>
+        <span class="hidden sm:inline">Tela Cheia</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== CABEÇALHO EDITORIAL LIMPO (SEM LOGO) ==================== -->
+  <header class="w-full px-6 pt-3.5 pb-1.5 shrink-0">
+    <div class="w-full pb-2.5 border-b border-[#ded6c6] flex items-end justify-between gap-6">
+      
+      <!-- Esquerda: Tipografia Clássica Editorial -->
+      <div>
+        <div id="headerCampusTitle" class="text-xs xl:text-sm font-extrabold uppercase tracking-[0.22em] text-[#7c1d24]">
+          UNIVASSOURAS CAMPUS MARICÁ E FACMAR &nbsp;·&nbsp; CAMPUS 2 &nbsp;·&nbsp; NOTURNO
+        </div>
+
+        <!-- Título Principal em Serifa Elegante -->
+        <div class="flex items-baseline gap-3.5 mt-1">
+          <h1 id="headerDayTitle" class="font-editorial text-4xl xl:text-[44px] 2xl:text-5xl font-medium text-[#1e1b18] tracking-tight leading-none">
+            Sexta-feira · Salas
+          </h1>
+          <span id="headerPartSubtitle" class="text-sm xl:text-base font-medium text-[#78716c] hidden md:inline">
+            Quadro de horários e salas · Parte 1
+          </span>
+        </div>
+      </div>
+
+      <!-- Direita: Assinatura + Paginação Minimalista -->
+      <div class="flex items-center gap-5 pb-0.5">
+        <div class="text-right hidden sm:block">
+          <p class="text-xs xl:text-sm font-semibold text-[#3f3a34] leading-tight">
+            Elaborado por <strong class="font-bold text-[#1e1b18]">Jonas Florencio</strong>
+          </p>
+          <p class="text-[11px] xl:text-xs font-medium text-[#8a8178] leading-tight mt-0.5">
+            Coordenação de Infraestrutura
+          </p>
+        </div>
+
+        <div class="h-8 w-px bg-[#dcd4c4] hidden sm:block"></div>
+
+        <!-- Indicador de Página Editorial (1 / 2) -->
+        <div class="flex flex-col items-end gap-1.5">
+          <div class="inline-flex items-center gap-2 bg-[#ebe5d8] border border-[#dad1be] px-3.5 py-1 rounded-xl">
+            <button onclick="prevSlide()" class="text-[#7c1d24] hover:opacity-70"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+            <span id="slideIndicatorText" class="text-xs xl:text-sm font-bold text-[#5e1319] tracking-widest">1 / 1</span>
+            <button onclick="nextSlide()" class="text-[#7c1d24] hover:opacity-70"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+          </div>
+          <div id="slideDotsContainer" class="flex items-center gap-1.5 pr-1"></div>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== CORPO PRINCIPAL (3 COLUNAS OCUPANDO 100% DA LARGURA) ==================== -->
+  <main class="flex-1 w-full px-6 py-1 overflow-hidden flex items-start">
+    <div id="slideColumnsContainer" class="w-full h-full grid grid-cols-3 gap-x-5 items-start content-start slide-fade">
+      <!-- Renderizado dinamicamente em Ordem Alfabética via JS -->
+    </div>
+  </main>
+
+  <!-- ==================== RODAPÉ DE LOCALIZAÇÃO EM LINHA ÚNICA ==================== -->
+  <footer class="w-full px-6 pb-3 pt-1 shrink-0">
+    <div id="footerLocationContainer" class="footer-single-line w-full bg-[#ebe5d8] border-2 border-[#d5cab4] text-[#292524] rounded-2xl py-2.5 px-4 shadow-sm flex flex-nowrap items-center justify-between gap-x-2 xl:gap-x-3 whitespace-nowrap overflow-hidden">
+      <!-- Preenchido dinamicamente conforme Unidade e Campus -->
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL LOGIN ADMINISTRADOR (PARA O FIREBASE ADAPTER) ==================== -->
+  <div id="adminLoginModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
+      <!-- Preenchido pelo firebase-adapter-tv.js -->
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE EDIÇÃO DE PROFESSOR / HORÁRIO DE INÍCIO ==================== -->
+  <div id="rowEditModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#fbf9f5] rounded-3xl shadow-2xl max-w-md w-full p-6 border border-[#ded6c6]">
+      <div class="flex items-center justify-between pb-3 border-b border-[#e5dec9]">
+        <div>
+          <span class="text-[10px] font-black uppercase tracking-wider text-[#7c1d24] block">Complemento Online da TV</span>
+          <h3 id="modalTitleText" class="font-editorial text-xl font-semibold text-[#1e1b18]">Professor e Horário de Início</h3>
+        </div>
+        <button onclick="closeRowEditModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="saveRowEdit(event)" class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Curso</label>
+          <input type="text" id="inputEditCourse" list="coursesCatalogList" required placeholder="Ex: Direito" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+          <datalist id="coursesCatalogList">
+            <option value="Administração">
+            <option value="Análise de Sistemas">
+            <option value="Biomedicina">
+            <option value="Ciências Contábeis">
+            <option value="Direito">
+            <option value="Educação Física">
+            <option value="Enfermagem">
+            <option value="Engenharia Civil">
+            <option value="Engenharia de Software">
+            <option value="Fisioterapia">
+            <option value="Gastronomia">
+            <option value="Gestão Ambiental">
+            <option value="Medicina">
+            <option value="Medicina Veterinária">
+            <option value="Nutrição">
+            <option value="Odontologia">
+            <option value="Pedagogia">
+            <option value="Psicologia">
+            <option value="Recursos Humanos">
+            <option value="Serviço Social">
+            <option value="Terapia Ocupacional">
+          </datalist>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Período / Turma</label>
+            <input type="text" id="inputEditPeriod" required placeholder="Ex: 3° Período A" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Sala (Vinda do Ensalamento)</label>
+            <input type="text" id="inputEditRoom" required placeholder="Ex: SALA 108" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-black text-[#7c1d24] focus:outline-none focus:border-[#7c1d24]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-2">
+            <label class="block font-bold text-stone-700 mb-1">Nome do(a) Professor(a)</label>
+            <input type="text" id="inputEditProf" placeholder="Ex: Claudio Barral" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Início (Ex: 17h)</label>
+            <input type="text" id="inputEditTime" placeholder="Ex: 17h" class="w-full px-3 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-amber-900 focus:outline-none focus:border-[#7c1d24]">
+          </div>
+        </div>
+
+        <p class="text-[11px] text-stone-500">
+          * O nome do professor e o horário ficam salvos na nuvem da TV sem alterar a planilha do Ensalamento.
+        </p>
+
+        <div class="flex items-center justify-between pt-3 border-t border-[#e5dec9]">
+          <button type="button" id="btnDeleteRow" onclick="deleteCurrentRow()" class="hidden px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold">
+            Excluir Turma Extra
+          </button>
+          <div class="flex gap-2 ml-auto">
+            <button type="button" onclick="closeRowEditModal()" class="px-4 py-2 rounded-xl bg-[#ebe5d8] text-stone-700 font-bold">Cancelar</button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-[#7c1d24] text-white font-black shadow-md">Salvar no Firebase</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÃO TOAST -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 pointer-events-none"></div>
+
+  <script>
+    // =========================================================================
+    // CATÁLOGO DE CURSOS E ÍCONES
+    // =========================================================================
+    const COURSE_STANDARD_NAMES = [
+      { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'Administração', icon: 'briefcase' },
+      { regex: /an[aá]lise\s*de\s*sistemas|\bads\b/gi, label: 'Ads', fullTitle: 'Análise de Sistemas', icon: 'terminal' },
+      { regex: /biomedicina/gi, label: 'Biomedicina', fullTitle: 'Biomedicina', icon: 'microscope' },
+      { regex: /ci[eê]ncias\s*cont[aá]beis|cont[aá]beis/gi, label: 'Contábeis', fullTitle: 'Ciências Contábeis', icon: 'calculator' },
+      { regex: /direito/gi, label: 'Direito', fullTitle: 'Direito', icon: 'scale' },
+      { regex: /educa[cç][aã]o\s*f[ií]sica|ed\.?\s*f[ií]sica/gi, label: 'Ed. Física', fullTitle: 'Educação Física', icon: 'dumbbell' },
+      { regex: /enfermagem/gi, label: 'Enfermagem', fullTitle: 'Enfermagem', icon: 'heart-pulse' },
+      { regex: /engenharia\s*civil|\bcivil\b/gi, label: 'Civil', fullTitle: 'Engenharia Civil', icon: 'hard-hat' },
+      { regex: /engenharia\s*de\s*software|\bsoftware\b/gi, label: 'Software', fullTitle: 'Engenharia de Software', icon: 'code-2' },
+      { regex: /fisioterapia/gi, label: 'Fisioterapia', fullTitle: 'Fisioterapia', icon: 'activity' },
+      { regex: /gastronomia/gi, label: 'Gastronomia', fullTitle: 'Gastronomia', icon: 'chef-hat' },
+      { regex: /gest[aã]o\s*ambiental|\bambiental\b/gi, label: 'Ambiental', fullTitle: 'Gestão Ambiental', icon: 'leaf' },
+      { regex: /medicina\s*veterin[aá]ria|\bveterin[aá]ria\b/gi, label: 'Veterinária', fullTitle: 'Medicina Veterinária', icon: 'paw-print' },
+      { regex: /\bmedicina\b/gi, label: 'Medicina', fullTitle: 'Medicina', icon: 'stethoscope' },
+      { regex: /nutri[cç][aã]o/gi, label: 'Nutrição', fullTitle: 'Nutrição', icon: 'apple' },
+      { regex: /odontologia|\bodonto\b/gi, label: 'Odonto', fullTitle: 'Odontologia', icon: 'smile' },
+      { regex: /pedagogia/gi, label: 'Pedagogia', fullTitle: 'Pedagogia', icon: 'book-open' },
+      { regex: /psicologia/gi, label: 'Psicologia', fullTitle: 'Psicologia', icon: 'brain' },
+      { regex: /recursos\s*humanos|\brh\b/gi, label: 'Rh', fullTitle: 'Recursos Humanos', icon: 'users' },
+      { regex: /servi[cç]o\s*social|\bseso\b/gi, label: 'Seso', fullTitle: 'Serviço Social', icon: 'heart-handshake' },
+      { regex: /terapia\s*ocupacional|\bt\.?o\.?\b/gi, label: 'T.o', fullTitle: 'Terapia Ocupacional', icon: 'accessibility' }
+    ];
+
+    function getCourseIcon(courseName) {
+      const found = COURSE_STANDARD_NAMES.find(c => courseName.toLowerCase().includes(c.fullTitle.toLowerCase()));
+      return found ? found.icon : 'graduation-cap';
+    }
+
+    const DAY_DISPLAY_NAMES = {
+      'SEGUNDA': 'Segunda-feira',
+      'TERÇA': 'Terça-feira',
+      'QUARTA': 'Quarta-feira',
+      'QUINTA': 'Quinta-feira',
+      'SEXTA': 'Sexta-feira',
+      'SÁBADO': 'Sábado'
+    };
+
+    // Estado Global Sincronizado com o firebase-adapter-tv.js
+    var ensalamentoCloudData = {
+      MARICA: { NOITE: {}, MANHA: {} },
+      SAQUAREMA: { NOITE: {}, MANHA: {} }
+    };
+
+    // Complementos salvos na TV (Professores, Horários de início e Turmas Extras) por Unidade_Turno
+    var tvOverridesData = {
+      MARICA_NOITE: { items: {}, extras: [] },
+      MARICA_MANHA: { items: {}, extras: [] },
+      SAQUAREMA_NOITE: { items: {}, extras: [] },
+      SAQUAREMA_MANHA: { items: {}, extras: [] }
+    };
+
+    var activeUnit = 'MARICA';     // 'MARICA' ou 'SAQUAREMA'
+    var activeShift = 'NOITE';     // 'NOITE' ou 'MANHA'
+    var activeCampus = 'CAMPUS_2'; // 'CAMPUS_1' ou 'CAMPUS_2' (Campus 3 em Saquarema)
+    var activeDay = 'SEXTA';
+    var isAdmin = false;
+
+    let currentAllocations = [];
+    let slidesPages = [];
+    let currentSlideIndex = 0;
+    let intervalSeconds = 15;
+    let progressTimer = null;
+    let elapsedTicks = 0;
+    let hideBarTimeout = null;
+    let editingItem = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      detectCurrentDay();
+      updateCampusSelectorOptions();
+      refreshTvBoard();
+      startAutoCarousel();
+      setupAutoHideBar();
+      setupKeyboardNavigation();
+      safeCreateIcons();
+    });
+
+    function detectCurrentDay() {
+      const dayMap = { 1: 'SEGUNDA', 2: 'TERÇA', 3: 'QUARTA', 4: 'QUINTA', 5: 'SEXTA', 6: 'SÁBADO' };
+      const todayKey = dayMap[new Date().getDay()] || 'SEXTA';
+      activeDay = todayKey;
+      const daySelect = document.getElementById('ctrlDay');
+      if (daySelect) daySelect.value = activeDay;
+    }
+
+    function getDocKey() {
+      return `${activeUnit}_${activeShift}`;
+    }
+
+    function getActiveTvOverrides() {
+      const key = getDocKey();
+      if (!tvOverridesData[key]) {
+        tvOverridesData[key] = { items: {}, extras: [] };
+      }
+      if (!tvOverridesData[key].items) tvOverridesData[key].items = {};
+      if (!Array.isArray(tvOverridesData[key].extras)) tvOverridesData[key].extras = [];
+      return tvOverridesData[key];
+    }
+
+    // =========================================================================
+    // SELETORES DE UNIDADE, TURNO, CAMPUS E DIA
+    // =========================================================================
+    function updateCampusSelectorOptions() {
+      const select = document.getElementById('ctrlCampus');
+      const unitShiftData = (ensalamentoCloudData[activeUnit] && ensalamentoCloudData[activeUnit][activeShift]) || {};
+      const keys = Object.keys(unitShiftData);
+      const campusKeys = keys.length > 0 ? keys : ['CAMPUS_2', 'CAMPUS_1'];
+
+      if (!campusKeys.includes(activeCampus)) {
+        activeCampus = campusKeys.includes('CAMPUS_2') ? 'CAMPUS_2' : campusKeys[0];
+      }
+
+      select.innerHTML = campusKeys.map(k => {
+        const label = formatCampusLabel(k);
+        return `<option value="${k}" class="text-stone-900" ${k === activeCampus ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+    }
+
+    function formatCampusLabel(campusKey) {
+      if (campusKey === 'CAMPUS_1') return 'Campus 1';
+      if (campusKey === 'CAMPUS_2') return activeUnit === 'SAQUAREMA' ? 'Campus 3' : 'Campus 2';
+      if (campusKey === 'CAMPUS_3') return 'Campus 3';
+      return campusKey.replace(/_/g, ' ');
+    }
+
+    function handleUnitChange(val) {
+      activeUnit = val;
+      activeCampus = 'CAMPUS_2';
+      currentSlideIndex = 0;
+      updateCampusSelectorOptions();
+      refreshTvBoard();
+    }
+
+    function handleShiftChange(val) {
+      activeShift = val;
+      currentSlideIndex = 0;
+      updateCampusSelectorOptions();
+      refreshTvBoard();
+    }
+
+    function handleCampusChange(val) {
+      activeCampus = val;
+      currentSlideIndex = 0;
+      refreshTvBoard();
+    }
+
+    function handleDayChange(val) {
+      activeDay = val;
+      currentSlideIndex = 0;
+      refreshTvBoard();
+    }
+
+    function updateHeaderAndFooterUI() {
+      const unitLabel = activeUnit === 'SAQUAREMA'
+        ? 'UNIVASSOURAS CAMPUS SAQUAREMA'
+        : 'UNIVASSOURAS CAMPUS MARICÁ E FACMAR';
+      const campusLabel = formatCampusLabel(activeCampus).toUpperCase();
+      const shiftLabel = activeShift === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOTURNO';
+
+      document.getElementById('headerCampusTitle').innerHTML =
+        `${unitLabel} &nbsp;·&nbsp; ${campusLabel} &nbsp;·&nbsp; ${shiftLabel}`;
+
+      const dayName = DAY_DISPLAY_NAMES[activeDay] || 'Sexta-feira';
+      document.getElementById('headerDayTitle').innerText = `${dayName} · Salas`;
+
+      // Atualiza Rodapé de Localização conforme Unidade e Campus
+      const footerEl = document.getElementById('footerLocationContainer');
+      let items = [];
+
+      if (activeUnit === 'MARICA' && activeCampus === 'CAMPUS_2') {
+        items = [
+          ['Salas 06 e 10:', 'Blocos 1 e 2 (Térreo)'],
+          ['Salas 20 a 29:', 'Blocos 1 e 2 (2° Andar)'],
+          ['Salas 100 a 415:', 'Bloco 3'],
+          ['Lab. Informática 1, 2 e 3:', 'Bloco 3 (2° Andar)'],
+          ['Salas 501 a 516:', 'Bloco 5']
+        ];
+      } else if (activeUnit === 'MARICA' && activeCampus === 'CAMPUS_1') {
+        items = [
+          ['Sala 12:', '1° Andar'],
+          ['Lab. Informática 1, 2 e 3:', '2° Andar'],
+          ['Salas 22 a 28:', '2° Andar'],
+          ['Salas 34, 36 e 37:', '3° Andar']
+        ];
+      } else if (activeUnit === 'SAQUAREMA' && activeCampus === 'CAMPUS_2') {
+        items = [
+          ['Salas 101 a 308 e Lab. Informática 1 a 3:', 'Bloco 1'],
+          ['Salas 401 a 415 e Lab. Informática 4:', 'Bloco 2'],
+          ['Salas 502 a 515:', 'Bloco 3'],
+          ['Salas 610 a 633:', 'Bloco 4']
+        ];
+      } else {
+        items = [
+          ['Salas 03 a 13:', 'Colégio (Térreo)'],
+          ['Salas 21 a 24:', 'Térreo'],
+          ['Auditório e Salas 14 a 20:', '1° Andar']
+        ];
+      }
+
+      const badgeHtml = `
+        <span class="inline-flex items-center gap-1.5 font-black text-[#7c1d24] uppercase tracking-[0.1em] bg-[#fbf9f5] px-2.5 py-1 rounded-xl border border-[#ded6c6] shadow-2xs shrink-0">
+          <i data-lucide="compass" class="w-4 h-4 text-[#7c1d24] shrink-0"></i> Localização
+        </span>
+      `;
+
+      const partsHtml = items.map(([boldPart, descPart]) => `
+        <span class="shrink-0">
+          <strong class="text-[#7c1d24] font-black">${boldPart}</strong> <span class="font-bold">${descPart}</span>
+        </span>
+      `).join('<span class="text-[#b8ae9c] font-black shrink-0">·</span>');
+
+      footerEl.innerHTML = badgeHtml + partsHtml;
+    }
+
+    // =========================================================================
+    // EXTRAÇÃO DAS TURMAS DO ENSALAMENTO + MESCLAGEM COM PROFESSORES DA TV
+    // =========================================================================
+    function formatRoomDisplay(sala, subtitulo) {
+      const clean = (sala || '').trim();
+      const sub = (subtitulo || '').trim();
+      const combined = `${clean} ${sub}`.toLowerCase();
+
+      const labMatch = combined.match(/lab(?:orat[oó]rio)?\.?\s*(?:de\s*)?(?:inform[aá]tica)?\s*0*(\d+)/i);
+      if (labMatch) {
+        return `Lab. Informática ${labMatch[1]}`;
+      }
+      if (/^lij$/i.test(clean)) return 'SALA 208 (LIJ)';
+      if (/^audit[oó]rio$/i.test(clean)) return 'AUDITÓRIO';
+      if (/^sala\s+/i.test(clean)) return clean.toUpperCase();
+      return clean.toUpperCase();
+    }
+
+    function parseTurmaFromEnsalamento(rawLine) {
+      let cleaned = (rawLine || '')
+        .replace(/\(\s*\d+\s*(?:alunos?)?\s*\)/gi, '')
+        .replace(/\[PMR\]/gi, '')
+        .trim();
+      if (!cleaned) return null;
+
+      let matchedCourse = null;
+      for (const item of COURSE_STANDARD_NAMES) {
+        item.regex.lastIndex = 0;
+        if (item.regex.test(cleaned)) {
+          matchedCourse = item;
+          break;
+        }
+      }
+
+      const courseFullTitle = matchedCourse ? matchedCourse.fullTitle : 'Outros Cursos';
+      const periodMatch = cleaned.match(/(\d+)\s*[º°]/);
+      const periodNum = periodMatch ? parseInt(periodMatch[1], 10) : 99;
+
+      let remainder = cleaned;
+      if (matchedCourse) {
+        matchedCourse.regex.lastIndex = 0;
+        remainder = remainder.replace(matchedCourse.regex, ' ');
+      }
+      if (periodMatch) {
+        remainder = remainder.replace(periodMatch[0], ' ');
+      }
+      remainder = remainder.replace(/\bper[ií]odo\b/gi, ' ').replace(/\bturma\b/gi, ' ').replace(/\s+/g, ' ').trim();
+
+      let periodLabel = '';
+      if (/est[aá]gio/i.test(cleaned)) {
+        periodLabel = 'Estágio';
+      } else if (periodNum !== 99) {
+        periodLabel = remainder ? `${periodNum}° Período ${remainder.toUpperCase()}` : `${periodNum}° Período`;
+      } else {
+        periodLabel = remainder || cleaned;
+      }
+
+      return { courseFullTitle, periodLabel };
+    }
+
+    function makeOverrideKey(campusKey, dayKey, courseTitle, periodLabel, roomDisplay) {
+      return `${campusKey}__${dayKey}__${courseTitle}__${periodLabel}__${roomDisplay}`
+        .replace(/[.#$/[\]\s]+/g, '_');
+    }
+
+    function makeCoursePeriodFallbackKey(campusKey, dayKey, courseTitle, periodLabel) {
+      return `${campusKey}__${dayKey}__${courseTitle}__${periodLabel}`
+        .replace(/[.#$/[\]\s]+/g, '_');
+    }
+
+    function buildAllocationsFromEnsalamento() {
+      const unitData = ensalamentoCloudData[activeUnit] || {};
+      const shiftData = unitData[activeShift] || {};
+      const blocks = Array.isArray(shiftData[activeCampus]) ? shiftData[activeCampus] : [];
+      const tvState = getActiveTvOverrides();
+
+      const list = [];
+
+      blocks.forEach(block => {
+        const rooms = Array.isArray(block.rooms) ? block.rooms : [];
+        rooms.forEach(room => {
+          const schedule = room.schedule || {};
+          const rawCell = (schedule[activeDay] || '').trim();
+          if (!rawCell) return;
+
+          const roomDisplay = formatRoomDisplay(room.sala, room.subtitulo);
+          const lines = rawCell.split(/\n+/).map(l => l.trim()).filter(Boolean);
+
+          lines.forEach(line => {
+            const parsed = parseTurmaFromEnsalamento(line);
+            if (!parsed) return;
+
+            const exactKey = makeOverrideKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel, roomDisplay);
+            const fallbackKey = makeCoursePeriodFallbackKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel);
+
+            const savedOverride = tvState.items[exactKey] || tvState.items[fallbackKey] || {};
+
+            list.push({
+              id: exactKey,
+              fallbackKey: fallbackKey,
+              isExtra: false,
+              course: savedOverride.course || parsed.courseFullTitle,
+              period: savedOverride.period || parsed.periodLabel,
+              room: savedOverride.room || roomDisplay,
+              prof: savedOverride.prof || '',
+              time: savedOverride.time || ''
+            });
+          });
+        });
+      });
+
+      // Adiciona também turmas extras criadas manualmente na TV para este Campus e Dia
+      tvState.extras.forEach(extra => {
+        if (extra.campus === activeCampus && extra.day === activeDay) {
+          list.push({
+            id: extra.id,
+            isExtra: true,
+            course: extra.course,
+            period: extra.period,
+            room: extra.room,
+            prof: extra.prof || '',
+            time: extra.time || ''
+          });
+        }
+      });
+
+      currentAllocations = list;
+    }
+
+    // =========================================================================
+    // MOTOR ALFABÉTICO E DISTRIBUIÇÃO NAS 3 COLUNAS
+    // =========================================================================
+    function extractPeriodNum(periodStr) {
+      if (/est[aá]gio/i.test(periodStr)) return 99;
+      const m = (periodStr || '').match(/(\d+)/);
+      return m ? parseInt(m[1], 10) : 50;
+    }
+
+    function buildAlphabeticalSlides() {
+      const courseMap = {};
+      currentAllocations.forEach(item => {
+        const cName = item.course.trim();
+        if (!courseMap[cName]) courseMap[cName] = [];
+        courseMap[cName].push(item);
+      });
+
+      const sortedCourseNames = Object.keys(courseMap).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+      const cardsList = sortedCourseNames.map(cName => {
+        const rows = courseMap[cName].sort((a, b) => {
+          const nA = extractPeriodNum(a.period);
+          const nB = extractPeriodNum(b.period);
+          if (nA !== nB) return nA - nB;
+          return a.period.localeCompare(b.period, 'pt-BR');
+        });
+
+        return {
+          course: cName,
+          rows: rows,
+          weight: rows.length + 1.25
+        };
+      });
+
+      const MAX_COL_WEIGHT = 15.5;
+      const slides = [];
+      let currentSlideCols = [[], [], []];
+      let currentColIdx = 0;
+      let currentColWeight = 0;
+
+      cardsList.forEach(card => {
+        if (currentColWeight > 0 && (currentColWeight + card.weight > MAX_COL_WEIGHT)) {
+          currentColIdx++;
+          currentColWeight = 0;
+          if (currentColIdx >= 3) {
+            slides.push(currentSlideCols);
+            currentSlideCols = [[], [], []];
+            currentColIdx = 0;
+          }
+        }
+        currentSlideCols[currentColIdx].push(card);
+        currentColWeight += card.weight;
+      });
+
+      if (currentSlideCols.some(col => col.length > 0)) {
+        slides.push(currentSlideCols);
+      }
+
+      slidesPages = slides.length > 0 ? slides : [[[], [], []]];
+      if (currentSlideIndex >= slidesPages.length) currentSlideIndex = 0;
+    }
+
+    function refreshTvBoard() {
+      updateCampusSelectorOptions();
+      updateHeaderAndFooterUI();
+      updateAdminUI();
+      buildAllocationsFromEnsalamento();
+      buildAlphabeticalSlides();
+      renderSlide();
+      startAutoCarousel();
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // RENDERIZAÇÃO EDITORIAL REQUINTADA
+    // =========================================================================
+    function renderSlide() {
+      const container = document.getElementById('slideColumnsContainer');
+      const slideCols = slidesPages[currentSlideIndex] || [[], [], []];
+
+      document.getElementById('slideIndicatorText').innerText = `${currentSlideIndex + 1} / ${slidesPages.length}`;
+      const partSub = document.getElementById('headerPartSubtitle');
+      if (partSub) {
+        partSub.innerText = `Quadro de horários e salas · Parte ${currentSlideIndex + 1}`;
+      }
+
+      const dotsEl = document.getElementById('slideDotsContainer');
+      dotsEl.innerHTML = slidesPages.map((_, idx) => `
+        <button onclick="goToSlide(${idx})" class="h-1.5 rounded-full transition-all ${idx === currentSlideIndex ? 'w-7 bg-[#7c1d24]' : 'w-2 bg-[#d5ccb8] hover:bg-[#b8ae9c]'}"></button>
+      `).join('');
+
+      const btnsEl = document.getElementById('slideButtonsContainer');
+      btnsEl.innerHTML = slidesPages.map((_, idx) => `
+        <button onclick="goToSlide(${idx})" class="px-3 py-1 rounded-lg font-black transition ${idx === currentSlideIndex ? 'bg-[#7c1d24] text-white' : 'text-stone-300 hover:text-white'}">
+          Parte ${idx + 1}
+        </button>
+      `).join('');
+
+      container.classList.remove('slide-fade');
+      void container.offsetWidth;
+      container.classList.add('slide-fade');
+
+      if (currentAllocations.length === 0) {
+        const dayLabel = DAY_DISPLAY_NAMES[activeDay] || activeDay;
+        container.innerHTML = `
+          <div class="col-span-3 my-auto flex flex-col items-center justify-center py-20 px-6 bg-[#fbf9f5] rounded-3xl border-2 border-dashed border-[#ded6c6] max-w-xl mx-auto text-center shadow-2xs">
+            <div class="w-14 h-14 rounded-2xl bg-[#7c1d24] text-[#e6c47a] flex items-center justify-center mb-4 shadow-md">
+              <i data-lucide="calendar-clock" class="w-7 h-7"></i>
+            </div>
+            <h2 class="font-editorial text-2xl xl:text-3xl font-medium text-[#1e1b18] mb-1">
+              Nenhuma Turma Alocada para ${dayLabel}
+            </h2>
+            <p class="text-xs sm:text-sm text-[#78716c] max-w-md">
+              As turmas cadastradas no mapa de Ensalamento deste campus e turno aparecerão aqui automaticamente em ordem alfabética.
+            </p>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      container.innerHTML = slideCols.map(colCards => `
+        <div class="space-y-3 w-full">
+          ${colCards.map(card => {
+            const iconName = getCourseIcon(card.course);
+            const safeCourse = card.course.replace(/'/g, "\\'");
+            return `
+              <div class="bg-[#fbf9f5] rounded-2xl shadow-2xs border border-[#ded6c6] overflow-hidden">
+                <!-- Cabeçalho do Curso com Tipografia Serifa Requintada e Bordô Clássico -->
+                <div class="px-4 py-2 bg-gradient-to-r from-[#7c1d24] to-[#5e1319] text-white flex items-center justify-between border-b border-[#b4833e]/30">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-xl bg-white/10 border border-[#e6c47a]/35 flex items-center justify-center shrink-0">
+                      <i data-lucide="${iconName}" class="w-4 h-4 text-[#e6c47a]"></i>
+                    </div>
+                    <h3 class="font-editorial text-xl xl:text-[22px] 2xl:text-2xl font-semibold tracking-tight text-[#fbf9f5] leading-none">
+                      ${card.course}
+                    </h3>
+                  </div>
+
+                  ${isAdmin ? `
+                    <button onclick="openNewAllocationModal('${safeCourse}')" title="Adicionar turma extra em ${card.course}"
+                      class="w-6 h-6 rounded-lg bg-white/10 hover:bg-white/25 text-[#e6c47a] flex items-center justify-center transition">
+                      <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    </button>
+                  ` : ''}
+                </div>
+
+                <!-- Linhas Preenchidas com Tons Creme/Areia Sofisticados -->
+                <div class="p-1.5 space-y-1">
+                  ${card.rows.map((r) => `
+                    <div onclick="handleRowClick('${r.id}')"
+                         class="group flex items-center gap-1.5 ${isAdmin ? 'cursor-pointer' : 'cursor-default'} transition-all"
+                         title="${isAdmin ? 'Clique para definir Professor e Horário de Início' : ''}">
+                      
+                      <!-- Bloco 1: Período -->
+                      <div class="w-[142px] xl:w-[158px] 2xl:w-[172px] shrink-0 bg-[#ede8dc] ${isAdmin ? 'group-hover:bg-[#e5dec9]' : ''} px-3 py-1.5 rounded-xl border border-[#ded6c6] transition-colors">
+                        <span class="text-sm xl:text-base 2xl:text-[17px] font-bold text-[#1e1b18] tracking-tight block truncate leading-tight">
+                          ${r.period}
+                        </span>
+                      </div>
+
+                      <!-- Bloco 2: Professor -->
+                      <div class="flex-1 min-w-0 bg-[#f4f1ea] ${isAdmin ? 'group-hover:bg-[#ebe5d8]' : ''} px-3 py-1.5 rounded-xl border border-[#e5dec9] flex items-center gap-2 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4 text-[#7c1d24]/80 shrink-0"></i>
+                        <span class="text-sm xl:text-base 2xl:text-[17px] font-bold ${r.prof ? 'text-[#292524]' : 'text-stone-400 italic'} block truncate leading-tight">
+                          ${r.prof || (isAdmin ? 'Adicionar professor...' : '—')}
+                        </span>
+                      </div>
+
+                      <!-- Bloco 3: Sala / Lab. Informática + Horário em Destaque -->
+                      <div class="shrink-0 flex items-center gap-1.5">
+                        ${r.time ? `
+                          <span class="px-2.5 py-1.5 rounded-xl bg-[#f3e6c8] text-[#6b4c1b] border border-[#dfc896] text-xs xl:text-sm font-extrabold tracking-tight whitespace-nowrap leading-tight">
+                            ${r.time}
+                          </span>
+                        ` : ''}
+                        <span class="px-3.5 py-1.5 rounded-xl bg-[#7c1d24]/10 text-[#7c1d24] border border-[#7c1d24]/25 text-sm xl:text-base 2xl:text-[17px] font-extrabold tracking-tight whitespace-nowrap text-center leading-tight">
+                          ${r.room}
+                        </span>
+                      </div>
+
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `).join('');
+
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // EDIÇÃO DE PROFESSOR / HORÁRIO DE INÍCIO (SEM MEXER NO ENSALAMENTO)
+    // =========================================================================
+    function handleRowClick(id) {
+      if (!isAdmin) {
+        showToast('Clique em "Admin" no topo para editar professores e horários.');
+        return;
+      }
+      openRowEditModal(id);
+    }
+
+    function openRowEditModal(id) {
+      const item = currentAllocations.find(a => a.id === id);
+      if (!item) return;
+      editingItem = item;
+
+      document.getElementById('modalTitleText').innerText = 'Professor e Horário de Início';
+      document.getElementById('inputEditCourse').value = item.course;
+      document.getElementById('inputEditPeriod').value = item.period;
+      document.getElementById('inputEditRoom').value = item.room;
+      document.getElementById('inputEditProf').value = item.prof || '';
+      document.getElementById('inputEditTime').value = item.time || '';
+
+      const delBtn = document.getElementById('btnDeleteRow');
+      if (item.isExtra) {
+        delBtn.classList.remove('hidden');
+      } else {
+        delBtn.classList.add('hidden');
+      }
+
+      document.getElementById('rowEditModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('inputEditProf').focus(), 50);
+      safeCreateIcons();
+    }
+
+    function openNewAllocationModal(defaultCourse = '') {
+      if (!isAdmin) return;
+      editingItem = null;
+      document.getElementById('modalTitleText').innerText = 'Adicionar Turma Extra na TV';
+      document.getElementById('inputEditCourse').value = defaultCourse;
+      document.getElementById('inputEditPeriod').value = '';
+      document.getElementById('inputEditRoom').value = '';
+      document.getElementById('inputEditProf').value = '';
+      document.getElementById('inputEditTime').value = '';
+      document.getElementById('btnDeleteRow').classList.add('hidden');
+
+      document.getElementById('rowEditModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeRowEditModal() {
+      document.getElementById('rowEditModal').classList.add('hidden');
+      editingItem = null;
+    }
+
+    function saveRowEdit(e) {
+      e.preventDefault();
+      if (!isAdmin) return;
+
+      const course = document.getElementById('inputEditCourse').value.trim();
+      const period = document.getElementById('inputEditPeriod').value.trim();
+      const room = document.getElementById('inputEditRoom').value.trim();
+      const prof = document.getElementById('inputEditProf').value.trim();
+      const time = document.getElementById('inputEditTime').value.trim();
+
+      const tvState = getActiveTvOverrides();
+
+      if (editingItem) {
+        if (editingItem.isExtra) {
+          const idx = tvState.extras.findIndex(x => x.id === editingItem.id);
+          if (idx !== -1) {
+            tvState.extras[idx] = { ...tvState.extras[idx], course, period, room, prof, time };
+          }
+        } else {
+          const payload = { course, period, room, prof, time };
+          tvState.items[editingItem.id] = payload;
+          if (editingItem.fallbackKey) {
+            tvState.items[editingItem.fallbackKey] = payload;
+          }
+        }
+      } else {
+        tvState.extras.push({
+          id: 'extra_' + Date.now(),
+          campus: activeCampus,
+          day: activeDay,
+          course,
+          period,
+          room,
+          prof,
+          time
+        });
+      }
+
+      closeRowEditModal();
+      saveTvDataToStorage();
+      refreshTvBoard();
+    }
+
+    function deleteCurrentRow() {
+      if (!isAdmin || !editingItem || !editingItem.isExtra) return;
+      const tvState = getActiveTvOverrides();
+      tvState.extras = tvState.extras.filter(x => x.id !== editingItem.id);
+      closeRowEditModal();
+      saveTvDataToStorage();
+      refreshTvBoard();
+    }
+
+    // Sobrescrito pelo firebase-adapter-tv.js para salvar no Firestore
+    function saveTvDataToStorage() {
+      localStorage.setItem('tv_overrides_local_backup_v1', JSON.stringify(tvOverridesData));
+    }
+
+    function updateAdminUI() {
+      const btnAdmin = document.getElementById('btnAdminToggle');
+      const roleBadge = document.getElementById('roleStatusBadge');
+      const btnAddExtra = document.getElementById('btnAddExtraTurma');
+
+      if (isAdmin) {
+        if (btnAddExtra) {
+          btnAddExtra.classList.remove('hidden');
+          btnAddExtra.classList.add('inline-flex');
+        }
+        if (btnAdmin) {
+          btnAdmin.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-950 bg-emerald-300 hover:bg-emerald-200 rounded-xl transition shrink-0';
+          btnAdmin.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5"></i><span>Bloquear</span>`;
+        }
+        if (roleBadge) {
+          roleBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30';
+          roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3"></i> Modo Admin`;
+        }
+      } else {
+        if (btnAddExtra) {
+          btnAddExtra.classList.add('hidden');
+          btnAddExtra.classList.remove('inline-flex');
+        }
+        if (btnAdmin) {
+          btnAdmin.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-900 bg-stone-100 hover:bg-white rounded-xl transition shrink-0';
+          btnAdmin.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-stone-700"></i><span>Admin</span>`;
+        }
+        if (roleBadge) {
+          roleBadge.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/10 text-stone-300 border border-white/15';
+          roleBadge.innerHTML = `<i data-lucide="eye" class="w-3 h-3"></i> Leitura`;
+        }
+      }
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // CARROSSEL AUTOMÁTICO E ATALHOS
+    // =========================================================================
+    function startAutoCarousel() {
+      clearInterval(progressTimer);
+      elapsedTicks = 0;
+      const bar = document.getElementById('slideProgressBar');
+
+      if (intervalSeconds <= 0 || slidesPages.length <= 1) {
+        bar.style.width = '0%';
+        return;
+      }
+
+      const totalTicks = intervalSeconds * 10;
+      progressTimer = setInterval(() => {
+        elapsedTicks++;
+        const pct = Math.min(100, (elapsedTicks / totalTicks) * 100);
+        bar.style.width = `${pct}%`;
+
+        if (elapsedTicks >= totalTicks) {
+          elapsedTicks = 0;
+          currentSlideIndex = (currentSlideIndex + 1) % slidesPages.length;
+          renderSlide();
+        }
+      }, 100);
+    }
+
+    function goToSlide(idx) {
+      currentSlideIndex = idx;
+      renderSlide();
+      startAutoCarousel();
+    }
+
+    function nextSlide() {
+      currentSlideIndex = (currentSlideIndex + 1) % slidesPages.length;
+      renderSlide();
+      startAutoCarousel();
+    }
+
+    function prevSlide() {
+      currentSlideIndex = (currentSlideIndex - 1 + slidesPages.length) % slidesPages.length;
+      renderSlide();
+      startAutoCarousel();
+    }
+
+    function handleIntervalChange() {
+      intervalSeconds = parseInt(document.getElementById('ctrlInterval').value, 10) || 0;
+      startAutoCarousel();
+    }
+
+    function setupKeyboardNavigation() {
+      window.addEventListener('keydown', (e) => {
+        if (!document.getElementById('rowEditModal').classList.contains('hidden')) return;
+        if (!document.getElementById('adminLoginModal').classList.contains('hidden')) return;
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+      });
+    }
+
+    function setupAutoHideBar() {
+      const bar = document.getElementById('tvControlBar');
+      const show = () => {
+        bar.classList.remove('hidden-bar');
+        clearTimeout(hideBarTimeout);
+        hideBarTimeout = setTimeout(() => {
+          if (!document.getElementById('rowEditModal').classList.contains('hidden')) return;
+          if (!document.getElementById('adminLoginModal').classList.contains('hidden')) return;
+          bar.classList.add('hidden-bar');
+        }, 3200);
+      };
+      window.addEventListener('mousemove', show);
+      show();
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3200);
+    }
+  </script>
+  <script src="firebase-adapter-tv.js"></script>
+</body>
+</html>
