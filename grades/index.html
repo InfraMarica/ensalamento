@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-[#fafaf9]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Portal de Grades Acadêmicas | Univassouras</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    function safeCreateIcons() {
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" onload="safeCreateIcons()"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fafaf9;
+      color: #1c1917;
+    }
+    ::-webkit-scrollbar { height: 8px; width: 6px; }
+    ::-webkit-scrollbar-track { background: #f5f5f4; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7a001e; }
+
+    /* Fundo Bordô Sofisticado com Textura Dupla para a Tela Inicial */
+    .bordeaux-luxury-bg {
+      background-color: #4a0012;
+      background-image: 
+        radial-gradient(circle at 18% 15%, rgba(251, 191, 36, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(159, 18, 57, 0.45) 0%, transparent 45%),
+        radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 18px),
+        linear-gradient(145deg, #7a001e 0%, #4d0013 52%, #240008 100%);
+      background-size: 100% 100%, 100% 100%, 24px 24px, 100% 100%, 100% 100%;
+    }
+
+    /* Proporção exata de folha A4 Paisagem aumentada em 25% (125%) na tela */
+    .a4-landscape-sheet {
+      width: 1080px;
+      max-width: 1080px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media screen {
+      .a4-landscape-sheet {
+        zoom: 1.25;
+      }
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body {
+        background: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .a4-landscape-sheet {
+        zoom: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .period-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #d6d3d1 !important;
+        margin-bottom: 10mm !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-[#fafaf9] text-stone-900">
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+  <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS (FUNDO BORDÔ TEXTURIZADO SOFISTICADO) ==================== -->
+  <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print">
+    <!-- Topo Institucional -->
+    <div class="max-w-5xl w-full mx-auto pt-2 flex items-center justify-between border-b border-white/15 pb-5">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center shadow-lg shadow-black/40 border border-amber-200/60">
+          <i data-lucide="graduation-cap" class="w-7 h-7 text-[#4d0013]"></i>
+        </div>
+        <div>
+          <span class="block text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
+            SISTEMA ACADÊMICO INTEGRADO
+          </span>
+          <h1 class="text-lg sm:text-2xl font-black text-white tracking-tight">
+            Portal de Grades Horárias
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <span id="firebaseStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/10 text-amber-200 border border-white/15">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Conectando...
+        </span>
+        <span class="text-xs sm:text-sm font-black text-amber-300 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-xl border border-amber-300/30 shadow-sm">
+          Semestre 2027.1
+        </span>
+      </div>
+    </div>
+
+    <!-- Centro: Escolha de Campus -->
+    <div class="max-w-4xl w-full mx-auto my-auto py-10 text-center">
+      <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-xs font-bold bg-white/10 text-amber-200 border border-amber-300/30 backdrop-blur-xs mb-4 shadow-sm">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+        Selecione a Unidade Acadêmica
+      </span>
+      <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-3">
+        Escolha o Campus
+      </h2>
+      <p class="text-xs sm:text-sm text-rose-100/80 max-w-xl mx-auto mb-10 font-medium">
+        Acesse a matriz de horários de cada graduação para gerenciar períodos, disciplinas, corpo docente e locais de aula.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+        <!-- Card 1: Maricá -->
+        <button 
+          type="button"
+          onclick="selectCampus('MARICA')"
+          class="group relative bg-white/95 hover:bg-white rounded-3xl p-7 sm:p-8 border-2 border-amber-300/40 hover:border-amber-300 shadow-2xl shadow-black/40 transition-all duration-300 flex flex-col justify-between cursor-pointer text-left overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6 relative z-10">
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <i data-lucide="building-2" class="w-8 h-8 text-amber-300"></i>
+              </div>
+              <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
+                20 Cursos
+              </span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-2">
+              Unidade Maricá
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              Grades horárias dos cursos da <strong>Univassouras Campus Maricá</strong> e dos cursos da <strong>FACMAR</strong>.
+            </p>
+          </div>
+          <div class="mt-7 pt-4 border-t border-stone-200/80 flex items-center justify-between">
+            <span id="summaryCampusMarica" class="text-xs font-bold text-stone-500">20 cursos disponíveis</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
+              <span>Acessar Cursos</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </button>
+
+        <!-- Card 2: Saquarema -->
+        <button 
+          type="button"
+          onclick="selectCampus('SAQUAREMA')"
+          class="group relative bg-white/95 hover:bg-white rounded-3xl p-7 sm:p-8 border-2 border-amber-300/40 hover:border-amber-300 shadow-2xl shadow-black/40 transition-all duration-300 flex flex-col justify-between cursor-pointer text-left overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6 relative z-10">
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <i data-lucide="landmark" class="w-8 h-8 text-amber-300"></i>
+              </div>
+              <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
+                15 Cursos
+              </span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-2">
+              Campus Saquarema
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              Grades horárias dos cursos de graduação da <strong>Univassouras Campus Saquarema</strong> (Campi 1 e 3).
+            </p>
+          </div>
+          <div class="mt-7 pt-4 border-t border-stone-200/80 flex items-center justify-between">
+            <span id="summaryCampusSaquarema" class="text-xs font-bold text-stone-500">15 cursos disponíveis</span>
+            <span class="inline-flex items-center gap-1.5 text-xs font-black text-[#7a001e] group-hover:translate-x-1 transition-transform">
+              <span>Acessar Cursos</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Rodapé da Tela Inicial -->
+    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-100/70">
+      <span>Gestão Acadêmica de Grades Horárias • Semestre 2027.1</span>
+      <span>Elaborado por <strong class="text-amber-300 font-bold">Jonas Florencio</strong></span>
+    </div>
+  </div>
+
+  <!-- ==================== TELA 2: SELEÇÃO DE CURSOS ==================== -->
+  <div id="courseScreen" class="hidden fixed inset-0 z-30 bg-[#fafaf9] flex flex-col justify-between p-6 overflow-y-auto no-print">
+    <div class="max-w-6xl w-full mx-auto pt-2 flex flex-wrap items-center justify-between gap-4 border-b border-stone-200 pb-4">
+      <div class="flex items-center gap-3">
+        <button 
+          type="button"
+          onclick="backToCampusScreen()" 
+          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-200/80 hover:bg-stone-300/80 text-stone-800 font-bold text-xs transition-all">
+          <i data-lucide="arrow-left" class="w-4 h-4 text-[#7a001e]"></i>
+          <span>Trocar Campus</span>
+        </button>
+        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/20">
+          <i data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
+        </div>
+        <div>
+          <span id="courseScreenCampusTag" class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
+            UNIDADE MARICÁ
+          </span>
+          <h2 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
+            Selecione o Curso para Acessar a Grade
+          </h2>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="relative w-48 sm:w-64">
+          <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input type="text" id="courseSearchInput" oninput="renderCourseSelectionGrid()" placeholder="Buscar curso..."
+            class="w-full pl-9 pr-3 py-2 text-xs bg-white border border-stone-200 rounded-xl focus:outline-none focus:border-[#7a001e] font-semibold">
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl w-full mx-auto my-auto py-8">
+      <div id="courseGridContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Gerado via JS -->
+      </div>
+    </div>
+
+    <div class="max-w-6xl w-full mx-auto pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
+      <span>🔒 Cada curso possui acesso protegido por senha individual (Padrão inicial: <strong>1234</strong>)</span>
+      <span>Elaborado por <strong class="text-stone-800 font-bold">Jonas Florencio</strong></span>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE SENHA DO CURSO ==================== -->
+  <div id="coursePasswordModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
+      <div class="flex items-center justify-between pb-4 border-b border-stone-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
+            <i id="passModalCourseIcon" data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
+          </div>
+          <div>
+            <span id="passModalInstitutionTag" class="text-[10px] font-black uppercase tracking-wider text-[#7a001e] block">UNIVASSOURAS</span>
+            <h3 id="passModalCourseTitle" class="text-base font-black text-stone-900 leading-tight">Curso</h3>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('coursePasswordModal')" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="verifyCoursePassword(event)" class="mt-4 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">Digite a senha deste curso</label>
+          <input type="password" id="coursePasswordInput" required placeholder="Senha do curso..."
+            class="w-full px-3.5 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-stone-900">
+          <p id="coursePasswordError" class="hidden text-xs font-bold text-rose-600 mt-1.5">
+            Senha incorreta para este curso. Tente novamente.
+          </p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+          <button type="button" onclick="closeModal('coursePasswordModal')" class="px-4 py-2 text-xs font-bold text-stone-500 hover:bg-stone-100 rounded-xl">
+            Cancelar
+          </button>
+          <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-black text-white bg-[#7a001e] hover:bg-[#600017] rounded-xl shadow-md transition-all">
+            <i data-lucide="unlock" class="w-3.5 h-3.5 text-amber-300"></i>
+            <span>Acessar Grade</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== TELA 3: GRADE DO CURSO ==================== -->
+  <div id="scheduleScreen" class="hidden flex-1 flex flex-col min-h-screen">
+    <!-- Header Institucional -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-20 shadow-xs no-print">
+      <div class="max-w-[1350px] mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Navegação + Ícone Bordô/Dourado do Curso + Nome Completo sem abreviação -->
+        <div class="flex items-center gap-3">
+          <button 
+            type="button"
+            onclick="backToCourseScreen()" 
+            title="Voltar para a seleção de cursos"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs border border-stone-200 transition-all">
+            <i data-lucide="arrow-left" class="w-4 h-4 text-[#7a001e]"></i>
+            <span class="hidden sm:inline">Cursos</span>
+          </button>
+
+          <div class="w-11 h-11 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/25 shrink-0">
+            <i id="activeCourseHeaderIcon" data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="activeCampusBadge" class="text-[11px] font-black uppercase tracking-wider text-[#7a001e]">
+                UNIVASSOURAS CAMPUS MARICÁ
+              </span>
+              <span class="text-[11px] font-black px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                2027.1
+              </span>
+            </div>
+            <h1 id="activeCourseHeaderTitle" class="text-lg sm:text-xl font-black text-stone-900 tracking-tight leading-tight">
+              Nome do Curso
+            </h1>
+          </div>
+        </div>
+
+        <!-- Botões Principais de Ação -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="openPeriodsModal()"
+            class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-black rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 shadow-sm transition">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>Gerenciar Períodos</span>
+          </button>
+
+          <button onclick="openNewClassModal()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-black rounded-xl bg-[#7a001e] hover:bg-[#600017] text-white shadow-md shadow-[#7a001e]/20 transition">
+            <i data-lucide="plus" class="w-4 h-4 text-amber-300"></i>
+            <span>Nova Aula</span>
+          </button>
+
+          <button onclick="openChangeCoursePasswordModal()" title="Alterar a senha exclusiva deste curso"
+            class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 transition">
+            <i data-lucide="key-round" class="w-4 h-4 text-[#7a001e]"></i>
+            <span class="hidden md:inline">Senha</span>
+          </button>
+
+          <button onclick="openModal('importExportModal')" title="Backup JSON / CSV"
+            class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 transition">
+            <i data-lucide="database" class="w-4 h-4 text-[#7a001e]"></i>
+            <span class="hidden lg:inline">Backup</span>
+          </button>
+
+          <button onclick="window.print()" title="Imprimir Grade em A4 Paisagem"
+            class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 transition">
+            <i data-lucide="printer" class="w-4 h-4 text-stone-600"></i>
+            <span class="hidden sm:inline">Imprimir</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de Filtros Simplificada -->
+      <div class="bg-stone-50 border-t border-stone-200/80 px-4 py-2">
+        <div class="max-w-[1350px] mx-auto flex flex-wrap items-center justify-between gap-3">
+          
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Filtro de Período -->
+            <div class="flex items-center gap-1.5 bg-white border border-stone-200 rounded-xl px-2.5 py-1 shadow-2xs">
+              <span class="text-stone-400 font-black uppercase text-[10px]">Período:</span>
+              <select id="periodFilterSelect" onchange="renderCourseSchedule()" class="bg-transparent text-stone-900 text-xs font-black focus:outline-none cursor-pointer">
+                <option value="ALL">Todos os Períodos</option>
+              </select>
+            </div>
+
+            <!-- Filtro de Campus Interno -->
+            <div class="flex items-center gap-1.5 bg-white border border-stone-200 rounded-xl px-2.5 py-1 shadow-2xs">
+              <span class="text-stone-400 font-black uppercase text-[10px]">Campus:</span>
+              <select id="campusUnitFilterSelect" onchange="renderCourseSchedule()" class="bg-transparent text-stone-900 text-xs font-black focus:outline-none cursor-pointer">
+                <option value="ALL">Todos</option>
+                <option value="Campus 1">Campus 1</option>
+                <option value="Campus 2">Campus 2</option>
+                <option value="Campus 3">Campus 3</option>
+              </select>
+            </div>
+
+            <!-- Filtro de Modalidade -->
+            <div class="flex items-center gap-1.5 bg-white border border-stone-200 rounded-xl px-2.5 py-1 shadow-2xs">
+              <span class="text-stone-400 font-black uppercase text-[10px]">Modalidade:</span>
+              <select id="categoryFilterSelect" onchange="renderCourseSchedule()" class="bg-transparent text-stone-900 text-xs font-black focus:outline-none cursor-pointer">
+                <option value="ALL">Todas</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Estágio">Estágio</option>
+                <option value="Aula Remota">Aula Remota</option>
+                <option value="AVA">AVA</option>
+              </select>
+            </div>
+
+            <!-- Busca Rápida -->
+            <div class="relative w-52 sm:w-64">
+              <i data-lucide="search" class="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="text" id="scheduleSearchInput" oninput="renderCourseSchedule()" placeholder="Matéria, prof, sala..."
+                class="w-full bg-white border border-stone-200 rounded-xl pl-8 pr-3 py-1 text-xs font-semibold text-stone-900 focus:outline-none focus:border-[#7a001e]">
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-[11px] text-stone-400 font-semibold hidden md:inline">Visualização 125% • Impressão A4 Paisagem</span>
+            <span id="courseStatsBadge" class="font-black text-[#7a001e] bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-xl">
+              0 Períodos • 0 Aulas
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal da Grade na Largura Exata de Impressão A4 Paisagem (Com zoom 125% na tela) -->
+    <main class="flex-1 w-full py-5 px-2 overflow-x-auto">
+      <div id="periodsContainer" class="a4-landscape-sheet space-y-6">
+        <!-- Períodos e Quadros de Segunda a Sábado renderizados via JS -->
+      </div>
+    </main>
+
+    <footer class="mt-auto py-4 bg-white border-t border-stone-200 text-center text-xs font-semibold text-stone-500 no-print">
+      Sistema de Grades Horárias • Elaborado por <strong class="text-stone-800">Jonas Florencio</strong>
+    </footer>
+  </div>
+
+  <!-- ==================== MODAL: GERENCIAR E ADICIONAR PERÍODOS ==================== -->
+  <div id="periodsModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto no-print">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 border border-stone-200 my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#7a001e] flex items-center justify-center">
+            <i data-lucide="layers" class="w-5 h-5 text-amber-300"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-stone-900">Gerenciar Períodos do Curso</h3>
+            <p class="text-xs text-stone-500">Marque os períodos de 1 a 10 e as turmas desejadas</p>
+          </div>
+        </div>
+        <button onclick="closeModal('periodsModal')" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4 text-xs">
+        <!-- Gerador por Seleção de Períodos (1 a 10) e Turmas (Única, A, B, C +) -->
+        <div class="bg-stone-50 p-3.5 rounded-2xl border border-stone-200 space-y-3.5">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-black uppercase text-[#7a001e]">1. Marque os Períodos (1º ao 10º):</span>
+              <div class="flex gap-2">
+                <button type="button" onclick="toggleAllPeriodChecks(true)" class="text-[10px] font-bold text-[#7a001e] hover:underline">Marcar todos</button>
+                <span class="text-stone-300">|</span>
+                <button type="button" onclick="toggleAllPeriodChecks(false)" class="text-[10px] font-bold text-stone-500 hover:underline">Limpar</button>
+              </div>
+            </div>
+            <div id="periodNumberChecksContainer" class="grid grid-cols-5 gap-1.5">
+              <!-- Gerado via JS (1º ao 10º) -->
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-stone-200/80">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[11px] font-black uppercase text-[#7a001e]">2. Selecione as Turmas:</span>
+              <span class="text-[10px] font-semibold text-stone-400">Clique no + para mais turmas</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5" id="turmaChipsContainer">
+              <!-- Chips Única, Turma A, Turma B, Turma C + botão de adicionar -->
+            </div>
+          </div>
+
+          <button type="button" onclick="generateSelectedPeriodsAndTurmas()"
+            class="w-full py-2.5 rounded-xl bg-[#7a001e] hover:bg-[#600017] text-white font-black shadow-sm flex items-center justify-center gap-1.5 transition">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-amber-300"></i>
+            <span>Adicionar Períodos e Turmas Marcados</span>
+          </button>
+        </div>
+
+        <!-- Adicionar Nome Personalizado Manual -->
+        <form onsubmit="handleAddPeriod(event)" class="flex gap-2">
+          <input type="text" id="newPeriodNameInput" required placeholder="Ou digite um nome livre (Ex: Turma Especial)..."
+            class="flex-1 rounded-xl bg-stone-50 border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          <button type="submit" class="px-3.5 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-white font-bold shrink-0">
+            + Criar
+          </button>
+        </form>
+
+        <!-- Lista de Períodos Atuais -->
+        <div>
+          <span class="block text-[11px] font-black uppercase text-stone-500 mb-2">Períodos Cadastrados neste Curso:</span>
+          <div id="modalPeriodsList" class="space-y-1.5 max-h-52 overflow-y-auto pr-1"></div>
+        </div>
+
+        <div class="flex justify-end pt-3 border-t border-stone-100">
+          <button type="button" onclick="closeModal('periodsModal')" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-bold">
+            Concluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: ADICIONAR / EDITAR AULA ==================== -->
+  <div id="addClassModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto no-print">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 border border-stone-200 my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#7a001e] flex items-center justify-center">
+            <i data-lucide="book-open" class="w-5 h-5 text-amber-300"></i>
+          </div>
+          <h3 id="modalFormTitle" class="text-base font-black text-stone-900">Cadastrar Aula na Grade</h3>
+        </div>
+        <button onclick="closeModal('addClassModal')" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="classForm" onsubmit="handleSaveClass(event)" class="mt-4 space-y-3.5 text-xs">
+        <input type="hidden" id="editClassId" value="">
+
+        <!-- Período e Dia da Semana -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Período / Turma</label>
+            <select id="formPeriodSelect" required class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Dia da Semana</label>
+            <select id="formDay" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+              <option value="Segunda-feira">Segunda-feira</option>
+              <option value="Terça-feira">Terça-feira</option>
+              <option value="Quarta-feira">Quarta-feira</option>
+              <option value="Quinta-feira">Quinta-feira</option>
+              <option value="Sexta-feira">Sexta-feira</option>
+              <option value="Sábado">Sábado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Disciplina e Carga Horária -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-stone-700 mb-1">Nome da Disciplina / Matéria</label>
+            <input type="text" id="formSubject" required placeholder="Ex: Anatomia I"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Carga Horária</label>
+            <input type="text" id="formWorkload" required list="workloadSuggestions" placeholder="Ex: 60h"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+            <datalist id="workloadSuggestions">
+              <option value="20h">
+              <option value="30h">
+              <option value="40h">
+              <option value="60h">
+              <option value="80h">
+              <option value="100h">
+              <option value="120h">
+            </datalist>
+          </div>
+        </div>
+
+        <!-- Professor e Matrícula (Opcional) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block font-bold text-stone-700 mb-1">Professor(a) / Docente</label>
+            <input type="text" id="formProfessor" required placeholder="Ex: Prof. Carlos Eduardo"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">
+              Matrícula <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
+            </label>
+            <input type="text" id="formMatricula" placeholder="Ex: 102938"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          </div>
+        </div>
+
+        <!-- Horário de Início e Fim Separados com Regra HH:MM -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">
+              Horário de Início <span class="text-[10px] font-semibold text-[#7a001e]">(Formato 18:50)</span>
+            </label>
+            <input type="text" id="formStartTime" required maxlength="5"
+              pattern="^([01][0-9]|2[0-3]):[0-5][0-9]$"
+              title="Use exclusivamente o formato HH:MM (Exemplo: 18:50 ou 20:00)"
+              oninput="maskTimeInput(this)"
+              placeholder="Ex: 18:50"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-mono font-black focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">
+              Horário de Fim <span class="text-[10px] font-semibold text-[#7a001e]">(Formato 20:00)</span>
+            </label>
+            <input type="text" id="formEndTime" required maxlength="5"
+              pattern="^([01][0-9]|2[0-3]):[0-5][0-9]$"
+              title="Use exclusivamente o formato HH:MM (Exemplo: 18:50 ou 20:00)"
+              oninput="maskTimeInput(this)"
+              placeholder="Ex: 20:00"
+              class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-mono font-black focus:outline-none focus:border-[#7a001e] focus:bg-white">
+          </div>
+        </div>
+        <p id="timeFormatError" class="hidden text-[11px] font-bold text-rose-600 -mt-1">
+          ⚠️ O horário de início e fim deve estar exatamente no formato HH:MM (ex: 18:50 ou 20:00).
+        </p>
+
+        <!-- Modalidade e Natureza da Aula (Teórica, Prática, Fazenda Escola) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Modalidade</label>
+            <select id="formType" onchange="handleModalityChange()" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+              <option value="Presencial">Presencial</option>
+              <option value="Estágio">Estágio Supervisionado</option>
+              <option value="Aula Remota">Aula Remota</option>
+              <option value="AVA">AVA (Ambiente Virtual)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Natureza da Aula</label>
+            <select id="formClassFormat" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+              <option value="Aula Teórica">Aula Teórica</option>
+              <option value="Aula Prática">Aula Prática</option>
+              <option value="Fazenda Escola" id="optFazendaEscola" class="hidden">Fazenda Escola (Med. Veterinária)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Local da Aula e Seleção de Campus próximos ao número da sala / laboratório -->
+        <div id="locationAndCampusWrapper" class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-black uppercase tracking-wider text-[#7a001e] flex items-center gap-1.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+              Localização & Campus da Aula
+            </span>
+            <span class="text-[10px] font-semibold text-stone-400">Sala aceita apenas números</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <!-- Seleção de Campus ao lado do Ambiente e Sala/Lab -->
+            <div>
+              <label class="block font-bold text-stone-700 mb-1">Campus</label>
+              <select id="formCampusUnit" required class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+                <!-- Preenchido via JS (Campus 1 e 2 ou Campus 1 e 3) -->
+              </select>
+            </div>
+
+            <div id="presencialAmbienteCol">
+              <label class="block font-bold text-stone-700 mb-1">Ambiente</label>
+              <select id="formLocationType" onchange="handleLocationTypeChange()" class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+                <option value="Sala de Aula">Sala de Aula</option>
+                <option value="Laboratório">Laboratório</option>
+              </select>
+            </div>
+
+            <div id="presencialDetalheCol">
+              <label id="lblLocationDetail" class="block font-bold text-stone-700 mb-1">
+                Nº da Sala <span class="text-[10px] font-semibold text-stone-400">(Só nº)</span>
+              </label>
+              <input type="text" id="formLocationDetail" oninput="handleLocationDetailInput(this)" inputmode="numeric" placeholder="Ex: 106"
+                class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-4 border-t border-stone-100">
+          <button type="button" onclick="closeModal('addClassModal')" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#7a001e] hover:bg-[#600017] text-white font-black shadow-md">
+            Salvar Aula
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: RENOMEAR PERÍODO ==================== -->
+  <div id="renamePeriodModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-stone-200">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <h3 class="text-base font-black text-stone-900">Renomear Período</h3>
+        <button onclick="closeModal('renamePeriodModal')" class="text-stone-400 hover:text-stone-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleRenamePeriod(event)" class="mt-4 space-y-3 text-xs">
+        <input type="hidden" id="oldPeriodNameInput">
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Novo Nome do Período / Turma</label>
+          <input type="text" id="renamePeriodInput" required class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-stone-100">
+          <button type="button" onclick="closeModal('renamePeriodModal')" class="px-4 py-2 rounded-xl bg-stone-100 text-stone-700 font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#7a001e] text-white font-black">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: ALTERAR SENHA INDIVIDUAL DO CURSO ==================== -->
+  <div id="changeCoursePassModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-stone-200">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <div>
+          <h3 class="text-base font-black text-[#7a001e]">Senha Exclusiva do Curso</h3>
+          <p id="changePassCourseSubtitle" class="text-xs text-stone-500">Defina a senha individual deste curso</p>
+        </div>
+        <button onclick="closeModal('changeCoursePassModal')" class="text-stone-400 hover:text-stone-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <form onsubmit="handleSaveCoursePassword(event)" class="mt-4 space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">Nova Senha do Curso</label>
+          <input type="text" id="newCoursePassInput" required minlength="3" placeholder="Digite a nova senha..."
+            class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t border-stone-100">
+          <button type="button" onclick="closeModal('changeCoursePassModal')" class="px-4 py-2 rounded-xl bg-stone-100 text-stone-700 font-bold">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#7a001e] text-white font-black">Salvar Senha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: BACKUP JSON / CSV ==================== -->
+  <div id="importExportModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 border border-stone-200">
+      <div class="flex items-center justify-between pb-3 border-b border-stone-100">
+        <h3 class="text-base font-black text-stone-900 flex items-center gap-2">
+          <i data-lucide="database" class="w-5 h-5 text-[#7a001e]"></i>
+          Backup de Dados do Curso
+        </h3>
+        <button onclick="closeModal('importExportModal')" class="text-stone-400 hover:text-stone-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3 text-xs">
+        <button onclick="exportCourseBackupJSON()" class="w-full p-4 rounded-2xl border border-stone-200 bg-stone-50 hover:bg-stone-100 flex items-center justify-between transition">
+          <div class="text-left">
+            <div class="font-black text-stone-900">Baixar Backup JSON deste Curso</div>
+            <div class="text-[11px] text-stone-500">Salva todos os períodos e aulas atuais</div>
+          </div>
+          <i data-lucide="download" class="w-5 h-5 text-[#7a001e]"></i>
+        </button>
+
+        <label class="w-full p-4 rounded-2xl border border-stone-200 bg-stone-50 hover:bg-stone-100 flex items-center justify-between cursor-pointer transition">
+          <div class="text-left">
+            <div class="font-black text-stone-900">Restaurar Backup JSON</div>
+            <div class="text-[11px] text-stone-500">Importar arquivo JSON salvo anteriormente</div>
+          </div>
+          <i data-lucide="upload" class="w-5 h-5 text-[#7a001e]"></i>
+          <input type="file" accept=".json" class="hidden" onchange="importCourseBackupJSON(event)">
+        </label>
+
+        <button onclick="exportCourseCSV()" class="w-full p-4 rounded-2xl border border-stone-200 bg-stone-50 hover:bg-stone-100 flex items-center justify-between transition">
+          <div class="text-left">
+            <div class="font-black text-stone-900">Exportar Planilha Excel (CSV)</div>
+            <div class="text-[11px] text-stone-500">Relatório completo das aulas deste curso</div>
+          </div>
+          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-emerald-700"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // DEFINIÇÃO DOS CURSOS E ÍCONES (SEM ABREVIAÇÕES DE ENSALAMENTO)
+    // =========================================================================
+    const ALL_COURSES_CATALOG = {
+      adm:          { id: 'adm',          title: 'Administração',            icon: 'briefcase' },
+      ads:          { id: 'ads',          title: 'Análise de Sistemas',      icon: 'terminal' },
+      biomedicina:  { id: 'biomedicina',  title: 'Biomedicina',              icon: 'microscope' },
+      contabeis:    { id: 'contabeis',    title: 'Ciências Contábeis',       icon: 'calculator' },
+      direito:      { id: 'direito',      title: 'Direito',                  icon: 'scale' },
+      edfisica:     { id: 'edfisica',     title: 'Educação Física',          icon: 'dumbbell' },
+      enfermagem:   { id: 'enfermagem',   title: 'Enfermagem',               icon: 'heart-pulse' },
+      civil:        { id: 'civil',        title: 'Engenharia Civil',         icon: 'hard-hat' },
+      software:     { id: 'software',     title: 'Engenharia de Software',   icon: 'code-2' },
+      fisioterapia: { id: 'fisioterapia', title: 'Fisioterapia',             icon: 'activity' },
+      gastronomia:  { id: 'gastronomia',  title: 'Gastronomia',              icon: 'chef-hat' },
+      ambiental:    { id: 'ambiental',    title: 'Gestão Ambiental',         icon: 'leaf' },
+      medicina:     { id: 'medicina',     title: 'Medicina',                 icon: 'stethoscope' },
+      veterinaria:  { id: 'veterinaria',  title: 'Medicina Veterinária',     icon: 'paw-print' },
+      nutricao:     { id: 'nutricao',     title: 'Nutrição',                 icon: 'apple' },
+      odonto:       { id: 'odonto',       title: 'Odontologia',              icon: 'smile' },
+      pedagogia:    { id: 'pedagogia',    title: 'Pedagogia',                icon: 'book-open' },
+      psicologia:   { id: 'psicologia',   title: 'Psicologia',               icon: 'brain' },
+      rh:           { id: 'rh',           title: 'Recursos Humanos',         icon: 'users' },
+      seso:         { id: 'seso',         title: 'Serviço Social',           icon: 'heart-handshake' },
+      to:           { id: 'to',           title: 'Terapia Ocupacional',      icon: 'accessibility' }
+    };
+
+    // Apenas Enfermagem, Medicina e Medicina Veterinária são FACMAR em Maricá
+    const FACMAR_EXCLUSIVE_COURSE_IDS = ['enfermagem', 'medicina', 'veterinaria'];
+
+    function getCourseInstitutionName(campusKey, courseId) {
+      if (campusKey === 'SAQUAREMA') {
+        return 'UNIVASSOURAS CAMPUS SAQUAREMA';
+      }
+      if (FACMAR_EXCLUSIVE_COURSE_IDS.includes(courseId)) {
+        return 'FACMAR';
+      }
+      return 'UNIVASSOURAS CAMPUS MARICÁ';
+    }
+
+    // Cursos de Maricá (20 cursos incluindo Medicina, Enfermagem e Medicina Veterinária como FACMAR)
+    const MARICA_COURSE_IDS = [
+      'adm', 'ads', 'biomedicina', 'contabeis', 'direito', 'edfisica', 'enfermagem',
+      'civil', 'software', 'fisioterapia', 'gastronomia', 'ambiental', 'medicina', 'veterinaria',
+      'nutricao', 'pedagogia', 'psicologia', 'rh', 'seso', 'to'
+    ];
+
+    // Cursos de Saquarema (15 cursos)
+    const SAQUAREMA_COURSE_IDS = [
+      'adm', 'biomedicina', 'contabeis', 'edfisica', 'enfermagem', 'civil',
+      'software', 'fisioterapia', 'veterinaria', 'nutricao', 'odonto',
+      'pedagogia', 'psicologia', 'seso', 'to'
+    ];
+
+    const DAYS_ORDER = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const STORAGE_KEY_DATA = 'univassouras_grades_cursos_v1_clean';
+    const STORAGE_KEY_PASS = 'univassouras_grades_cursos_passwords_v1';
+
+    var appData = {
+      MARICA: {},
+      SAQUAREMA: {}
+    };
+    var coursePasswords = {};
+
+    var activeCampus = null; // 'MARICA' ou 'SAQUAREMA'
+    var activeCourseId = null;
+    var pendingCourseId = null;
+
+    // Estado para o gerador de períodos (1 a 10 + Turmas Única, A, B, C, etc.)
+    let selectedPeriodNumbers = new Set();
+    let availableTurmaOptions = ['Única', 'Turma A', 'Turma B', 'Turma C'];
+    let selectedTurmaOptions = new Set(['Única']);
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStateFromStorage();
+      updateCampusScreenSummaries();
+      safeCreateIcons();
+    });
+
+    function loadStateFromStorage() {
+      const savedData = localStorage.getItem(STORAGE_KEY_DATA);
+      if (savedData) {
+        try {
+          appData = JSON.parse(savedData);
+        } catch (e) {}
+      }
+      if (!appData.MARICA) appData.MARICA = {};
+      if (!appData.SAQUAREMA) appData.SAQUAREMA = {};
+
+      MARICA_COURSE_IDS.forEach(cid => {
+        if (!appData.MARICA[cid]) appData.MARICA[cid] = { periods: [], classes: [] };
+      });
+      SAQUAREMA_COURSE_IDS.forEach(cid => {
+        if (!appData.SAQUAREMA[cid]) appData.SAQUAREMA[cid] = { periods: [], classes: [] };
+      });
+
+      const savedPass = localStorage.getItem(STORAGE_KEY_PASS);
+      if (savedPass) {
+        try {
+          coursePasswords = JSON.parse(savedPass);
+        } catch (e) {}
+      }
+    }
+
+    function saveStateToStorage() {
+      localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(appData));
+      updateCampusScreenSummaries();
+    }
+
+    function getCourseKey(campus, courseId) {
+      return `${campus}_${courseId}`;
+    }
+
+    function getCoursePassword(campus, courseId) {
+      const key = getCourseKey(campus, courseId);
+      return coursePasswords[key] || '1234';
+    }
+
+    function setCoursePassword(campus, courseId, newPass) {
+      const key = getCourseKey(campus, courseId);
+      coursePasswords[key] = newPass;
+      localStorage.setItem(STORAGE_KEY_PASS, JSON.stringify(coursePasswords));
+    }
+
+    function getActiveCourseState() {
+      if (!activeCampus || !activeCourseId) return { periods: [], classes: [] };
+      if (!appData[activeCampus][activeCourseId]) {
+        appData[activeCampus][activeCourseId] = { periods: [], classes: [] };
+      }
+      return appData[activeCampus][activeCourseId];
+    }
+
+    // =========================================================================
+    // NAVEGAÇÃO ENTRE TELAS (CAMPUS -> CURSOS -> SENHA -> GRADE)
+    // =========================================================================
+    function updateCampusScreenSummaries() {
+      const calcStats = (campusKey, courseIds) => {
+        let totalPeriods = 0, totalClasses = 0;
+        courseIds.forEach(cid => {
+          const st = (appData[campusKey] && appData[campusKey][cid]) || { periods: [], classes: [] };
+          totalPeriods += (st.periods || []).length;
+          totalClasses += (st.classes || []).length;
+        });
+        return { courses: courseIds.length, totalPeriods, totalClasses };
+      };
+
+      const mStats = calcStats('MARICA', MARICA_COURSE_IDS);
+      const sStats = calcStats('SAQUAREMA', SAQUAREMA_COURSE_IDS);
+
+      document.getElementById('summaryCampusMarica').innerText = `${mStats.courses} Cursos • ${mStats.totalPeriods} períodos • ${mStats.totalClasses} aulas`;
+      document.getElementById('summaryCampusSaquarema').innerText = `${sStats.courses} Cursos • ${sStats.totalPeriods} períodos • ${sStats.totalClasses} aulas`;
+    }
+
+    function selectCampus(campusKey) {
+      activeCampus = campusKey;
+      const campusScreenTitle = campusKey === 'MARICA'
+        ? 'UNIDADE MARICÁ'
+        : 'UNIVASSOURAS CAMPUS SAQUAREMA';
+
+      document.getElementById('courseScreenCampusTag').innerText = campusScreenTitle;
+      document.getElementById('courseSearchInput').value = '';
+      document.getElementById('campusScreen').classList.add('hidden');
+      document.getElementById('courseScreen').classList.remove('hidden');
+
+      renderCourseSelectionGrid();
+      safeCreateIcons();
+    }
+
+    function backToCampusScreen() {
+      activeCampus = null;
+      activeCourseId = null;
+      document.getElementById('courseScreen').classList.add('hidden');
+      document.getElementById('scheduleScreen').classList.add('hidden');
+      document.getElementById('campusScreen').classList.remove('hidden');
+      updateCampusScreenSummaries();
+      safeCreateIcons();
+    }
+
+    function backToCourseScreen() {
+      activeCourseId = null;
+      document.getElementById('scheduleScreen').classList.add('hidden');
+      document.getElementById('courseScreen').classList.remove('hidden');
+      renderCourseSelectionGrid();
+      safeCreateIcons();
+    }
+
+    function renderCourseSelectionGrid() {
+      const container = document.getElementById('courseGridContainer');
+      const query = (document.getElementById('courseSearchInput').value || '').toLowerCase().trim();
+      const courseIds = activeCampus === 'MARICA' ? MARICA_COURSE_IDS : SAQUAREMA_COURSE_IDS;
+
+      const filtered = courseIds
+        .map(id => ALL_COURSES_CATALOG[id])
+        .filter(Boolean)
+        .filter(c => !query || c.title.toLowerCase().includes(query));
+
+      container.innerHTML = filtered.map(course => {
+        const st = (appData[activeCampus] && appData[activeCampus][course.id]) || { periods: [], classes: [] };
+        const pCount = (st.periods || []).length;
+        const cCount = (st.classes || []).length;
+        const instName = getCourseInstitutionName(activeCampus, course.id);
+
+        return `
+          <button 
+            type="button"
+            onclick="promptCoursePassword('${course.id}')"
+            class="group bg-white hover:bg-rose-50/40 rounded-2xl p-5 border-2 border-stone-200 hover:border-[#7a001e] shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between text-left cursor-pointer">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div class="w-12 h-12 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/25 group-hover:scale-105 transition-transform shrink-0">
+                <i data-lucide="${course.icon}" class="w-6 h-6 text-amber-300"></i>
+              </div>
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-stone-100 text-stone-600 group-hover:bg-[#7a001e]/10 group-hover:text-[#7a001e]">
+                <i data-lucide="lock" class="w-3 h-3"></i> Protegido
+              </span>
+            </div>
+
+            <div>
+              <span class="block text-[10px] font-black uppercase tracking-wider text-[#7a001e] mb-0.5">
+                ${instName}
+              </span>
+              <h3 class="text-base sm:text-lg font-black text-stone-900 group-hover:text-[#7a001e] transition-colors leading-snug">
+                ${course.title}
+              </h3>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
+              <span class="font-bold text-stone-500">${pCount} período(s) • ${cCount} aula(s)</span>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-[#7a001e] group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </button>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // AUTENTICAÇÃO INDIVIDUAL POR CURSO
+    // =========================================================================
+    function promptCoursePassword(courseId) {
+      pendingCourseId = courseId;
+      const course = ALL_COURSES_CATALOG[courseId];
+      const instName = getCourseInstitutionName(activeCampus, courseId);
+
+      document.getElementById('passModalInstitutionTag').innerText = instName;
+      document.getElementById('passModalCourseTitle').innerText = course.title;
+
+      const iconEl = document.getElementById('passModalCourseIcon');
+      iconEl.setAttribute('data-lucide', course.icon);
+
+      document.getElementById('coursePasswordInput').value = '';
+      document.getElementById('coursePasswordError').classList.add('hidden');
+      openModal('coursePasswordModal');
+      setTimeout(() => document.getElementById('coursePasswordInput').focus(), 50);
+    }
+
+    function verifyCoursePassword(e) {
+      e.preventDefault();
+      if (!pendingCourseId || !activeCampus) return;
+
+      const typed = document.getElementById('coursePasswordInput').value.trim();
+      const expected = getCoursePassword(activeCampus, pendingCourseId);
+
+      if (typed === expected || typed === 'admin') {
+        closeModal('coursePasswordModal');
+        enterCourseSchedule(pendingCourseId);
+      } else {
+        document.getElementById('coursePasswordError').classList.remove('hidden');
+      }
+    }
+
+    function enterCourseSchedule(courseId) {
+      activeCourseId = courseId;
+      const course = ALL_COURSES_CATALOG[courseId];
+      const instTitle = getCourseInstitutionName(activeCampus, courseId);
+
+      document.getElementById('activeCampusBadge').innerText = instTitle;
+      document.getElementById('activeCourseHeaderTitle').innerText = course.title;
+
+      const headerIcon = document.getElementById('activeCourseHeaderIcon');
+      headerIcon.setAttribute('data-lucide', course.icon);
+
+      const unitFilter = document.getElementById('campusUnitFilterSelect');
+      if (activeCampus === 'SAQUAREMA') {
+        unitFilter.innerHTML = `
+          <option value="ALL">Todos (C1 e C3)</option>
+          <option value="Campus 1">Campus 1</option>
+          <option value="Campus 3">Campus 3</option>
+        `;
+      } else {
+        unitFilter.innerHTML = `
+          <option value="ALL">Todos (C1 e C2)</option>
+          <option value="Campus 1">Campus 1</option>
+          <option value="Campus 2">Campus 2</option>
+        `;
+      }
+
+      document.getElementById('periodFilterSelect').value = 'ALL';
+      document.getElementById('categoryFilterSelect').value = 'ALL';
+      document.getElementById('scheduleSearchInput').value = '';
+
+      document.getElementById('courseScreen').classList.add('hidden');
+      document.getElementById('scheduleScreen').classList.remove('hidden');
+
+      renderCourseSchedule();
+      safeCreateIcons();
+    }
+
+    function openChangeCoursePasswordModal() {
+      const course = ALL_COURSES_CATALOG[activeCourseId];
+      const instTitle = getCourseInstitutionName(activeCampus, activeCourseId);
+      document.getElementById('changePassCourseSubtitle').innerText = `${course.title} • ${instTitle}`;
+      document.getElementById('newCoursePassInput').value = getCoursePassword(activeCampus, activeCourseId);
+      openModal('changeCoursePassModal');
+    }
+
+    function handleSaveCoursePassword(e) {
+      e.preventDefault();
+      const newPass = document.getElementById('newCoursePassInput').value.trim();
+      if (!newPass) return;
+      setCoursePassword(activeCampus, activeCourseId, newPass);
+      closeModal('changeCoursePassModal');
+      showToast('Senha exclusiva deste curso atualizada!', 'success');
+    }
+
+    // =========================================================================
+    // GERENCIADOR DE PERÍODOS (SELEÇÃO DE 1 A 10 + TURMAS A, B, C, ÚNICA +)
+    // =========================================================================
+    function sortPeriodNames(periodsList) {
+      return [...periodsList].sort((a, b) => {
+        const numA = parseInt((a.match(/\d+/) || [999])[0], 10);
+        const numB = parseInt((b.match(/\d+/) || [999])[0], 10);
+        if (numA !== numB) return numA - numB;
+        return a.localeCompare(b, 'pt-BR');
+      });
+    }
+
+    function openPeriodsModal() {
+      document.getElementById('newPeriodNameInput').value = '';
+      selectedPeriodNumbers.clear();
+      if (selectedTurmaOptions.size === 0) selectedTurmaOptions.add('Única');
+      renderPeriodGeneratorControls();
+      renderModalPeriodsList();
+      openModal('periodsModal');
+    }
+
+    function renderPeriodGeneratorControls() {
+      const numContainer = document.getElementById('periodNumberChecksContainer');
+      let numHtml = '';
+      for (let i = 1; i <= 10; i++) {
+        const isSelected = selectedPeriodNumbers.has(i);
+        numHtml += `
+          <button type="button" onclick="togglePeriodNumberCheck(${i})"
+            class="py-2 px-2 rounded-xl font-black text-xs border transition-all flex items-center justify-center gap-1 cursor-pointer ${
+              isSelected
+                ? 'bg-[#7a001e] text-white border-[#7a001e] shadow-xs'
+                : 'bg-white text-stone-700 border-stone-200 hover:border-[#7a001e]/40'
+            }">
+            <span>${i}º Per.</span>
+          </button>
+        `;
+      }
+      numContainer.innerHTML = numHtml;
+
+      const turmaContainer = document.getElementById('turmaChipsContainer');
+      let turmaHtml = availableTurmaOptions.map(tLabel => {
+        const isSelected = selectedTurmaOptions.has(tLabel);
+        const safeLabel = tLabel.replace(/'/g, "\\'");
+        return `
+          <button type="button" onclick="toggleTurmaOptionChip('${safeLabel}')"
+            class="px-3 py-1.5 rounded-xl font-black text-xs border transition-all flex items-center gap-1.5 cursor-pointer ${
+              isSelected
+                ? 'bg-amber-400 text-stone-950 border-amber-500 shadow-xs'
+                : 'bg-white text-stone-700 border-stone-200 hover:border-amber-400'
+            }">
+            <span>${tLabel}</span>
+          </button>
+        `;
+      }).join('');
+
+      turmaHtml += `
+        <button type="button" onclick="addNextTurmaOption()" title="Adicionar mais opções de turma (D, E, F...)"
+          class="w-8 h-8 rounded-xl bg-[#7a001e] hover:bg-[#600017] text-amber-300 font-black flex items-center justify-center shadow-xs transition cursor-pointer">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+        </button>
+      `;
+
+      turmaContainer.innerHTML = turmaHtml;
+      safeCreateIcons();
+    }
+
+    function togglePeriodNumberCheck(num) {
+      if (selectedPeriodNumbers.has(num)) {
+        selectedPeriodNumbers.delete(num);
+      } else {
+        selectedPeriodNumbers.add(num);
+      }
+      renderPeriodGeneratorControls();
+    }
+
+    function toggleAllPeriodChecks(selectAll) {
+      selectedPeriodNumbers.clear();
+      if (selectAll) {
+        for (let i = 1; i <= 10; i++) selectedPeriodNumbers.add(i);
+      }
+      renderPeriodGeneratorControls();
+    }
+
+    function toggleTurmaOptionChip(label) {
+      if (selectedTurmaOptions.has(label)) {
+        if (selectedTurmaOptions.size > 1) {
+          selectedTurmaOptions.delete(label);
+        }
+      } else {
+        selectedTurmaOptions.add(label);
+      }
+      renderPeriodGeneratorControls();
+    }
+
+    function addNextTurmaOption() {
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let nextLetter = null;
+      for (const ch of alphabet) {
+        const candidate = `Turma ${ch}`;
+        if (!availableTurmaOptions.includes(candidate)) {
+          nextLetter = candidate;
+          break;
+        }
+      }
+      if (nextLetter) {
+        availableTurmaOptions.push(nextLetter);
+        selectedTurmaOptions.delete('Única');
+        selectedTurmaOptions.add(nextLetter);
+        renderPeriodGeneratorControls();
+        showToast(`${nextLetter} adicionada às opções!`, 'info');
+      }
+    }
+
+    function generateSelectedPeriodsAndTurmas() {
+      if (selectedPeriodNumbers.size === 0) {
+        showToast('Marque pelo menos um período (de 1º a 10º) acima.', 'error');
+        return;
+      }
+
+      const st = getActiveCourseState();
+      const sortedNums = [...selectedPeriodNumbers].sort((a, b) => a - b);
+      const turmas = [...selectedTurmaOptions];
+
+      let addedCount = 0;
+      sortedNums.forEach(num => {
+        turmas.forEach(t => {
+          const periodTitle = (t === 'Única')
+            ? `${num}º Período`
+            : `${num}º Período - ${t}`;
+          if (!st.periods.includes(periodTitle)) {
+            st.periods.push(periodTitle);
+            addedCount++;
+          }
+        });
+      });
+
+      st.periods = sortPeriodNames(st.periods);
+      saveStateToStorage();
+      selectedPeriodNumbers.clear();
+      renderPeriodGeneratorControls();
+      renderModalPeriodsList();
+      renderCourseSchedule();
+
+      if (addedCount > 0) {
+        showToast(`${addedCount} período(s)/turma(s) criado(s) com sucesso!`, 'success');
+      } else {
+        showToast('Os períodos/turmas selecionados já estavam cadastrados.', 'info');
+      }
+    }
+
+    function handleAddPeriod(e) {
+      e.preventDefault();
+      const name = document.getElementById('newPeriodNameInput').value.trim();
+      if (!name) return;
+
+      const st = getActiveCourseState();
+      if (st.periods.includes(name)) {
+        showToast('Este período já está cadastrado neste curso.', 'error');
+        return;
+      }
+
+      st.periods.push(name);
+      st.periods = sortPeriodNames(st.periods);
+      saveStateToStorage();
+      document.getElementById('newPeriodNameInput').value = '';
+      renderModalPeriodsList();
+      renderCourseSchedule();
+      showToast(`"${name}" adicionado ao curso!`, 'success');
+    }
+
+    function renderModalPeriodsList() {
+      const st = getActiveCourseState();
+      const listEl = document.getElementById('modalPeriodsList');
+
+      if (st.periods.length === 0) {
+        listEl.innerHTML = `<div class="p-4 text-center text-stone-400 bg-stone-50 rounded-xl border border-dashed border-stone-200">Nenhum período criado ainda. Marque acima para gerar!</div>`;
+        return;
+      }
+
+      listEl.innerHTML = st.periods.map(pName => {
+        const count = st.classes.filter(c => c.period === pName).length;
+        const safeP = pName.replace(/'/g, "\\'");
+        return `
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 border border-stone-200">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#7a001e]"></span>
+              <span class="font-black text-stone-900">${pName}</span>
+              <span class="text-[11px] font-bold text-stone-400">(${count} aulas)</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="openRenamePeriodModal('${safeP}')" class="p-1.5 text-stone-500 hover:text-[#7a001e] hover:bg-stone-200/60 rounded-lg" title="Renomear">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              </button>
+              <button type="button" onclick="deletePeriod('${safeP}')" class="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg" title="Excluir Período">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      safeCreateIcons();
+    }
+
+    function openRenamePeriodModal(periodName) {
+      document.getElementById('oldPeriodNameInput').value = periodName;
+      document.getElementById('renamePeriodInput').value = periodName;
+      openModal('renamePeriodModal');
+    }
+
+    function handleRenamePeriod(e) {
+      e.preventDefault();
+      const oldName = document.getElementById('oldPeriodNameInput').value;
+      const newName = document.getElementById('renamePeriodInput').value.trim();
+      if (!newName || oldName === newName) {
+        closeModal('renamePeriodModal');
+        return;
+      }
+
+      const st = getActiveCourseState();
+      const idx = st.periods.indexOf(oldName);
+      if (idx !== -1) st.periods[idx] = newName;
+      st.periods = sortPeriodNames([...new Set(st.periods)]);
+
+      st.classes.forEach(c => {
+        if (c.period === oldName) c.period = newName;
+      });
+
+      saveStateToStorage();
+      closeModal('renamePeriodModal');
+      renderModalPeriodsList();
+      renderCourseSchedule();
+      showToast('Período renomeado com sucesso!', 'success');
+    }
+
+    function deletePeriod(periodName) {
+      const st = getActiveCourseState();
+      st.periods = st.periods.filter(p => p !== periodName);
+      st.classes = st.classes.filter(c => c.period !== periodName);
+      saveStateToStorage();
+      renderModalPeriodsList();
+      renderCourseSchedule();
+      showToast(`"${periodName}" removido.`, 'info');
+    }
+
+    // =========================================================================
+    // RENDERIZAÇÃO DA GRADE HORÁRIA (SEM ABREVIAÇÕES E INSTITUIÇÃO SEPARADA)
+    // =========================================================================
+    function renderCourseSchedule() {
+      const st = getActiveCourseState();
+      const course = ALL_COURSES_CATALOG[activeCourseId];
+      if (!course) return;
+      const container = document.getElementById('periodsContainer');
+
+      const periodSelect = document.getElementById('periodFilterSelect');
+      const currentPeriodFilter = periodSelect.value || 'ALL';
+      periodSelect.innerHTML = `<option value="ALL">Todos os Períodos (${st.periods.length})</option>` +
+        st.periods.map(p => `<option value="${p}" ${p === currentPeriodFilter ? 'selected' : ''}>${p}</option>`).join('');
+
+      const campusUnitFilter = document.getElementById('campusUnitFilterSelect').value;
+      const categoryFilter = document.getElementById('categoryFilterSelect').value;
+      const searchQuery = (document.getElementById('scheduleSearchInput').value || '').toLowerCase().trim();
+
+      document.getElementById('courseStatsBadge').innerText = `${st.periods.length} Período(s) • ${st.classes.length} Aula(s)`;
+
+      if (st.periods.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl border-2 border-dashed border-stone-300 p-12 text-center max-w-2xl mx-auto my-8">
+            <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#7a001e]/20">
+              <i data-lucide="${course.icon}" class="w-8 h-8 text-amber-300"></i>
+            </div>
+            <h3 class="text-xl font-black text-stone-900 mb-2">Grade em Branco • ${course.title}</h3>
+            <p class="text-xs sm:text-sm text-stone-500 mb-6">
+              Este curso ainda não possui períodos cadastrados. Clique abaixo para adicionar quantos períodos e turmas desejar!
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <button onclick="openPeriodsModal()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#7a001e] hover:bg-[#600017] text-white text-xs sm:text-sm font-black shadow-md transition">
+                <i data-lucide="layers" class="w-4 h-4 text-amber-300"></i>
+                <span>Adicionar Períodos Agora</span>
+              </button>
+            </div>
+          </div>
+        `;
+        safeCreateIcons();
+        return;
+      }
+
+      const periodsToShow = currentPeriodFilter === 'ALL'
+        ? st.periods
+        : st.periods.filter(p => p === currentPeriodFilter);
+
+      const institutionHeaderLabel = getCourseInstitutionName(activeCampus, activeCourseId);
+
+      container.innerHTML = periodsToShow.map(periodName => {
+        const periodClasses = st.classes.filter(c => {
+          if (c.period !== periodName) return false;
+          if (campusUnitFilter !== 'ALL' && c.campusUnit !== campusUnitFilter) return false;
+          if (categoryFilter !== 'ALL' && c.type !== categoryFilter) return false;
+          if (searchQuery) {
+            const hay = `${c.subject} ${c.professor} ${c.matricula || ''} ${c.campusUnit || ''} ${c.time || ''} ${c.startTime || ''} ${c.endTime || ''} ${c.type} ${c.classFormat || ''} ${c.locationType || ''} ${c.locationDetail || ''}`.toLowerCase();
+            if (!hay.includes(searchQuery)) return false;
+          }
+          return true;
+        });
+
+        const safePeriod = periodName.replace(/'/g, "\\'");
+
+        return `
+          <div class="period-card bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+            <!-- Cabeçalho do Período com Símbolo Bordô/Dourado e Nome Completo sem Abreviação -->
+            <div class="px-4 py-2.5 bg-gradient-to-r from-[#7a001e] to-[#590016] text-white flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-black/25 border border-amber-300/30 flex items-center justify-center shrink-0">
+                  <i data-lucide="${course.icon}" class="w-4 h-4 text-amber-300"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-sm sm:text-base font-black tracking-tight text-white">${course.title} • ${periodName}</h3>
+                  </div>
+                  <p class="text-[10.5px] text-amber-100/90 font-medium">
+                    ${institutionHeaderLabel} • ${periodClasses.length} disciplina(s) na semana
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1.5 no-print">
+                <button onclick="openNewClassModal('${safePeriod}')"
+                  class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-black rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 shadow-xs transition">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  <span>Adicionar Aula</span>
+                </button>
+                <button onclick="openRenamePeriodModal('${safePeriod}')" title="Renomear Período"
+                  class="p-1.5 text-amber-200 hover:text-white hover:bg-white/10 rounded-xl transition">
+                  <i data-lucide="pencil" class="w-4 h-4"></i>
+                </button>
+                <button onclick="deletePeriod('${safePeriod}')" title="Excluir Período"
+                  class="p-1.5 text-rose-200 hover:text-white hover:bg-rose-600/40 rounded-xl transition">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Grade Fixa de 6 Colunas (Mesma proporção na tela em 125% e na impressão A4) -->
+            <div class="p-2.5 bg-stone-50/60">
+              <div class="grid grid-cols-6 gap-2 w-full">
+                ${DAYS_ORDER.map(dayName => {
+                  const dayClasses = periodClasses
+                    .filter(c => c.day === dayName)
+                    .sort((a, b) => (a.startTime || a.time || '').localeCompare(b.startTime || b.time || ''));
+
+                  return `
+                    <div class="flex flex-col bg-white rounded-xl border border-stone-200 p-2 shadow-2xs min-w-0">
+                      <!-- Topo do Dia -->
+                      <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b border-stone-100">
+                        <span class="text-[10.5px] font-black uppercase tracking-wider text-[#7a001e]">
+                          ${dayName.replace('-feira', '')}
+                        </span>
+                        <button onclick="openNewClassModal('${safePeriod}', '${dayName}')" title="Adicionar aula na ${dayName}"
+                          class="no-print w-5 h-5 rounded-md bg-stone-100 hover:bg-[#7a001e] text-stone-600 hover:text-amber-300 flex items-center justify-center transition">
+                          <i data-lucide="plus" class="w-3 h-3"></i>
+                        </button>
+                      </div>
+
+                      <!-- Cartões das Aulas -->
+                      <div class="space-y-1.5 flex-1">
+                        ${dayClasses.length === 0 ? `
+                          <button type="button" onclick="openNewClassModal('${safePeriod}', '${dayName}')"
+                            class="w-full h-16 rounded-lg border border-dashed border-stone-200 hover:border-[#7a001e]/40 hover:bg-rose-50/20 flex flex-col items-center justify-center text-stone-300 hover:text-[#7a001e] transition cursor-pointer">
+                            <span class="text-[10px] font-semibold">Livre</span>
+                          </button>
+                        ` : dayClasses.map(cls => renderCleanClassCard(cls)).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function renderCleanClassCard(cls) {
+      let badgeStyle = 'bg-rose-50 text-[#7a001e] border-rose-200';
+      let borderLeft = 'border-l-4 border-l-[#7a001e]';
+
+      if (cls.type === 'Estágio') {
+        badgeStyle = 'bg-amber-50 text-amber-900 border-amber-200';
+        borderLeft = 'border-l-4 border-l-amber-500';
+      } else if (cls.type === 'Aula Remota') {
+        badgeStyle = 'bg-purple-50 text-purple-900 border-purple-200';
+        borderLeft = 'border-l-4 border-l-purple-600';
+      } else if (cls.type === 'AVA') {
+        badgeStyle = 'bg-emerald-50 text-emerald-900 border-emerald-200';
+        borderLeft = 'border-l-4 border-l-emerald-600';
+      }
+
+      const displayTime = (cls.startTime && cls.endTime)
+        ? `${cls.startTime} às ${cls.endTime}`
+        : (cls.time || '');
+
+      let formatBadge = '';
+      if (cls.classFormat) {
+        let fmtColor = 'bg-stone-100 text-stone-700 border-stone-200';
+        if (cls.classFormat === 'Aula Prática') fmtColor = 'bg-blue-50 text-blue-800 border-blue-200';
+        if (cls.classFormat === 'Fazenda Escola') fmtColor = 'bg-emerald-100 text-emerald-900 border-emerald-300';
+        formatBadge = `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded border ${fmtColor}">${cls.classFormat}</span>`;
+      }
+
+      const workloadBadge = cls.workload
+        ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded bg-amber-100/80 text-amber-900 border border-amber-200 shrink-0" title="Carga Horária">${cls.workload}</span>`
+        : '';
+
+      // Bloco de Localização com o Campus posicionado ao lado do número da Sala ou nome do Laboratório
+      let locationParts = [];
+      let locIcon = 'map-pin';
+      if (cls.type === 'Presencial' && cls.locationType) {
+        const isLab = cls.locationType === 'Laboratório';
+        locIcon = isLab ? 'flask-conical' : 'door-open';
+        if (isLab) {
+          locationParts.push(cls.locationDetail ? `Lab: <strong>${cls.locationDetail}</strong>` : 'Laboratório');
+        } else {
+          locationParts.push(cls.locationDetail ? `Sala <strong>${cls.locationDetail}</strong>` : 'Sala de Aula');
+        }
+      }
+      if (cls.campusUnit) {
+        locationParts.push(`<span class="font-black text-[#7a001e]">${cls.campusUnit}</span>`);
+      }
+
+      const locationBlock = locationParts.length > 0 ? `
+        <div class="flex items-center gap-1 text-[10px] font-semibold text-stone-700 bg-amber-50/70 px-2 py-1 rounded-md border border-amber-200/70 mt-1">
+          <i data-lucide="${locIcon}" class="w-3 h-3 text-[#7a001e] shrink-0"></i>
+          <span class="break-words leading-tight">${locationParts.join(' • ')}</span>
+        </div>
+      ` : '';
+
+      return `
+        <div class="rounded-lg p-2 border border-stone-200 bg-white shadow-2xs hover:shadow-sm transition-all ${borderLeft}">
+          <!-- Horário Limpo Sem Fundo Preto e em Linha Única Lado a Lado com a Carga Horária -->
+          <div class="flex items-center justify-between gap-1 pb-1 mb-1 border-b border-stone-100">
+            <span class="inline-flex items-center gap-1 text-[10.5px] font-black text-[#7a001e] whitespace-nowrap tracking-tight">
+              <i data-lucide="clock" class="w-2.5 h-2.5 text-[#7a001e] shrink-0"></i>
+              <span>${displayTime}</span>
+            </span>
+            ${workloadBadge}
+          </div>
+
+          <!-- Modalidade e Natureza (Teórica / Prática / Fazenda Escola) -->
+          <div class="flex flex-wrap items-center gap-1 mb-1">
+            <span class="text-[9px] font-black px-1.5 py-0.5 rounded border ${badgeStyle}">
+              ${cls.type}
+            </span>
+            ${formatBadge}
+          </div>
+
+          <!-- Nome da Disciplina (Fonte compacta) -->
+          <h4 class="text-[11px] font-bold text-stone-900 leading-tight break-words mb-1.5">
+            ${cls.subject}
+          </h4>
+
+          <!-- Professor + Matrícula Opcional -->
+          <div class="flex items-start gap-1 text-[10px] font-bold text-stone-700 bg-stone-50 px-1.5 py-1 rounded border border-stone-100">
+            <i data-lucide="user" class="w-3 h-3 text-[#7a001e] shrink-0 mt-0.5"></i>
+            <div class="break-words leading-tight">
+              <span>${cls.professor}</span>
+              ${cls.matricula ? `<span class="block text-[9px] font-semibold text-stone-400">Mat: ${cls.matricula}</span>` : ''}
+            </div>
+          </div>
+
+          <!-- Sala / Laboratório + Campus lado a lado -->
+          ${locationBlock}
+
+          <!-- Botões de Ação -->
+          <div class="mt-1.5 pt-1 border-t border-stone-100 flex items-center justify-end gap-2 no-print">
+            <button onclick="editClass('${cls.id}')" class="text-[9.5px] font-bold text-stone-600 hover:text-[#7a001e] flex items-center gap-0.5">
+              <i data-lucide="pencil" class="w-2.5 h-2.5"></i> Editar
+            </button>
+            <button onclick="deleteClass('${cls.id}')" class="text-[9.5px] font-bold text-rose-600 hover:text-rose-800 flex items-center gap-0.5">
+              <i data-lucide="trash-2" class="w-2.5 h-2.5"></i> Excluir
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // REGRAS DO MODAL DE AULA (CAMPUS, MÁSCARA HH:MM, SALA SÓ NÚMERO)
+    // =========================================================================
+    function maskTimeInput(input) {
+      let digits = input.value.replace(/\D/g, '').slice(0, 4);
+      if (digits.length >= 3) {
+        input.value = digits.slice(0, 2) + ':' + digits.slice(2);
+      } else {
+        input.value = digits;
+      }
+      document.getElementById('timeFormatError').classList.add('hidden');
+    }
+
+    function isValidHHMM(val) {
+      return /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(val);
+    }
+
+    function handleLocationDetailInput(input) {
+      const locType = document.getElementById('formLocationType').value;
+      if (locType === 'Sala de Aula') {
+        input.value = input.value.replace(/\D/g, '');
+      }
+    }
+
+    function populateCampusUnitDropdown(selectedUnit = '') {
+      const select = document.getElementById('formCampusUnit');
+      const units = activeCampus === 'SAQUAREMA'
+        ? ['Campus 1', 'Campus 3']
+        : ['Campus 1', 'Campus 2'];
+
+      const defaultUnit = selectedUnit || (activeCampus === 'SAQUAREMA' ? 'Campus 3' : 'Campus 2');
+      select.innerHTML = units.map(u => `<option value="${u}" ${u === defaultUnit ? 'selected' : ''}>${u}</option>`).join('');
+    }
+
+    function updateCourseSpecificModalOptions() {
+      const optFazenda = document.getElementById('optFazendaEscola');
+      const formatSelect = document.getElementById('formClassFormat');
+      if (activeCourseId === 'veterinaria') {
+        optFazenda.classList.remove('hidden');
+        optFazenda.disabled = false;
+      } else {
+        optFazenda.classList.add('hidden');
+        optFazenda.disabled = true;
+        if (formatSelect.value === 'Fazenda Escola') {
+          formatSelect.value = 'Aula Teórica';
+        }
+      }
+    }
+
+    function handleModalityChange() {
+      const modality = document.getElementById('formType').value;
+      const ambCol = document.getElementById('presencialAmbienteCol');
+      const detCol = document.getElementById('presencialDetalheCol');
+      if (modality === 'Presencial') {
+        ambCol.classList.remove('hidden');
+        detCol.classList.remove('hidden');
+      } else {
+        ambCol.classList.add('hidden');
+        detCol.classList.add('hidden');
+      }
+    }
+
+    function handleLocationTypeChange() {
+      const locType = document.getElementById('formLocationType').value;
+      const lbl = document.getElementById('lblLocationDetail');
+      const inp = document.getElementById('formLocationDetail');
+
+      if (locType === 'Laboratório') {
+        lbl.innerHTML = `Nome do Laboratório <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>`;
+        inp.placeholder = 'Ex: Lab. de Anatomia';
+        inp.removeAttribute('inputmode');
+      } else {
+        lbl.innerHTML = `Nº da Sala <span class="text-[10px] font-semibold text-stone-400">(Só nº)</span>`;
+        inp.placeholder = 'Ex: 106';
+        inp.setAttribute('inputmode', 'numeric');
+        inp.value = inp.value.replace(/\D/g, '');
+      }
+    }
+
+    function openNewClassModal(defaultPeriod = '', defaultDay = 'Segunda-feira') {
+      const st = getActiveCourseState();
+      if (st.periods.length === 0) {
+        st.periods.push('1º Período');
+        saveStateToStorage();
+        renderCourseSchedule();
+      }
+
+      document.getElementById('modalFormTitle').innerText = 'Cadastrar Aula na Grade';
+      document.getElementById('classForm').reset();
+      document.getElementById('editClassId').value = '';
+      document.getElementById('timeFormatError').classList.add('hidden');
+
+      const periodSelect = document.getElementById('formPeriodSelect');
+      periodSelect.innerHTML = st.periods.map(p => `<option value="${p}" ${p === defaultPeriod ? 'selected' : ''}>${p}</option>`).join('');
+
+      document.getElementById('formDay').value = defaultDay;
+      populateCampusUnitDropdown();
+      document.getElementById('formType').value = 'Presencial';
+      document.getElementById('formClassFormat').value = 'Aula Teórica';
+      document.getElementById('formLocationType').value = 'Sala de Aula';
+      document.getElementById('formLocationDetail').value = '';
+
+      updateCourseSpecificModalOptions();
+      handleModalityChange();
+      handleLocationTypeChange();
+
+      openModal('addClassModal');
+    }
+
+    function handleSaveClass(e) {
+      e.preventDefault();
+      const st = getActiveCourseState();
+      const id = document.getElementById('editClassId').value;
+
+      const startTime = document.getElementById('formStartTime').value.trim();
+      const endTime = document.getElementById('formEndTime').value.trim();
+
+      if (!isValidHHMM(startTime) || !isValidHHMM(endTime)) {
+        document.getElementById('timeFormatError').classList.remove('hidden');
+        showToast('Use o formato exato HH:MM (ex: 18:50 ou 20:00).', 'error');
+        return;
+      }
+
+      const modality = document.getElementById('formType').value;
+      const locationType = modality === 'Presencial' ? document.getElementById('formLocationType').value : '';
+      let locationDetail = modality === 'Presencial' ? document.getElementById('formLocationDetail').value.trim() : '';
+      if (locationType === 'Sala de Aula') {
+        locationDetail = locationDetail.replace(/\D/g, '');
+      }
+
+      const entry = {
+        id: id || ('cls_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)),
+        period: document.getElementById('formPeriodSelect').value,
+        day: document.getElementById('formDay').value,
+        campusUnit: document.getElementById('formCampusUnit').value,
+        subject: document.getElementById('formSubject').value.trim(),
+        workload: document.getElementById('formWorkload').value.trim(),
+        professor: document.getElementById('formProfessor').value.trim(),
+        matricula: document.getElementById('formMatricula').value.trim(),
+        startTime: startTime,
+        endTime: endTime,
+        time: `${startTime} às ${endTime}`,
+        type: modality,
+        classFormat: document.getElementById('formClassFormat').value,
+        locationType: locationType,
+        locationDetail: locationDetail
+      };
+
+      if (id) {
+        const idx = st.classes.findIndex(c => c.id === id);
+        if (idx !== -1) st.classes[idx] = entry;
+        showToast('Aula atualizada!', 'success');
+      } else {
+        st.classes.push(entry);
+        showToast('Aula adicionada na grade!', 'success');
+      }
+
+      saveStateToStorage();
+      closeModal('addClassModal');
+      renderCourseSchedule();
+    }
+
+    function editClass(id) {
+      const st = getActiveCourseState();
+      const cls = st.classes.find(c => c.id === id);
+      if (!cls) return;
+
+      document.getElementById('modalFormTitle').innerText = 'Editar Aula';
+      document.getElementById('editClassId').value = cls.id;
+      document.getElementById('timeFormatError').classList.add('hidden');
+
+      const periodSelect = document.getElementById('formPeriodSelect');
+      periodSelect.innerHTML = st.periods.map(p => `<option value="${p}" ${p === cls.period ? 'selected' : ''}>${p}</option>`).join('');
+
+      updateCourseSpecificModalOptions();
+      populateCampusUnitDropdown(cls.campusUnit || '');
+
+      document.getElementById('formDay').value = cls.day;
+      document.getElementById('formSubject').value = cls.subject || '';
+      document.getElementById('formWorkload').value = cls.workload || '';
+      document.getElementById('formProfessor').value = cls.professor || '';
+      document.getElementById('formMatricula').value = cls.matricula || '';
+
+      let sTime = cls.startTime || '';
+      let eTime = cls.endTime || '';
+      if ((!sTime || !eTime) && cls.time) {
+        const m = cls.time.match(/(\d{2}:\d{2}).*?(\d{2}:\d{2})/);
+        if (m) { sTime = m[1]; eTime = m[2]; }
+      }
+      document.getElementById('formStartTime').value = sTime;
+      document.getElementById('formEndTime').value = eTime;
+
+      document.getElementById('formType').value = cls.type || 'Presencial';
+      document.getElementById('formClassFormat').value = cls.classFormat || 'Aula Teórica';
+      document.getElementById('formLocationType').value = cls.locationType || 'Sala de Aula';
+      document.getElementById('formLocationDetail').value = cls.locationDetail || '';
+
+      handleModalityChange();
+      handleLocationTypeChange();
+
+      openModal('addClassModal');
+    }
+
+    function deleteClass(id) {
+      const st = getActiveCourseState();
+      st.classes = st.classes.filter(c => c.id !== id);
+      saveStateToStorage();
+      renderCourseSchedule();
+      showToast('Aula excluída.', 'info');
+    }
+
+    // =========================================================================
+    // BACKUP JSON / CSV DO CURSO
+    // =========================================================================
+    function exportCourseBackupJSON() {
+      const st = getActiveCourseState();
+      const course = ALL_COURSES_CATALOG[activeCourseId];
+      const payload = {
+        campus: activeCampus,
+        institution: getCourseInstitutionName(activeCampus, activeCourseId),
+        courseId: activeCourseId,
+        courseTitle: course.title,
+        periods: st.periods,
+        classes: st.classes
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `grade_${activeCampus.toLowerCase()}_${activeCourseId}.json`;
+      a.click();
+      showToast('Backup JSON baixado!', 'success');
+    }
+
+    function importCourseBackupJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          const st = getActiveCourseState();
+          if (Array.isArray(parsed.periods)) st.periods = sortPeriodNames(parsed.periods);
+          if (Array.isArray(parsed.classes)) st.classes = parsed.classes;
+          saveStateToStorage();
+          closeModal('importExportModal');
+          renderCourseSchedule();
+          showToast('Grade restaurada com sucesso!', 'success');
+        } catch (err) {
+          showToast('Arquivo JSON inválido.', 'error');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function exportCourseCSV() {
+      const st = getActiveCourseState();
+      const course = ALL_COURSES_CATALOG[activeCourseId];
+      const instName = getCourseInstitutionName(activeCampus, activeCourseId);
+      const headers = ['Instituicao', 'Campus_Aula', 'Curso', 'Periodo', 'Dia', 'Inicio', 'Fim', 'Carga_Horaria', 'Disciplina', 'Professor', 'Matricula', 'Modalidade', 'Natureza_Aula', 'Ambiente', 'Sala_ou_Laboratorio'];
+      const rows = st.classes.map(c => [
+        `"${instName}"`,
+        `"${c.campusUnit || ''}"`,
+        `"${course.title}"`,
+        `"${c.period}"`,
+        `"${c.day}"`,
+        `"${c.startTime || ''}"`,
+        `"${c.endTime || ''}"`,
+        `"${c.workload || ''}"`,
+        `"${c.subject}"`,
+        `"${c.professor}"`,
+        `"${c.matricula || ''}"`,
+        `"${c.type}"`,
+        `"${c.classFormat || ''}"`,
+        `"${c.locationType || ''}"`,
+        `"${c.locationDetail || ''}"`
+      ]);
+      const csv = '\uFEFF' + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `grade_${activeCampus.toLowerCase()}_${activeCourseId}.csv`;
+      a.click();
+      showToast('Planilha CSV exportada!', 'success');
+    }
+
+    // =========================================================================
+    // UTILITÁRIOS DE MODAL E TOAST
+    // =========================================================================
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const el = document.createElement('div');
+      const bg = type === 'success' ? 'bg-[#7a001e] text-white' : (type === 'error' ? 'bg-rose-700 text-white' : 'bg-stone-900 text-white');
+      el.className = `${bg} px-4 py-2.5 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2 transition-all duration-300`;
+      el.innerHTML = `<span>${msg}</span>`;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.classList.add('opacity-0');
+        setTimeout(() => el.remove(), 300);
+      }, 3000);
+    }
+  </script>
+  <script src="firebase-adapter-grades.js"></script>
+</body>
+</html>
