@@ -38,8 +38,8 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-cream);
       background-image: 
-        radial-gradient(circle at 12% 0%, rgba(124, 29, 36, 0.04) 0%, transparent 50%),
-        radial-gradient(circle at 88% 100%, rgba(180, 140, 80, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 12% 0%, rgba(124, 29, 36, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 88% 100%, rgba(180, 140, 80, 0.06) 0%, transparent 50%);
       color: var(--ink-dark);
       overflow: hidden;
       user-select: none;
@@ -54,13 +54,13 @@
       font-size: clamp(11px, 0.94vw, 17.5px);
     }
 
-    /* Transição suave entre slides */
+    /* Transição suave entre slides e telas */
     .slide-fade {
       animation: fadeSlide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -82,17 +82,239 @@
 </head>
 <body class="h-screen w-screen flex flex-col justify-between relative">
 
+  <!-- ==================== TELA INICIAL CLARA E MODERNA (ETAPA 1: UNIDADE | ETAPA 2: CAMPUS, TURNO E DIA) ==================== -->
+  <div id="tvLauncherScreen" class="fixed inset-0 z-40 bg-[#f5f2eb] flex flex-col justify-between p-6 sm:p-10 overflow-y-auto">
+    
+    <!-- Cabeçalho da Tela Inicial -->
+    <div class="max-w-5xl w-full mx-auto flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-[#ded6c6]">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-[#7c1d24] text-[#e6c47a] flex items-center justify-center shadow-md shadow-[#7c1d24]/15 border border-[#b4833e]/40">
+          <i data-lucide="tv" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="block text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#7c1d24]">
+            UNIVERSIDADE DE VASSOURAS
+          </span>
+          <h1 class="font-editorial text-2xl sm:text-3xl font-semibold text-[#1e1b18] tracking-tight leading-none mt-0.5">
+            Painel Digital de Ensalamento para TV
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="handleAdminButtonClick()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#fbf9f5] text-[#1e1b18] border border-[#ded6c6] text-xs font-bold shadow-2xs transition cursor-pointer">
+          <i data-lucide="lock" class="w-3.5 h-3.5 text-[#7c1d24]"></i>
+          <span id="launcherAdminBtnText">Acesso Admin</span>
+        </button>
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#7c1d24]/10 text-[#7c1d24] border border-[#7c1d24]/20 text-xs font-extrabold">
+          <span class="w-2 h-2 rounded-full bg-[#7c1d24] animate-pulse"></span>
+          Sincronizado Online
+        </span>
+      </div>
+    </div>
+
+    <!-- ETAPA 1: ESCOLHA ENTRE MARICÁ E SAQUAREMA -->
+    <div id="launcherStep1" class="max-w-4xl w-full mx-auto my-auto py-8 slide-fade">
+      <div class="text-center mb-10">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest bg-[#ebe5d8] text-[#7c1d24] border border-[#dad1be] mb-3">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Passo 1 de 2
+        </span>
+        <h2 class="font-editorial text-4xl sm:text-5xl font-medium text-[#1e1b18] tracking-tight">
+          Escolha a Unidade Acadêmica
+        </h2>
+        <p class="text-sm text-[#78716c] mt-2 max-w-lg mx-auto">
+          Selecione a unidade desejada para configurar o campus, o turno e o dia da semana da projeção na TV.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Card Unidade Maricá e FACMAR -->
+        <button type="button" onclick="selectLauncherUnit('MARICA')"
+          class="group bg-white hover:bg-[#fbf9f5] rounded-3xl p-8 border-2 border-[#e2dacb] hover:border-[#7c1d24] shadow-sm hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between cursor-pointer relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#7c1d24] via-[#d4ac63] to-[#7c1d24]"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-14 h-14 rounded-2xl bg-[#7c1d24] text-[#e6c47a] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                <i data-lucide="building-2" class="w-7 h-7"></i>
+              </div>
+              <span class="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#f3efe6] text-[#7c1d24] border border-[#e2dacb]">
+                Campi 1 e 2
+              </span>
+            </div>
+            <span class="block text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#7c1d24] mb-1">
+              Unidade 01
+            </span>
+            <h3 class="font-editorial text-3xl font-semibold text-[#1e1b18] group-hover:text-[#7c1d24] transition-colors">
+              Maricá e FACMAR
+            </h3>
+            <p class="text-xs sm:text-sm text-[#78716c] mt-2 leading-relaxed">
+              Projeção de slides de ensalamento da Univassouras Campus Maricá e Faculdade de Maricá (FACMAR).
+            </p>
+          </div>
+
+          <div class="mt-7 pt-4 border-t border-[#ede8dc] flex items-center justify-between text-xs font-extrabold text-[#7c1d24] uppercase tracking-wider">
+            <span>Configurar Projeção</span>
+            <span class="w-8 h-8 rounded-full bg-[#f3efe6] group-hover:bg-[#7c1d24] group-hover:text-white flex items-center justify-center transition-all">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </button>
+
+        <!-- Card Unidade Saquarema -->
+        <button type="button" onclick="selectLauncherUnit('SAQUAREMA')"
+          class="group bg-white hover:bg-[#fbf9f5] rounded-3xl p-8 border-2 border-[#e2dacb] hover:border-[#7c1d24] shadow-sm hover:shadow-xl transition-all duration-300 text-left flex flex-col justify-between cursor-pointer relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#7c1d24] via-[#d4ac63] to-[#7c1d24]"></div>
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-14 h-14 rounded-2xl bg-[#7c1d24] text-[#e6c47a] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                <i data-lucide="landmark" class="w-7 h-7"></i>
+              </div>
+              <span class="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#f3efe6] text-[#7c1d24] border border-[#e2dacb]">
+                Campi 1 e 3
+              </span>
+            </div>
+            <span class="block text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#7c1d24] mb-1">
+              Unidade 02
+            </span>
+            <h3 class="font-editorial text-3xl font-semibold text-[#1e1b18] group-hover:text-[#7c1d24] transition-colors">
+              Campus Saquarema
+            </h3>
+            <p class="text-xs sm:text-sm text-[#78716c] mt-2 leading-relaxed">
+              Projeção de slides de ensalamento dos cursos de graduação da Univassouras Campus Saquarema.
+            </p>
+          </div>
+
+          <div class="mt-7 pt-4 border-t border-[#ede8dc] flex items-center justify-between text-xs font-extrabold text-[#7c1d24] uppercase tracking-wider">
+            <span>Configurar Projeção</span>
+            <span class="w-8 h-8 rounded-full bg-[#f3efe6] group-hover:bg-[#7c1d24] group-hover:text-white flex items-center justify-center transition-all">
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: SELEÇÃO DE CAMPUS, TURNO E DIA DA SEMANA -->
+    <div id="launcherStep2" class="hidden max-w-4xl w-full mx-auto my-auto py-6 slide-fade">
+      <div class="bg-white rounded-3xl p-6 sm:p-9 border-2 border-[#e2dacb] shadow-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#7c1d24] via-[#d4ac63] to-[#7c1d24]"></div>
+
+        <!-- Topo do Card de Configuração -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-[#ede8dc]">
+          <div>
+            <span id="step2UnitBadge" class="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#7c1d24]">
+              UNIVASSOURAS CAMPUS MARICÁ E FACMAR
+            </span>
+            <h2 class="font-editorial text-3xl sm:text-4xl font-semibold text-[#1e1b18] mt-0.5">
+              Configure a Projeção dos Slides
+            </h2>
+          </div>
+
+          <button type="button" onclick="backToLauncherStep1()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f3efe6] hover:bg-[#e5dec9] text-[#1e1b18] text-xs font-extrabold border border-[#ded6c6] transition cursor-pointer">
+            <i data-lucide="arrow-left" class="w-4 h-4 text-[#7c1d24]"></i>
+            <span>Trocar Unidade</span>
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-6">
+          <!-- 1. Seleção de Campus e 2. Seleção de Turno lado a lado -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Seleção de Campus -->
+            <div>
+              <label class="block text-xs font-extrabold uppercase tracking-wider text-[#78716c] mb-2.5">
+                1. Selecione o Campus
+              </label>
+              <div id="launcherCampusOptions" class="grid grid-cols-2 gap-3">
+                <!-- Preenchido via JS (Campus 1 e Campus 2 ou Campus 3) -->
+              </div>
+            </div>
+
+            <!-- Seleção de Turno -->
+            <div>
+              <label class="block text-xs font-extrabold uppercase tracking-wider text-[#78716c] mb-2.5">
+                2. Selecione o Turno
+              </label>
+              <div class="grid grid-cols-2 gap-3">
+                <button type="button" id="btnLaunchShiftNoite" onclick="setLauncherShift('NOITE')"
+                  class="p-3.5 rounded-2xl border-2 text-left transition-all flex items-center gap-3 cursor-pointer">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 icon-box">
+                    <i data-lucide="moon" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <span class="block text-sm font-black leading-tight">Noturno</span>
+                    <span class="block text-[11px] opacity-75 font-semibold">Aulas à noite</span>
+                  </div>
+                </button>
+
+                <button type="button" id="btnLaunchShiftManha" onclick="setLauncherShift('MANHA')"
+                  class="p-3.5 rounded-2xl border-2 text-left transition-all flex items-center gap-3 cursor-pointer">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 icon-box">
+                    <i data-lucide="sun" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <span class="block text-sm font-black leading-tight">Manhã / Integral</span>
+                    <span class="block text-[11px] opacity-75 font-semibold">Diurno e Medicina</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Seleção do Dia da Semana -->
+          <div>
+            <label class="block text-xs font-extrabold uppercase tracking-wider text-[#78716c] mb-2.5">
+              3. Selecione o Dia da Semana
+            </label>
+            <div id="launcherDayOptions" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+              <!-- Botões Segunda a Sábado gerados via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Rodapé de Ação do Card -->
+        <div class="mt-8 pt-5 border-t border-[#ede8dc] flex flex-wrap items-center justify-between gap-4">
+          <div class="text-xs text-[#78716c] font-semibold">
+            💡 Passe o mouse no topo da TV durante a projeção para alterar filtros ou editar professores.
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 ml-auto">
+            <button type="button" onclick="launchSlidesProjection(false)"
+              class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#ebe5d8] hover:bg-[#ded6c6] text-[#1e1b18] text-xs sm:text-sm font-black border border-[#d5cab4] transition cursor-pointer">
+              <i data-lucide="play" class="w-4 h-4 text-[#7c1d24]"></i>
+              <span>Abrir Painel</span>
+            </button>
+
+            <button type="button" onclick="launchSlidesProjection(true)"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#7c1d24] hover:bg-[#5e1319] text-white text-xs sm:text-sm font-black shadow-lg shadow-[#7c1d24]/25 transition cursor-pointer">
+              <i data-lucide="maximize" class="w-4 h-4 text-[#e6c47a]"></i>
+              <span>Projetar em Tela Cheia (TV)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé da Tela Inicial -->
+    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-[#ded6c6] flex flex-wrap items-center justify-between gap-2 text-xs text-[#78716c]">
+      <span>Universidade de Vassouras • Coordenação de Infraestrutura</span>
+      <span>Elaborado por <strong class="text-[#1e1b18] font-bold">Jonas Florencio</strong></span>
+    </div>
+  </div>
+
   <!-- BARRA FINA DE PROGRESSO DO SLIDE NO TOPO -->
-  <div class="fixed top-0 left-0 right-0 h-1 bg-[#e5dec9] z-40">
+  <div class="fixed top-0 left-0 right-0 h-1 bg-[#e5dec9] z-30">
     <div id="slideProgressBar" class="h-full bg-gradient-to-r from-[#7c1d24] to-[#b4833e] transition-all duration-100" style="width: 0%;"></div>
   </div>
 
   <!-- ==================== BARRA FLUTUANTE DE CONTROLE (OCULTA NA TV) ==================== -->
-  <div id="tvControlBar" class="fixed top-0 left-0 right-0 z-50 bg-[#1e1b18]/95 backdrop-blur-md text-white px-5 py-2.5 shadow-2xl border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+  <div id="tvControlBar" class="fixed top-0 left-0 right-0 z-50 bg-[#1e1b18]/95 backdrop-blur-md text-white px-5 py-2.5 shadow-2xl border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs hidden-bar">
     <div class="flex items-center gap-2 flex-wrap">
-      <span class="inline-flex items-center gap-1.5 font-black text-amber-300 uppercase tracking-wider mr-1">
-        <i data-lucide="tv" class="w-4 h-4"></i> Controle TV
-      </span>
+      <!-- Botão para voltar à Tela Inicial Moderna -->
+      <button onclick="openLauncherScreen()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black transition cursor-pointer mr-1" title="Voltar para a tela inicial de seleção">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <span>Início</span>
+      </button>
 
       <!-- Seletor de Unidade: Maricá vs Saquarema -->
       <div class="flex items-center gap-1.5 bg-white/10 px-2.5 py-1.5 rounded-xl">
@@ -465,13 +687,11 @@
       "Vânia Quintão", "Victor", "Victor Hugo", "Vitor", "Wellington", "William", "Yasmim"
     ];
 
-    // Disciplinas Padrão de Medicina (extraídas do slide de Medicina)
     const INITIAL_MEDICINA_SUBJECTS = [
       "P.INTEGRADOR I", "PNEUMO", "CARDIO", "P.INOVADOR I", "IMUNO",
       "CIRURGIA", "SF I", "PAPM I", "BFF II", "MICRO"
     ];
 
-    // Template de Auto-Preenchimento de Medicina por Sala (igual ao slide Quarta Manhã/Tarde)
     const MEDICINA_DEFAULT_TEMPLATE_ROWS = [
       { period: "P.INTEGRADOR I", room: "SALA 107", prof: "Manhã", time: "" },
       { period: "P.INOVADOR I",   room: "SALA 107", prof: "Tarde", time: "" },
@@ -486,13 +706,12 @@
       { period: "SF I",           room: "SALA 516", prof: "Manhã", time: "" }
     ];
 
-    // Catálogo global sincronizado com o Firebase
     var tvCatalogsData = {
       professors: [...INITIAL_PROFESSORS_DB].sort((a, b) => a.localeCompare(b, 'pt-BR')),
       medicinaSubjects: [...INITIAL_MEDICINA_SUBJECTS]
     };
 
-    var medicinaShiftFilter = 'ALL'; // 'ALL', 'Manhã', 'Tarde'
+    var medicinaShiftFilter = 'ALL';
 
     // =========================================================================
     // 2. CATÁLOGO DE CURSOS E ÍCONES
@@ -535,6 +754,15 @@
       'SÁBADO': 'Sábado'
     };
 
+    const DAYS_LIST = [
+      { key: 'SEGUNDA', short: 'Segunda', full: 'Segunda-feira' },
+      { key: 'TERÇA',   short: 'Terça',   full: 'Terça-feira' },
+      { key: 'QUARTA',  short: 'Quarta',  full: 'Quarta-feira' },
+      { key: 'QUINTA',  short: 'Quinta',  full: 'Quinta-feira' },
+      { key: 'SEXTA',   short: 'Sexta',   full: 'Sexta-feira' },
+      { key: 'SÁBADO',  short: 'Sábado',  full: 'Sábado' }
+    ];
+
     // Estado Global Sincronizado com o firebase-adapter-tv.js
     var ensalamentoCloudData = {
       MARICA: { NOITE: {}, MANHA: {} },
@@ -568,13 +796,167 @@
       loadLocalCatalogsBackup();
       detectCurrentDay();
       updateCampusSelectorOptions();
+      renderLauncherStep2Controls();
       refreshTvBoard();
-      startAutoCarousel();
       setupAutoHideBar();
       setupKeyboardNavigation();
       setupOutsideClickForAutocomplete();
       safeCreateIcons();
     });
+
+    // =========================================================================
+    // FUNÇÕES DA TELA INICIAL MODERNA (PASSO 1 E PASSO 2)
+    // =========================================================================
+    function openLauncherScreen() {
+      const launcher = document.getElementById('tvLauncherScreen');
+      launcher.classList.remove('hidden');
+      document.getElementById('tvControlBar').classList.add('hidden-bar');
+      clearInterval(progressTimer);
+      renderLauncherStep2Controls();
+      safeCreateIcons();
+    }
+
+    function selectLauncherUnit(unitKey) {
+      activeUnit = unitKey;
+      activeCampus = 'CAMPUS_2';
+      document.getElementById('ctrlUnit').value = unitKey;
+      updateCampusSelectorOptions();
+
+      document.getElementById('launcherStep1').classList.add('hidden');
+      document.getElementById('launcherStep2').classList.remove('hidden');
+      renderLauncherStep2Controls();
+      safeCreateIcons();
+    }
+
+    function backToLauncherStep1() {
+      document.getElementById('launcherStep2').classList.add('hidden');
+      document.getElementById('launcherStep1').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function setLauncherCampus(campusKey) {
+      activeCampus = campusKey;
+      document.getElementById('ctrlCampus').value = campusKey;
+      renderLauncherStep2Controls();
+    }
+
+    function setLauncherShift(shiftKey) {
+      activeShift = shiftKey;
+      document.getElementById('ctrlShift').value = shiftKey;
+      updateCampusSelectorOptions();
+      renderLauncherStep2Controls();
+    }
+
+    function setLauncherDay(dayKey) {
+      activeDay = dayKey;
+      document.getElementById('ctrlDay').value = dayKey;
+      renderLauncherStep2Controls();
+    }
+
+    function renderLauncherStep2Controls() {
+      const unitBadge = document.getElementById('step2UnitBadge');
+      if (unitBadge) {
+        unitBadge.innerText = activeUnit === 'SAQUAREMA'
+          ? 'UNIVASSOURAS CAMPUS SAQUAREMA'
+          : 'UNIVASSOURAS CAMPUS MARICÁ E FACMAR';
+      }
+
+      // 1. Renderiza Opções de Campus
+      const campusContainer = document.getElementById('launcherCampusOptions');
+      if (campusContainer) {
+        const campusList = activeUnit === 'SAQUAREMA'
+          ? [
+              { key: 'CAMPUS_1', title: 'Campus 1', desc: 'Unidade Centro' },
+              { key: 'CAMPUS_2', title: 'Campus 3', desc: 'Blocos 1 a 4' }
+            ]
+          : [
+              { key: 'CAMPUS_1', title: 'Campus 1', desc: '1° ao 3° Andar' },
+              { key: 'CAMPUS_2', title: 'Campus 2', desc: 'Blocos 1, 2, 3 e 5' }
+            ];
+
+        campusContainer.innerHTML = campusList.map(c => {
+          const isSelected = activeCampus === c.key;
+          return `
+            <button type="button" onclick="setLauncherCampus('${c.key}')"
+              class="p-3.5 rounded-2xl border-2 text-left transition-all flex items-center gap-3 cursor-pointer ${
+                isSelected
+                  ? 'bg-[#7c1d24] text-white border-[#7c1d24] shadow-md shadow-[#7c1d24]/20'
+                  : 'bg-[#fbf9f5] hover:bg-[#f3efe6] text-[#1e1b18] border-[#e2dacb]'
+              }">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                isSelected ? 'bg-white/15 text-[#e6c47a]' : 'bg-[#ebe5d8] text-[#7c1d24]'
+              }">
+                <i data-lucide="building" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <span class="block text-sm font-black leading-tight">${c.title}</span>
+                <span class="block text-[11px] ${isSelected ? 'text-amber-100/80' : 'text-[#78716c]'} font-semibold">${c.desc}</span>
+              </div>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Renderiza Estado dos Botões de Turno
+      const btnNoite = document.getElementById('btnLaunchShiftNoite');
+      const btnManha = document.getElementById('btnLaunchShiftManha');
+      if (btnNoite && btnManha) {
+        const applyShiftStyle = (btn, selected) => {
+          btn.className = `p-3.5 rounded-2xl border-2 text-left transition-all flex items-center gap-3 cursor-pointer ${
+            selected
+              ? 'bg-[#7c1d24] text-white border-[#7c1d24] shadow-md shadow-[#7c1d24]/20'
+              : 'bg-[#fbf9f5] hover:bg-[#f3efe6] text-[#1e1b18] border-[#e2dacb]'
+          }`;
+          const iconBox = btn.querySelector('.icon-box');
+          if (iconBox) {
+            iconBox.className = `w-10 h-10 rounded-xl flex items-center justify-center shrink-0 icon-box ${
+              selected ? 'bg-white/15 text-[#e6c47a]' : 'bg-[#ebe5d8] text-[#7c1d24]'
+            }`;
+          }
+        };
+        applyShiftStyle(btnNoite, activeShift === 'NOITE');
+        applyShiftStyle(btnManha, activeShift === 'MANHA');
+      }
+
+      // 3. Renderiza Botões de Dia da Semana
+      const dayContainer = document.getElementById('launcherDayOptions');
+      if (dayContainer) {
+        dayContainer.innerHTML = DAYS_LIST.map(d => {
+          const isSelected = activeDay === d.key;
+          return `
+            <button type="button" onclick="setLauncherDay('${d.key}')"
+              class="py-3 px-3 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center justify-center ${
+                isSelected
+                  ? 'bg-[#7c1d24] text-white border-[#7c1d24] shadow-md shadow-[#7c1d24]/20'
+                  : 'bg-[#fbf9f5] hover:bg-[#f3efe6] text-[#1e1b18] border-[#e2dacb]'
+              }">
+              <span class="text-xs sm:text-sm font-black leading-tight">${d.short}</span>
+              <span class="text-[10px] font-semibold mt-0.5 ${isSelected ? 'text-[#e6c47a]' : 'text-[#78716c]'}">
+                ${d.key === 'SÁBADO' ? 'Fim de semana' : 'Feira'}
+              </span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      safeCreateIcons();
+    }
+
+    function launchSlidesProjection(goFullscreen = false) {
+      document.getElementById('ctrlUnit').value = activeUnit;
+      document.getElementById('ctrlShift').value = activeShift;
+      updateCampusSelectorOptions();
+      document.getElementById('ctrlCampus').value = activeCampus;
+      document.getElementById('ctrlDay').value = activeDay;
+
+      currentSlideIndex = 0;
+      document.getElementById('tvLauncherScreen').classList.add('hidden');
+      refreshTvBoard();
+
+      if (goFullscreen && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    }
 
     function loadLocalCatalogsBackup() {
       try {
@@ -839,7 +1221,6 @@
             const fallbackKey = makeCoursePeriodFallbackKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel);
             const savedOverride = tvState.items[exactKey] || (parsed.courseFullTitle !== 'Medicina' ? tvState.items[fallbackKey] : null) || {};
 
-            // Se for Medicina e ainda não tiver disciplina configurada, tenta sugerir a matéria padrão daquela sala
             let defaultMedSubject = parsed.periodLabel;
             let defaultMedShift = '';
             if (parsed.courseFullTitle === 'Medicina' && (!savedOverride.period || savedOverride.period === 'Disciplina')) {
@@ -864,7 +1245,6 @@
         });
       });
 
-      // Adiciona turmas extras criadas na TV para este Campus e Dia
       tvState.extras.forEach(extra => {
         if (extra.campus === activeCampus && extra.day === activeDay) {
           list.push({
@@ -882,12 +1262,10 @@
       currentAllocations = list;
     }
 
-    // Auto-preenche o quadro completo de Medicina com as matérias e turnos do slide
     function autoFillMedicinaSubjects() {
       if (!isAdmin) return;
       const tvState = getActiveTvOverrides();
 
-      // Oculta linhas genéricas de Medicina vindas do ensalamento neste dia/campus para não duplicar
       currentAllocations.forEach(item => {
         if (item.course === 'Medicina' && !item.isExtra) {
           if (!tvState.hiddenKeys.includes(item.id)) {
@@ -896,7 +1274,6 @@
         }
       });
 
-      // Remove extras antigos de Medicina neste dia/campus e insere os 11 padrões
       tvState.extras = tvState.extras.filter(x => !(x.campus === activeCampus && x.day === activeDay && x.course === 'Medicina'));
 
       MEDICINA_DEFAULT_TEMPLATE_ROWS.forEach((tpl, idx) => {
@@ -1051,16 +1428,19 @@
             <p class="text-xs sm:text-sm text-[#78716c] max-w-md mb-4">
               As turmas cadastradas no mapa de Ensalamento deste campus e turno aparecerão aqui automaticamente em ordem alfabética.
             </p>
-            ${isAdmin ? `
-              <div class="flex flex-wrap items-center justify-center gap-2">
+            <div class="flex flex-wrap items-center justify-center gap-2">
+              <button onclick="openLauncherScreen()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#ebe5d8] hover:bg-[#e2dacb] text-[#1e1b18] text-xs font-black border border-[#d5cab4]">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-[#7c1d24]"></i> Trocar Campus / Turno / Dia
+              </button>
+              ${isAdmin ? `
                 <button onclick="openNewAllocationModal()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7c1d24] text-white text-xs font-black shadow-sm">
                   <i data-lucide="plus" class="w-4 h-4 text-amber-300"></i> Adicionar Turma
                 </button>
                 <button onclick="autoFillMedicinaSubjects()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#ebe5d8] hover:bg-[#e2dacb] text-[#7c1d24] text-xs font-black border border-[#d5cab4]">
                   <i data-lucide="stethoscope" class="w-4 h-4"></i> Auto-preencher Medicina
                 </button>
-              </div>
-            ` : ''}
+              ` : ''}
+            </div>
           </div>
         `;
         safeCreateIcons();
@@ -1089,7 +1469,6 @@
 
                   <div class="flex items-center gap-1 shrink-0">
                     ${isMedicina ? `
-                      <!-- Botões de Filtro Rápido Manhã / Tarde na Medicina -->
                       <div class="flex items-center bg-black/25 p-0.5 rounded-lg border border-white/10 text-[10px] font-black">
                         <button onclick="setMedicinaCardFilter('ALL')" class="px-2 py-0.5 rounded-md transition ${medicinaShiftFilter === 'ALL' ? 'bg-[#e6c47a] text-stone-950' : 'text-amber-100/80 hover:text-white'}">Todos</button>
                         <button onclick="setMedicinaCardFilter('Manhã')" class="px-2 py-0.5 rounded-md transition ${medicinaShiftFilter === 'Manhã' ? 'bg-[#e6c47a] text-stone-950' : 'text-amber-100/80 hover:text-white'}">Manhã</button>
@@ -1124,7 +1503,7 @@
                            class="group flex items-stretch gap-1.5 ${isAdmin ? 'cursor-pointer' : 'cursor-default'} transition-all"
                            title="${isAdmin ? 'Clique para editar' : ''}">
                         
-                        <!-- Bloco 1: Período ou Disciplina de Medicina (Autoajustável) -->
+                        <!-- Bloco 1: Período ou Disciplina de Medicina -->
                         <div class="w-fit max-w-[42%] shrink-0 bg-[#ede8dc] ${isAdmin ? 'group-hover:bg-[#e5dec9]' : ''} px-3 py-1.5 rounded-xl border border-[#ded6c6] flex items-center transition-colors">
                           <span class="text-sm xl:text-base 2xl:text-[17px] font-bold text-[#1e1b18] tracking-tight whitespace-normal break-words leading-snug">
                             ${r.period}
@@ -1288,7 +1667,6 @@
       tvCatalogsData.professors = sortUniqueNames(tvCatalogsData.professors);
       editingProfessorIndex = null;
 
-      // Atualiza também nas turmas salvas caso o professor estivesse alocado com o nome antigo
       if (oldName && oldName !== newName) {
         const replaceProfInString = (str) => {
           if (!str) return str;
@@ -1322,13 +1700,11 @@
       showToast(`"${removed}" removido da lista de sugestões.`);
     }
 
-    // Autocomplete ao digitar no campo de Professor (suporta múltiplos professores separados por "/")
     function handleProfAutocompleteInput() {
       const input = document.getElementById('inputEditProf');
       const dropdown = document.getElementById('profSuggestionsDropdown');
       const rawVal = input.value;
 
-      // Pega apenas o trecho após a última barra "/" para sugerir o próximo professor
       const parts = rawVal.split('/');
       const currentSegment = parts[parts.length - 1].trim();
       const query = normalizeStr(currentSegment);
@@ -1538,10 +1914,8 @@
       const prof = document.getElementById('inputEditProf').value.trim();
       const time = document.getElementById('inputEditTime').value.trim();
 
-      // Guarda automaticamente novos professores digitados para sugerir nas próximas vezes
       registerNewProfessorsFromInput(prof);
 
-      // Se for Medicina e digitou uma matéria nova, guarda nas matérias de Medicina
       if (course.toLowerCase() === 'medicina' && period) {
         const up = period.toUpperCase();
         if (!tvCatalogsData.medicinaSubjects.includes(up)) {
@@ -1598,7 +1972,6 @@
       refreshTvBoard();
     }
 
-    // Sobrescritos pelo firebase-adapter-tv.js para salvar no Firestore
     function saveTvDataToStorage() {
       localStorage.setItem('tv_overrides_local_backup_v1', JSON.stringify(tvOverridesData));
     }
@@ -1612,8 +1985,10 @@
       const roleBadge = document.getElementById('roleStatusBadge');
       const btnAddExtra = document.getElementById('btnAddExtraTurma');
       const btnProfs = document.getElementById('btnManageProfessors');
+      const launcherAdminTxt = document.getElementById('launcherAdminBtnText');
 
       if (isAdmin) {
+        if (launcherAdminTxt) launcherAdminTxt.innerText = 'Admin Conectado (Sair)';
         if (btnAddExtra) { btnAddExtra.classList.remove('hidden'); btnAddExtra.classList.add('inline-flex'); }
         if (btnProfs) { btnProfs.classList.remove('hidden'); btnProfs.classList.add('inline-flex'); }
         if (btnAdmin) {
@@ -1625,6 +2000,7 @@
           roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3"></i> Modo Admin`;
         }
       } else {
+        if (launcherAdminTxt) launcherAdminTxt.innerText = 'Acesso Admin';
         if (btnAddExtra) { btnAddExtra.classList.add('hidden'); btnAddExtra.classList.remove('inline-flex'); }
         if (btnProfs) { btnProfs.classList.add('hidden'); btnProfs.classList.remove('inline-flex'); }
         if (btnAdmin) {
@@ -1647,7 +2023,8 @@
       elapsedTicks = 0;
       const bar = document.getElementById('slideProgressBar');
 
-      if (intervalSeconds <= 0 || slidesPages.length <= 1) {
+      const launcherVisible = !document.getElementById('tvLauncherScreen').classList.contains('hidden');
+      if (launcherVisible || intervalSeconds <= 0 || slidesPages.length <= 1) {
         bar.style.width = '0%';
         return;
       }
@@ -1691,6 +2068,7 @@
 
     function setupKeyboardNavigation() {
       window.addEventListener('keydown', (e) => {
+        if (!document.getElementById('tvLauncherScreen').classList.contains('hidden')) return;
         if (!document.getElementById('rowEditModal').classList.contains('hidden')) return;
         if (!document.getElementById('professorsModal').classList.contains('hidden')) return;
         if (!document.getElementById('adminLoginModal').classList.contains('hidden')) return;
@@ -1702,6 +2080,10 @@
     function setupAutoHideBar() {
       const bar = document.getElementById('tvControlBar');
       const show = () => {
+        if (!document.getElementById('tvLauncherScreen').classList.contains('hidden')) {
+          bar.classList.add('hidden-bar');
+          return;
+        }
         bar.classList.remove('hidden-bar');
         clearTimeout(hideBarTimeout);
         hideBarTimeout = setTimeout(() => {
@@ -1712,7 +2094,6 @@
         }, 3200);
       };
       window.addEventListener('mousemove', show);
-      show();
     }
 
     function toggleFullScreen() {
