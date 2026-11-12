@@ -73,6 +73,11 @@
       transform: translateY(-100%);
       pointer-events: none;
     }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f3efe6; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: #c7bba6; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #7c1d24; }
   </style>
 </head>
 <body class="h-screen w-screen flex flex-col justify-between relative">
@@ -84,7 +89,7 @@
 
   <!-- ==================== BARRA FLUTUANTE DE CONTROLE (OCULTA NA TV) ==================== -->
   <div id="tvControlBar" class="fixed top-0 left-0 right-0 z-50 bg-[#1e1b18]/95 backdrop-blur-md text-white px-5 py-2.5 shadow-2xl border-b border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
-    <div class="flex items-center gap-2.5 flex-wrap">
+    <div class="flex items-center gap-2 flex-wrap">
       <span class="inline-flex items-center gap-1.5 font-black text-amber-300 uppercase tracking-wider mr-1">
         <i data-lucide="tv" class="w-4 h-4"></i> Controle TV
       </span>
@@ -150,6 +155,13 @@
         <i data-lucide="eye" class="w-3 h-3"></i> Leitura
       </span>
 
+      <!-- Botão Gerenciar Professores (Admin) -->
+      <button id="btnManageProfessors" onclick="openProfessorsModal()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-amber-300 font-black border border-amber-300/30 transition">
+        <i data-lucide="users" class="w-3.5 h-3.5"></i>
+        <span>Professores</span>
+      </button>
+
+      <!-- Botão Nova Turma Extra (Admin) -->
       <button id="btnAddExtraTurma" onclick="openNewAllocationModal()" class="hidden items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black transition">
         <i data-lucide="plus" class="w-3.5 h-3.5"></i>
         <span>Turma Extra</span>
@@ -236,9 +248,61 @@
     </div>
   </div>
 
-  <!-- ==================== MODAL DE EDIÇÃO DE PROFESSOR / HORÁRIO DE INÍCIO ==================== -->
-  <div id="rowEditModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-[#fbf9f5] rounded-3xl shadow-2xl max-w-md w-full p-6 border border-[#ded6c6]">
+  <!-- ==================== MODAL: GERENCIAR E EDITAR PROFESSORES ==================== -->
+  <div id="professorsModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#fbf9f5] rounded-3xl shadow-2xl max-w-lg w-full p-6 border border-[#ded6c6] max-h-[88vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-[#e5dec9]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#7c1d24] text-[#e6c47a] flex items-center justify-center">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-wider text-[#7c1d24] block">Catálogo Sincronizado</span>
+            <h3 class="font-editorial text-xl font-semibold text-[#1e1b18]">Gerenciar e Editar Professores</h3>
+          </div>
+        </div>
+        <button onclick="closeProfessorsModal()" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Adicionar Novo Professor -->
+      <form onsubmit="handleAddProfessor(event)" class="mt-4 flex gap-2 text-xs">
+        <input type="text" id="newProfessorInput" required placeholder="Adicionar novo professor(a)..."
+          class="flex-1 px-3.5 py-2.5 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+        <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#7c1d24] hover:bg-[#5e1319] text-white font-black shadow-xs shrink-0">
+          + Cadastrar
+        </button>
+      </form>
+
+      <!-- Busca Rápida no Banco de Professores -->
+      <div class="mt-3 relative text-xs">
+        <i data-lucide="search" class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+        <input type="text" id="searchProfessorModalInput" oninput="renderProfessorsModalList()" placeholder="Buscar professor cadastrado para editar ou excluir..."
+          class="w-full pl-9 pr-3 py-2 bg-[#f3efe6] border border-[#ded6c6] rounded-xl font-semibold text-stone-800 focus:outline-none focus:border-[#7c1d24]">
+      </div>
+
+      <div class="mt-2 flex items-center justify-between text-[11px] font-bold text-stone-500 px-1">
+        <span id="professorsCountLabel">0 professores cadastrados</span>
+        <span>Clique no lápis para editar o nome</span>
+      </div>
+
+      <!-- Lista de Professores com Edição Inline -->
+      <div id="professorsModalList" class="mt-2 flex-1 overflow-y-auto space-y-1.5 pr-1">
+        <!-- Gerado via JS -->
+      </div>
+
+      <div class="flex justify-end pt-3 mt-3 border-t border-[#e5dec9] text-xs">
+        <button type="button" onclick="closeProfessorsModal()" class="px-5 py-2 rounded-xl bg-stone-900 text-white font-black">
+          Concluir
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE EDIÇÃO DE TURMA / PROFESSOR / MEDICINA ==================== -->
+  <div id="rowEditModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-[#fbf9f5] rounded-3xl shadow-2xl max-w-lg w-full p-6 border border-[#ded6c6] my-8">
       <div class="flex items-center justify-between pb-3 border-b border-[#e5dec9]">
         <div>
           <span class="text-[10px] font-black uppercase tracking-wider text-[#7c1d24] block">Complemento Online da TV</span>
@@ -250,9 +314,10 @@
       </div>
 
       <form onsubmit="saveRowEdit(event)" class="mt-4 space-y-3.5 text-xs">
+        <!-- Curso -->
         <div>
           <label class="block font-bold text-stone-700 mb-1">Curso</label>
-          <input type="text" id="inputEditCourse" list="coursesCatalogList" required placeholder="Ex: Direito" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+          <input type="text" id="inputEditCourse" list="coursesCatalogList" oninput="handleModalCourseChange()" required placeholder="Ex: Direito ou Medicina" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
           <datalist id="coursesCatalogList">
             <option value="Administração">
             <option value="Análise de Sistemas">
@@ -278,22 +343,75 @@
           </datalist>
         </div>
 
+        <!-- Período (ou Disciplina quando for Medicina) + Sala -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Período / Turma</label>
+            <label id="lblEditPeriodOrSubject" class="block font-bold text-stone-700 mb-1">Período / Turma</label>
             <input type="text" id="inputEditPeriod" required placeholder="Ex: 3° Período A" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
           </div>
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Sala (Vinda do Ensalamento)</label>
+            <label class="block font-bold text-stone-700 mb-1">Sala / Laboratório</label>
             <input type="text" id="inputEditRoom" required placeholder="Ex: SALA 108" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-black text-[#7c1d24] focus:outline-none focus:border-[#7c1d24]">
           </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-3">
-          <div class="col-span-2">
-            <label class="block font-bold text-stone-700 mb-1">Nome do(a) Professor(a)</label>
-            <input type="text" id="inputEditProf" placeholder="Ex: Claudio Barral" class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+        <!-- PAINEL EXCLUSIVO DE MEDICINA (Matérias + Botões Manhã e Tarde) -->
+        <div id="medicinaSpecialPanel" class="hidden p-3.5 rounded-2xl bg-[#f3efe6] border border-[#ded6c6] space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[10.5px] font-black uppercase tracking-wider text-[#7c1d24] flex items-center gap-1">
+                <i data-lucide="stethoscope" class="w-3.5 h-3.5"></i>
+                Disciplinas de Medicina (Clique para preencher)
+              </span>
+              <button type="button" onclick="promptAddMedicinaSubject()" class="text-[10.5px] font-black text-[#7c1d24] hover:underline">
+                + Nova Matéria
+              </button>
+            </div>
+            <div id="medicinaSubjectsChips" class="flex flex-wrap gap-1.5">
+              <!-- Chips das matérias de Medicina gerados via JS -->
+            </div>
           </div>
+
+          <div class="pt-2.5 border-t border-[#e2dacb]">
+            <span class="block text-[10.5px] font-black uppercase tracking-wider text-[#7c1d24] mb-1.5">
+              Turno da Disciplina de Medicina:
+            </span>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="setMedicinaShiftValue('Manhã')"
+                class="py-2 px-3 rounded-xl font-black text-xs bg-white hover:bg-amber-100 text-stone-900 border border-[#d6cebe] flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer">
+                <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-600"></i>
+                <span>Manhã</span>
+              </button>
+              <button type="button" onclick="setMedicinaShiftValue('Tarde')"
+                class="py-2 px-3 rounded-xl font-black text-xs bg-white hover:bg-amber-100 text-stone-900 border border-[#d6cebe] flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer">
+                <i data-lucide="sunset" class="w-3.5 h-3.5 text-orange-600"></i>
+                <span>Tarde</span>
+              </button>
+              <button type="button" onclick="setMedicinaShiftValue('Manhã / Tarde')"
+                class="py-2 px-3 rounded-xl font-black text-xs bg-[#7c1d24] hover:bg-[#5e1319] text-white border border-[#7c1d24] flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-300"></i>
+                <span>Manhã / Tarde</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professor com Sugestão Inteligente ao Digitar + Horário de Início -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-2 relative">
+            <label id="lblEditProfOrShift" class="block font-bold text-stone-700 mb-1">Nome do(a) Professor(a)</label>
+            <input type="text" id="inputEditProf" autocomplete="off"
+              oninput="handleProfAutocompleteInput()"
+              onfocus="handleProfAutocompleteInput()"
+              placeholder="Digite as iniciais para sugerir..."
+              class="w-full px-3.5 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-stone-900 focus:outline-none focus:border-[#7c1d24]">
+            
+            <!-- Lista Flutuante de Sugestões de Professores -->
+            <div id="profSuggestionsDropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-[#d6cebe] rounded-2xl shadow-xl max-h-44 overflow-y-auto z-50 divide-y divide-stone-100">
+              <!-- Sugestões geradas via JS conforme as letras digitadas -->
+            </div>
+          </div>
+
           <div>
             <label class="block font-bold text-stone-700 mb-1">Início (Ex: 17h)</label>
             <input type="text" id="inputEditTime" placeholder="Ex: 17h" class="w-full px-3 py-2 bg-white border border-[#d6cebe] rounded-xl font-bold text-amber-900 focus:outline-none focus:border-[#7c1d24]">
@@ -301,12 +419,12 @@
         </div>
 
         <p class="text-[11px] text-stone-500">
-          * O nome do professor e o horário ficam salvos na nuvem da TV sem alterar a planilha do Ensalamento.
+          * Para colocar mais de um professor na mesma turma, separe com <strong class="text-stone-700">/</strong> (ex: <code class="bg-stone-200/70 px-1 rounded">Maria Carolina / Luiza</code>).
         </p>
 
         <div class="flex items-center justify-between pt-3 border-t border-[#e5dec9]">
           <button type="button" id="btnDeleteRow" onclick="deleteCurrentRow()" class="hidden px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold">
-            Excluir Turma Extra
+            Excluir Linha
           </button>
           <div class="flex gap-2 ml-auto">
             <button type="button" onclick="closeRowEditModal()" class="px-4 py-2 rounded-xl bg-[#ebe5d8] text-stone-700 font-bold">Cancelar</button>
@@ -322,7 +440,62 @@
 
   <script>
     // =========================================================================
-    // CATÁLOGO DE CURSOS E ÍCONES
+    // 1. BANCO COMPLETO DE PROFESSORES EXTRAÍDOS DE TODOS OS SLIDES ENVIADOS
+    // =========================================================================
+    const INITIAL_PROFESSORS_DB = [
+      "Adriana Salomão", "Adriana Serqueira", "Alessandra", "Alexandre", "Alexandre Araújo",
+      "Alfredo", "Altineia", "Ana Cristina", "Anderson", "André", "Andréa", "Andreza",
+      "Antonio", "Arilda", "Beatriz", "Bruna", "Bruno", "Bruno Albarelli", "Bruno Goulart",
+      "Bruno Marins", "Camille", "Camille Mattos", "Carlos Alberto", "Carlos Eduardo",
+      "Carolina", "Cássia", "Christiane", "Christiane Martins", "Claudio Barral", "Cosme",
+      "Cristiane", "Danilo", "Delguel", "Denila", "Denise", "Diana", "Douglas", "Emanuelle",
+      "Eraldo", "Fabiana", "Felipe", "Fernanda", "Gabriel", "Gabriela", "Gabriela Vicente",
+      "Gedison", "Gianni", "Gustavo", "Hildegard", "Iara", "Irineu", "Isabel", "João Dario",
+      "Jorge", "Juliana", "Juliana Ferreira", "Juliana Machado", "Juliana Marques", "Kauane",
+      "Kissel", "Kissyla", "Laís", "Leonardo", "Lilian", "Luana", "Luana Duarte", "Luana Oeby",
+      "Luciana", "Luís Filipe", "Luiza", "Luiza Fraga", "Luiza Helena Fraga", "Marcelo",
+      "Márcia", "Marcia Sena", "Marcio", "Marcio Alexandre", "Marcos", "Marcos Felipe",
+      "Marcos Mota", "Marcus Lanza", "Marcus Vinícius", "Maria Carolina", "Maria Clara",
+      "Marianna", "Max", "Michele", "Nilcéia", "Patrícia Esteves", "Patricia Vale", "Paulo",
+      "Paulo César", "Priscila", "Pryscila", "Queren", "Rafael", "Rafael Mocarzel",
+      "Rafael Mynssen", "Rafael Valle", "Raquel", "Reinaldo", "Renata", "Renata Bastos",
+      "Rodrigo", "Ronaldo Cardim", "Sabrina", "Samara", "Sandra", "Sandra Godinho", "Sávio",
+      "Sérgio", "Sirlei", "Suelen", "Suely", "Tatiane", "Thamara", "Tiago", "Tiago Ruiz",
+      "Valmir", "Vanessa", "Vanessa Costa", "Vanessa Rezende", "Vanessa Rodrigues",
+      "Vânia Quintão", "Victor", "Victor Hugo", "Vitor", "Wellington", "William", "Yasmim"
+    ];
+
+    // Disciplinas Padrão de Medicina (extraídas do slide de Medicina)
+    const INITIAL_MEDICINA_SUBJECTS = [
+      "P.INTEGRADOR I", "PNEUMO", "CARDIO", "P.INOVADOR I", "IMUNO",
+      "CIRURGIA", "SF I", "PAPM I", "BFF II", "MICRO"
+    ];
+
+    // Template de Auto-Preenchimento de Medicina por Sala (igual ao slide Quarta Manhã/Tarde)
+    const MEDICINA_DEFAULT_TEMPLATE_ROWS = [
+      { period: "P.INTEGRADOR I", room: "SALA 107", prof: "Manhã", time: "" },
+      { period: "P.INOVADOR I",   room: "SALA 107", prof: "Tarde", time: "" },
+      { period: "CIRURGIA",       room: "SALA 108", prof: "Manhã / Tarde", time: "" },
+      { period: "PNEUMO",         room: "SALA 502", prof: "Manhã / Tarde", time: "" },
+      { period: "CARDIO",         room: "SALA 510", prof: "Manhã / Tarde", time: "" },
+      { period: "BFF II",         room: "SALA 511", prof: "Manhã / Tarde", time: "" },
+      { period: "MICRO",          room: "SALA 513", prof: "Manhã", time: "" },
+      { period: "IMUNO",          room: "SALA 513", prof: "Tarde", time: "" },
+      { period: "PAPM I",         room: "SALA 514", prof: "Manhã / Tarde", time: "" },
+      { period: "PAPM I",         room: "SALA 515", prof: "Manhã / Tarde", time: "" },
+      { period: "SF I",           room: "SALA 516", prof: "Manhã", time: "" }
+    ];
+
+    // Catálogo global sincronizado com o Firebase
+    var tvCatalogsData = {
+      professors: [...INITIAL_PROFESSORS_DB].sort((a, b) => a.localeCompare(b, 'pt-BR')),
+      medicinaSubjects: [...INITIAL_MEDICINA_SUBJECTS]
+    };
+
+    var medicinaShiftFilter = 'ALL'; // 'ALL', 'Manhã', 'Tarde'
+
+    // =========================================================================
+    // 2. CATÁLOGO DE CURSOS E ÍCONES
     // =========================================================================
     const COURSE_STANDARD_NAMES = [
       { regex: /administra[cç][aã]o|\badm\b/gi, label: 'Adm', fullTitle: 'Administração', icon: 'briefcase' },
@@ -368,17 +541,16 @@
       SAQUAREMA: { NOITE: {}, MANHA: {} }
     };
 
-    // Complementos salvos na TV (Professores, Horários de início e Turmas Extras) por Unidade_Turno
     var tvOverridesData = {
-      MARICA_NOITE: { items: {}, extras: [] },
-      MARICA_MANHA: { items: {}, extras: [] },
-      SAQUAREMA_NOITE: { items: {}, extras: [] },
-      SAQUAREMA_MANHA: { items: {}, extras: [] }
+      MARICA_NOITE: { items: {}, extras: [], hiddenKeys: [] },
+      MARICA_MANHA: { items: {}, extras: [], hiddenKeys: [] },
+      SAQUAREMA_NOITE: { items: {}, extras: [], hiddenKeys: [] },
+      SAQUAREMA_MANHA: { items: {}, extras: [], hiddenKeys: [] }
     };
 
-    var activeUnit = 'MARICA';     // 'MARICA' ou 'SAQUAREMA'
-    var activeShift = 'NOITE';     // 'NOITE' ou 'MANHA'
-    var activeCampus = 'CAMPUS_2'; // 'CAMPUS_1' ou 'CAMPUS_2' (Campus 3 em Saquarema)
+    var activeUnit = 'MARICA';
+    var activeShift = 'NOITE';
+    var activeCampus = 'CAMPUS_2';
     var activeDay = 'SEXTA';
     var isAdmin = false;
 
@@ -390,16 +562,46 @@
     let elapsedTicks = 0;
     let hideBarTimeout = null;
     let editingItem = null;
+    let editingProfessorIndex = null;
 
     window.addEventListener('DOMContentLoaded', () => {
+      loadLocalCatalogsBackup();
       detectCurrentDay();
       updateCampusSelectorOptions();
       refreshTvBoard();
       startAutoCarousel();
       setupAutoHideBar();
       setupKeyboardNavigation();
+      setupOutsideClickForAutocomplete();
       safeCreateIcons();
     });
+
+    function loadLocalCatalogsBackup() {
+      try {
+        const raw = localStorage.getItem('tv_catalogs_backup_v1');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.professors) && parsed.professors.length > 0) {
+            tvCatalogsData.professors = sortUniqueNames([...INITIAL_PROFESSORS_DB, ...parsed.professors]);
+          }
+          if (Array.isArray(parsed.medicinaSubjects) && parsed.medicinaSubjects.length > 0) {
+            tvCatalogsData.medicinaSubjects = [...new Set([...INITIAL_MEDICINA_SUBJECTS, ...parsed.medicinaSubjects])];
+          }
+        }
+      } catch (e) {}
+    }
+
+    function sortUniqueNames(arr) {
+      const map = new Map();
+      arr.forEach(n => {
+        const clean = (n || '').trim();
+        if (clean && !['manhã', 'tarde', 'manhã / tarde'].includes(clean.toLowerCase())) {
+          const key = clean.toLowerCase();
+          if (!map.has(key)) map.set(key, clean);
+        }
+      });
+      return [...map.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    }
 
     function detectCurrentDay() {
       const dayMap = { 1: 'SEGUNDA', 2: 'TERÇA', 3: 'QUARTA', 4: 'QUINTA', 5: 'SEXTA', 6: 'SÁBADO' };
@@ -416,15 +618,16 @@
     function getActiveTvOverrides() {
       const key = getDocKey();
       if (!tvOverridesData[key]) {
-        tvOverridesData[key] = { items: {}, extras: [] };
+        tvOverridesData[key] = { items: {}, extras: [], hiddenKeys: [] };
       }
       if (!tvOverridesData[key].items) tvOverridesData[key].items = {};
       if (!Array.isArray(tvOverridesData[key].extras)) tvOverridesData[key].extras = [];
+      if (!Array.isArray(tvOverridesData[key].hiddenKeys)) tvOverridesData[key].hiddenKeys = [];
       return tvOverridesData[key];
     }
 
     // =========================================================================
-    // SELETORES DE UNIDADE, TURNO, CAMPUS E DIA
+    // 3. SELETORES DE UNIDADE, TURNO, CAMPUS E DIA
     // =========================================================================
     function updateCampusSelectorOptions() {
       const select = document.getElementById('ctrlCampus');
@@ -481,7 +684,7 @@
         ? 'UNIVASSOURAS CAMPUS SAQUAREMA'
         : 'UNIVASSOURAS CAMPUS MARICÁ E FACMAR';
       const campusLabel = formatCampusLabel(activeCampus).toUpperCase();
-      const shiftLabel = activeShift === 'MANHA' ? 'MANHÃ / INTEGRAL' : 'NOTURNO';
+      const shiftLabel = activeShift === 'MANHA' ? 'MATUTINO / INTEGRAL' : 'NOTURNO';
 
       document.getElementById('headerCampusTitle').innerHTML =
         `${unitLabel} &nbsp;·&nbsp; ${campusLabel} &nbsp;·&nbsp; ${shiftLabel}`;
@@ -489,7 +692,6 @@
       const dayName = DAY_DISPLAY_NAMES[activeDay] || 'Sexta-feira';
       document.getElementById('headerDayTitle').innerText = `${dayName} · Salas`;
 
-      // Atualiza Rodapé de Localização conforme Unidade e Campus
       const footerEl = document.getElementById('footerLocationContainer');
       let items = [];
 
@@ -539,7 +741,7 @@
     }
 
     // =========================================================================
-    // EXTRAÇÃO DAS TURMAS DO ENSALAMENTO + MESCLAGEM COM PROFESSORES DA TV
+    // 4. EXTRAÇÃO DAS TURMAS DO ENSALAMENTO + SUPORTE ESPECIAL À MEDICINA
     // =========================================================================
     function formatRoomDisplay(sala, subtitulo) {
       const clean = (sala || '').trim();
@@ -592,7 +794,7 @@
       } else if (periodNum !== 99) {
         periodLabel = remainder ? `${periodNum}° Período ${remainder.toUpperCase()}` : `${periodNum}° Período`;
       } else {
-        periodLabel = remainder || cleaned;
+        periodLabel = remainder || (courseFullTitle === 'Medicina' ? 'Disciplina' : cleaned);
       }
 
       return { courseFullTitle, periodLabel };
@@ -613,6 +815,7 @@
       const shiftData = unitData[activeShift] || {};
       const blocks = Array.isArray(shiftData[activeCampus]) ? shiftData[activeCampus] : [];
       const tvState = getActiveTvOverrides();
+      const hiddenSet = new Set(tvState.hiddenKeys || []);
 
       const list = [];
 
@@ -631,25 +834,37 @@
             if (!parsed) return;
 
             const exactKey = makeOverrideKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel, roomDisplay);
-            const fallbackKey = makeCoursePeriodFallbackKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel);
+            if (hiddenSet.has(exactKey)) return;
 
-            const savedOverride = tvState.items[exactKey] || tvState.items[fallbackKey] || {};
+            const fallbackKey = makeCoursePeriodFallbackKey(activeCampus, activeDay, parsed.courseFullTitle, parsed.periodLabel);
+            const savedOverride = tvState.items[exactKey] || (parsed.courseFullTitle !== 'Medicina' ? tvState.items[fallbackKey] : null) || {};
+
+            // Se for Medicina e ainda não tiver disciplina configurada, tenta sugerir a matéria padrão daquela sala
+            let defaultMedSubject = parsed.periodLabel;
+            let defaultMedShift = '';
+            if (parsed.courseFullTitle === 'Medicina' && (!savedOverride.period || savedOverride.period === 'Disciplina')) {
+              const roomMatch = MEDICINA_DEFAULT_TEMPLATE_ROWS.find(m => m.room === roomDisplay);
+              if (roomMatch) {
+                defaultMedSubject = roomMatch.period;
+                defaultMedShift = roomMatch.prof;
+              }
+            }
 
             list.push({
               id: exactKey,
               fallbackKey: fallbackKey,
               isExtra: false,
               course: savedOverride.course || parsed.courseFullTitle,
-              period: savedOverride.period || parsed.periodLabel,
+              period: savedOverride.period || defaultMedSubject,
               room: savedOverride.room || roomDisplay,
-              prof: savedOverride.prof || '',
+              prof: savedOverride.prof !== undefined ? savedOverride.prof : defaultMedShift,
               time: savedOverride.time || ''
             });
           });
         });
       });
 
-      // Adiciona também turmas extras criadas manualmente na TV para este Campus e Dia
+      // Adiciona turmas extras criadas na TV para este Campus e Dia
       tvState.extras.forEach(extra => {
         if (extra.campus === activeCampus && extra.day === activeDay) {
           list.push({
@@ -667,8 +882,49 @@
       currentAllocations = list;
     }
 
+    // Auto-preenche o quadro completo de Medicina com as matérias e turnos do slide
+    function autoFillMedicinaSubjects() {
+      if (!isAdmin) return;
+      const tvState = getActiveTvOverrides();
+
+      // Oculta linhas genéricas de Medicina vindas do ensalamento neste dia/campus para não duplicar
+      currentAllocations.forEach(item => {
+        if (item.course === 'Medicina' && !item.isExtra) {
+          if (!tvState.hiddenKeys.includes(item.id)) {
+            tvState.hiddenKeys.push(item.id);
+          }
+        }
+      });
+
+      // Remove extras antigos de Medicina neste dia/campus e insere os 11 padrões
+      tvState.extras = tvState.extras.filter(x => !(x.campus === activeCampus && x.day === activeDay && x.course === 'Medicina'));
+
+      MEDICINA_DEFAULT_TEMPLATE_ROWS.forEach((tpl, idx) => {
+        tvState.extras.push({
+          id: `med_tpl_${Date.now()}_${idx}`,
+          campus: activeCampus,
+          day: activeDay,
+          course: 'Medicina',
+          period: tpl.period,
+          room: tpl.room,
+          prof: tpl.prof,
+          time: tpl.time
+        });
+      });
+
+      saveTvDataToStorage();
+      refreshTvBoard();
+      showToast('Matérias e turnos de Medicina auto-preenchidos!');
+    }
+
+    function setMedicinaCardFilter(filterVal) {
+      medicinaShiftFilter = filterVal;
+      buildAlphabeticalSlides();
+      renderSlide();
+    }
+
     // =========================================================================
-    // MOTOR ALFABÉTICO E DISTRIBUIÇÃO NAS 3 COLUNAS
+    // 5. MOTOR ALFABÉTICO E DISTRIBUIÇÃO NAS 3 COLUNAS
     // =========================================================================
     function extractPeriodNum(periodStr) {
       if (/est[aá]gio/i.test(periodStr)) return 99;
@@ -680,6 +936,11 @@
       const courseMap = {};
       currentAllocations.forEach(item => {
         const cName = item.course.trim();
+        if (cName === 'Medicina' && medicinaShiftFilter !== 'ALL') {
+          const pShift = (item.prof || '').toLowerCase();
+          if (medicinaShiftFilter === 'Manhã' && !pShift.includes('manhã')) return;
+          if (medicinaShiftFilter === 'Tarde' && !pShift.includes('tarde')) return;
+        }
         if (!courseMap[cName]) courseMap[cName] = [];
         courseMap[cName].push(item);
       });
@@ -688,16 +949,24 @@
 
       const cardsList = sortedCourseNames.map(cName => {
         const rows = courseMap[cName].sort((a, b) => {
+          if (cName === 'Medicina') {
+            return a.room.localeCompare(b.room, 'pt-BR', { numeric: true });
+          }
           const nA = extractPeriodNum(a.period);
           const nB = extractPeriodNum(b.period);
           if (nA !== nB) return nA - nB;
           return a.period.localeCompare(b.period, 'pt-BR');
         });
 
+        const rowsWeight = rows.reduce((sum, r) => {
+          const profLen = (r.prof || '').length;
+          return sum + (profLen > 26 ? 1.35 : 1);
+        }, 0);
+
         return {
           course: cName,
           rows: rows,
-          weight: rows.length + 1.25
+          weight: rowsWeight + 1.25
         };
       });
 
@@ -741,7 +1010,7 @@
     }
 
     // =========================================================================
-    // RENDERIZAÇÃO EDITORIAL REQUINTADA
+    // 6. RENDERIZAÇÃO EDITORIAL REQUINTADA (COM DESTAQUE PARA MEDICINA)
     // =========================================================================
     function renderSlide() {
       const container = document.getElementById('slideColumnsContainer');
@@ -779,9 +1048,19 @@
             <h2 class="font-editorial text-2xl xl:text-3xl font-medium text-[#1e1b18] mb-1">
               Nenhuma Turma Alocada para ${dayLabel}
             </h2>
-            <p class="text-xs sm:text-sm text-[#78716c] max-w-md">
+            <p class="text-xs sm:text-sm text-[#78716c] max-w-md mb-4">
               As turmas cadastradas no mapa de Ensalamento deste campus e turno aparecerão aqui automaticamente em ordem alfabética.
             </p>
+            ${isAdmin ? `
+              <div class="flex flex-wrap items-center justify-center gap-2">
+                <button onclick="openNewAllocationModal()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7c1d24] text-white text-xs font-black shadow-sm">
+                  <i data-lucide="plus" class="w-4 h-4 text-amber-300"></i> Adicionar Turma
+                </button>
+                <button onclick="autoFillMedicinaSubjects()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#ebe5d8] hover:bg-[#e2dacb] text-[#7c1d24] text-xs font-black border border-[#d5cab4]">
+                  <i data-lucide="stethoscope" class="w-4 h-4"></i> Auto-preencher Medicina
+                </button>
+              </div>
+            ` : ''}
           </div>
         `;
         safeCreateIcons();
@@ -793,63 +1072,88 @@
           ${colCards.map(card => {
             const iconName = getCourseIcon(card.course);
             const safeCourse = card.course.replace(/'/g, "\\'");
+            const isMedicina = card.course.toLowerCase() === 'medicina';
+
             return `
               <div class="bg-[#fbf9f5] rounded-2xl shadow-2xs border border-[#ded6c6] overflow-hidden">
-                <!-- Cabeçalho do Curso com Tipografia Serifa Requintada e Bordô Clássico -->
-                <div class="px-4 py-2 bg-gradient-to-r from-[#7c1d24] to-[#5e1319] text-white flex items-center justify-between border-b border-[#b4833e]/30">
-                  <div class="flex items-center gap-2.5">
+                <!-- Cabeçalho do Curso -->
+                <div class="px-4 py-2 bg-gradient-to-r from-[#7c1d24] to-[#5e1319] text-white flex items-center justify-between gap-2 border-b border-[#b4833e]/30">
+                  <div class="flex items-center gap-2.5 min-w-0">
                     <div class="w-7 h-7 rounded-xl bg-white/10 border border-[#e6c47a]/35 flex items-center justify-center shrink-0">
                       <i data-lucide="${iconName}" class="w-4 h-4 text-[#e6c47a]"></i>
                     </div>
-                    <h3 class="font-editorial text-xl xl:text-[22px] 2xl:text-2xl font-semibold tracking-tight text-[#fbf9f5] leading-none">
+                    <h3 class="font-editorial text-xl xl:text-[22px] 2xl:text-2xl font-semibold tracking-tight text-[#fbf9f5] leading-none truncate">
                       ${card.course}
                     </h3>
                   </div>
 
-                  ${isAdmin ? `
-                    <button onclick="openNewAllocationModal('${safeCourse}')" title="Adicionar turma extra em ${card.course}"
-                      class="w-6 h-6 rounded-lg bg-white/10 hover:bg-white/25 text-[#e6c47a] flex items-center justify-center transition">
-                      <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                    </button>
-                  ` : ''}
+                  <div class="flex items-center gap-1 shrink-0">
+                    ${isMedicina ? `
+                      <!-- Botões de Filtro Rápido Manhã / Tarde na Medicina -->
+                      <div class="flex items-center bg-black/25 p-0.5 rounded-lg border border-white/10 text-[10px] font-black">
+                        <button onclick="setMedicinaCardFilter('ALL')" class="px-2 py-0.5 rounded-md transition ${medicinaShiftFilter === 'ALL' ? 'bg-[#e6c47a] text-stone-950' : 'text-amber-100/80 hover:text-white'}">Todos</button>
+                        <button onclick="setMedicinaCardFilter('Manhã')" class="px-2 py-0.5 rounded-md transition ${medicinaShiftFilter === 'Manhã' ? 'bg-[#e6c47a] text-stone-950' : 'text-amber-100/80 hover:text-white'}">Manhã</button>
+                        <button onclick="setMedicinaCardFilter('Tarde')" class="px-2 py-0.5 rounded-md transition ${medicinaShiftFilter === 'Tarde' ? 'bg-[#e6c47a] text-stone-950' : 'text-amber-100/80 hover:text-white'}">Tarde</button>
+                      </div>
+                    ` : ''}
+
+                    ${isAdmin && isMedicina ? `
+                      <button onclick="autoFillMedicinaSubjects()" title="Auto-preencher com as matérias padrão de Medicina"
+                        class="px-2 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-[#e6c47a] text-[10px] font-black flex items-center gap-1 transition">
+                        <i data-lucide="sparkles" class="w-3 h-3"></i>
+                        <span class="hidden xl:inline">Matérias</span>
+                      </button>
+                    ` : ''}
+
+                    ${isAdmin ? `
+                      <button onclick="openNewAllocationModal('${safeCourse}')" title="Adicionar em ${card.course}"
+                        class="w-6 h-6 rounded-lg bg-white/10 hover:bg-white/25 text-[#e6c47a] flex items-center justify-center transition">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                      </button>
+                    ` : ''}
+                  </div>
                 </div>
 
-                <!-- Linhas Preenchidas com Tons Creme/Areia Sofisticados -->
+                <!-- Linhas Autoajustáveis -->
                 <div class="p-1.5 space-y-1">
-                  ${card.rows.map((r) => `
-                    <div onclick="handleRowClick('${r.id}')"
-                         class="group flex items-center gap-1.5 ${isAdmin ? 'cursor-pointer' : 'cursor-default'} transition-all"
-                         title="${isAdmin ? 'Clique para definir Professor e Horário de Início' : ''}">
-                      
-                      <!-- Bloco 1: Período -->
-                      <div class="w-[142px] xl:w-[158px] 2xl:w-[172px] shrink-0 bg-[#ede8dc] ${isAdmin ? 'group-hover:bg-[#e5dec9]' : ''} px-3 py-1.5 rounded-xl border border-[#ded6c6] transition-colors">
-                        <span class="text-sm xl:text-base 2xl:text-[17px] font-bold text-[#1e1b18] tracking-tight block truncate leading-tight">
-                          ${r.period}
-                        </span>
-                      </div>
-
-                      <!-- Bloco 2: Professor -->
-                      <div class="flex-1 min-w-0 bg-[#f4f1ea] ${isAdmin ? 'group-hover:bg-[#ebe5d8]' : ''} px-3 py-1.5 rounded-xl border border-[#e5dec9] flex items-center gap-2 transition-colors">
-                        <i data-lucide="user" class="w-4 h-4 text-[#7c1d24]/80 shrink-0"></i>
-                        <span class="text-sm xl:text-base 2xl:text-[17px] font-bold ${r.prof ? 'text-[#292524]' : 'text-stone-400 italic'} block truncate leading-tight">
-                          ${r.prof || (isAdmin ? 'Adicionar professor...' : '—')}
-                        </span>
-                      </div>
-
-                      <!-- Bloco 3: Sala / Lab. Informática + Horário em Destaque -->
-                      <div class="shrink-0 flex items-center gap-1.5">
-                        ${r.time ? `
-                          <span class="px-2.5 py-1.5 rounded-xl bg-[#f3e6c8] text-[#6b4c1b] border border-[#dfc896] text-xs xl:text-sm font-extrabold tracking-tight whitespace-nowrap leading-tight">
-                            ${r.time}
+                  ${card.rows.map((r) => {
+                    const isShiftLabel = /^(manh[aã]|tarde|manh[aã]\s*\/\s*tarde)$/i.test((r.prof || '').trim());
+                    const middleIcon = (isMedicina && isShiftLabel) ? 'clock' : 'user';
+                    return `
+                      <div onclick="handleRowClick('${r.id}')"
+                           class="group flex items-stretch gap-1.5 ${isAdmin ? 'cursor-pointer' : 'cursor-default'} transition-all"
+                           title="${isAdmin ? 'Clique para editar' : ''}">
+                        
+                        <!-- Bloco 1: Período ou Disciplina de Medicina (Autoajustável) -->
+                        <div class="w-fit max-w-[42%] shrink-0 bg-[#ede8dc] ${isAdmin ? 'group-hover:bg-[#e5dec9]' : ''} px-3 py-1.5 rounded-xl border border-[#ded6c6] flex items-center transition-colors">
+                          <span class="text-sm xl:text-base 2xl:text-[17px] font-bold text-[#1e1b18] tracking-tight whitespace-normal break-words leading-snug">
+                            ${r.period}
                           </span>
-                        ` : ''}
-                        <span class="px-3.5 py-1.5 rounded-xl bg-[#7c1d24]/10 text-[#7c1d24] border border-[#7c1d24]/25 text-sm xl:text-base 2xl:text-[17px] font-extrabold tracking-tight whitespace-nowrap text-center leading-tight">
-                          ${r.room}
-                        </span>
-                      </div>
+                        </div>
 
-                    </div>
-                  `).join('')}
+                        <!-- Bloco 2: Professor ou Turno (Manhã / Tarde) -->
+                        <div class="flex-1 min-w-0 bg-[#f4f1ea] ${isAdmin ? 'group-hover:bg-[#ebe5d8]' : ''} px-3 py-1.5 rounded-xl border border-[#e5dec9] flex items-center gap-2 transition-colors">
+                          <i data-lucide="${middleIcon}" class="w-4 h-4 text-[#7c1d24]/80 shrink-0"></i>
+                          <span class="text-sm xl:text-base 2xl:text-[16.5px] font-bold ${r.prof ? 'text-[#292524]' : 'text-stone-400 italic'} whitespace-normal break-words leading-snug">
+                            ${r.prof || (isAdmin ? (isMedicina ? 'Definir Manhã / Tarde...' : 'Adicionar professor...') : '—')}
+                          </span>
+                        </div>
+
+                        <!-- Bloco 3: Sala / Lab. Informática + Horário -->
+                        <div class="shrink-0 flex items-stretch gap-1.5">
+                          ${r.time ? `
+                            <span class="px-2.5 py-1.5 rounded-xl bg-[#f3e6c8] text-[#6b4c1b] border border-[#dfc896] text-xs xl:text-sm font-extrabold tracking-tight whitespace-nowrap flex items-center justify-center leading-tight">
+                              ${r.time}
+                            </span>
+                          ` : ''}
+                          <span class="px-3.5 py-1.5 rounded-xl bg-[#7c1d24]/10 text-[#7c1d24] border border-[#7c1d24]/25 text-sm xl:text-base 2xl:text-[17px] font-extrabold tracking-tight whitespace-nowrap flex items-center justify-center text-center leading-tight">
+                            ${r.room}
+                          </span>
+                        </div>
+
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
               </div>
             `;
@@ -861,11 +1165,311 @@
     }
 
     // =========================================================================
-    // EDIÇÃO DE PROFESSOR / HORÁRIO DE INÍCIO (SEM MEXER NO ENSALAMENTO)
+    // 7. GERENCIADOR DE PROFESSORES (ADICIONAR, EDITAR E EXCLUIR) + AUTOCOMPLETE
+    // =========================================================================
+    function normalizeStr(s) {
+      return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    function openProfessorsModal() {
+      if (!isAdmin) return;
+      editingProfessorIndex = null;
+      document.getElementById('newProfessorInput').value = '';
+      document.getElementById('searchProfessorModalInput').value = '';
+      renderProfessorsModalList();
+      document.getElementById('professorsModal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeProfessorsModal() {
+      document.getElementById('professorsModal').classList.add('hidden');
+      editingProfessorIndex = null;
+    }
+
+    function handleAddProfessor(e) {
+      e.preventDefault();
+      const input = document.getElementById('newProfessorInput');
+      const name = input.value.trim();
+      if (!name) return;
+
+      const exists = tvCatalogsData.professors.some(p => normalizeStr(p) === normalizeStr(name));
+      if (exists) {
+        showToast('Este professor já está cadastrado na lista.');
+        return;
+      }
+
+      tvCatalogsData.professors = sortUniqueNames([...tvCatalogsData.professors, name]);
+      input.value = '';
+      saveCatalogsToStorage();
+      renderProfessorsModalList();
+      showToast(`Professor(a) "${name}" adicionado(a)!`);
+    }
+
+    function renderProfessorsModalList() {
+      const listEl = document.getElementById('professorsModalList');
+      const query = normalizeStr(document.getElementById('searchProfessorModalInput').value.trim());
+
+      const allProfs = tvCatalogsData.professors;
+      document.getElementById('professorsCountLabel').innerText = `${allProfs.length} professores cadastrados`;
+
+      const filtered = allProfs
+        .map((name, idx) => ({ name, idx }))
+        .filter(item => !query || normalizeStr(item.name).includes(query));
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `<div class="p-6 text-center text-stone-400 text-xs">Nenhum professor encontrado com esse filtro.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(({ name, idx }) => {
+        if (editingProfessorIndex === idx) {
+          return `
+            <div class="flex items-center gap-2 p-2 rounded-xl bg-amber-50 border border-amber-300 text-xs">
+              <input type="text" id="inlineProfEditInput_${idx}" value="${name.replace(/"/g, '&quot;')}"
+                class="flex-1 px-2.5 py-1.5 bg-white border border-[#7c1d24] rounded-lg font-bold text-stone-900 focus:outline-none">
+              <button type="button" onclick="saveInlineProfessorEdit(${idx})" class="px-3 py-1.5 rounded-lg bg-[#7c1d24] text-white font-black">
+                Salvar
+              </button>
+              <button type="button" onclick="cancelInlineProfessorEdit()" class="px-2.5 py-1.5 rounded-lg bg-stone-200 text-stone-700 font-bold">
+                Cancelar
+              </button>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="flex items-center justify-between px-3 py-2 rounded-xl bg-white border border-[#e5dec9] hover:border-[#c7bba6] text-xs transition">
+            <div class="flex items-center gap-2 font-bold text-stone-800">
+              <i data-lucide="user" class="w-3.5 h-3.5 text-[#7c1d24]"></i>
+              <span>${name}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="startInlineProfessorEdit(${idx})" title="Editar nome do professor"
+                class="p-1.5 rounded-lg text-stone-500 hover:text-[#7c1d24] hover:bg-stone-100 transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              </button>
+              <button type="button" onclick="deleteProfessorFromCatalog(${idx})" title="Remover da lista"
+                class="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+      if (editingProfessorIndex !== null) {
+        const inp = document.getElementById(`inlineProfEditInput_${editingProfessorIndex}`);
+        if (inp) {
+          inp.focus();
+          inp.select();
+        }
+      }
+    }
+
+    function startInlineProfessorEdit(idx) {
+      editingProfessorIndex = idx;
+      renderProfessorsModalList();
+    }
+
+    function cancelInlineProfessorEdit() {
+      editingProfessorIndex = null;
+      renderProfessorsModalList();
+    }
+
+    function saveInlineProfessorEdit(idx) {
+      const inp = document.getElementById(`inlineProfEditInput_${idx}`);
+      if (!inp) return;
+      const newName = inp.value.trim();
+      const oldName = tvCatalogsData.professors[idx];
+      if (!newName) return;
+
+      tvCatalogsData.professors[idx] = newName;
+      tvCatalogsData.professors = sortUniqueNames(tvCatalogsData.professors);
+      editingProfessorIndex = null;
+
+      // Atualiza também nas turmas salvas caso o professor estivesse alocado com o nome antigo
+      if (oldName && oldName !== newName) {
+        const replaceProfInString = (str) => {
+          if (!str) return str;
+          return str.split('/').map(part => part.trim() === oldName ? newName : part.trim()).join(' / ');
+        };
+
+        Object.keys(tvOverridesData).forEach(docKey => {
+          const doc = tvOverridesData[docKey];
+          if (!doc) return;
+          Object.values(doc.items || {}).forEach(it => {
+            if (it && it.prof) it.prof = replaceProfInString(it.prof);
+          });
+          (doc.extras || []).forEach(ex => {
+            if (ex && ex.prof) ex.prof = replaceProfInString(ex.prof);
+          });
+        });
+        saveTvDataToStorage();
+      }
+
+      saveCatalogsToStorage();
+      renderProfessorsModalList();
+      refreshTvBoard();
+      showToast(`Nome atualizado para "${newName}"!`);
+    }
+
+    function deleteProfessorFromCatalog(idx) {
+      const removed = tvCatalogsData.professors[idx];
+      tvCatalogsData.professors.splice(idx, 1);
+      saveCatalogsToStorage();
+      renderProfessorsModalList();
+      showToast(`"${removed}" removido da lista de sugestões.`);
+    }
+
+    // Autocomplete ao digitar no campo de Professor (suporta múltiplos professores separados por "/")
+    function handleProfAutocompleteInput() {
+      const input = document.getElementById('inputEditProf');
+      const dropdown = document.getElementById('profSuggestionsDropdown');
+      const rawVal = input.value;
+
+      // Pega apenas o trecho após a última barra "/" para sugerir o próximo professor
+      const parts = rawVal.split('/');
+      const currentSegment = parts[parts.length - 1].trim();
+      const query = normalizeStr(currentSegment);
+
+      if (!query) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      const matches = tvCatalogsData.professors.filter(p => normalizeStr(p).includes(query)).slice(0, 8);
+      if (matches.length === 0 || (matches.length === 1 && normalizeStr(matches[0]) === query)) {
+        dropdown.classList.add('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = matches.map(profName => {
+        const safeName = profName.replace(/'/g, "\\'");
+        return `
+          <button type="button" onclick="selectProfSuggestion('${safeName}')"
+            class="w-full px-3.5 py-2 text-left text-xs font-bold text-stone-800 hover:bg-[#f3efe6] hover:text-[#7c1d24] flex items-center justify-between transition cursor-pointer">
+            <span>${profName}</span>
+            <span class="text-[10px] text-stone-400 font-semibold">Selecionar</span>
+          </button>
+        `;
+      }).join('');
+
+      dropdown.classList.remove('hidden');
+    }
+
+    function selectProfSuggestion(selectedName) {
+      const input = document.getElementById('inputEditProf');
+      const parts = input.value.split('/');
+      parts[parts.length - 1] = selectedName;
+      input.value = parts.map(p => p.trim()).filter(Boolean).join(' / ');
+      document.getElementById('profSuggestionsDropdown').classList.add('hidden');
+      input.focus();
+    }
+
+    function setupOutsideClickForAutocomplete() {
+      document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('profSuggestionsDropdown');
+        const input = document.getElementById('inputEditProf');
+        if (dropdown && !dropdown.contains(e.target) && e.target !== input) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+
+    function registerNewProfessorsFromInput(profString) {
+      if (!profString) return;
+      const parts = profString.split('/').map(s => s.trim()).filter(Boolean);
+      let added = false;
+
+      parts.forEach(name => {
+        if (['manhã', 'tarde', 'manhã / tarde'].includes(name.toLowerCase())) return;
+        const exists = tvCatalogsData.professors.some(p => normalizeStr(p) === normalizeStr(name));
+        if (!exists && name.length >= 2) {
+          tvCatalogsData.professors.push(name);
+          added = true;
+        }
+      });
+
+      if (added) {
+        tvCatalogsData.professors = sortUniqueNames(tvCatalogsData.professors);
+        saveCatalogsToStorage();
+      }
+    }
+
+    // =========================================================================
+    // 8. PAINEL ESPECIAL DE MEDICINA NO MODAL (MATÉRIAS + MANHÃ / TARDE)
+    // =========================================================================
+    function handleModalCourseChange() {
+      const courseVal = (document.getElementById('inputEditCourse').value || '').trim().toLowerCase();
+      const medPanel = document.getElementById('medicinaSpecialPanel');
+      const lblPeriod = document.getElementById('lblEditPeriodOrSubject');
+      const inpPeriod = document.getElementById('inputEditPeriod');
+      const lblProf = document.getElementById('lblEditProfOrShift');
+
+      if (courseVal === 'medicina') {
+        medPanel.classList.remove('hidden');
+        lblPeriod.innerText = 'Disciplina / Matéria (Medicina)';
+        inpPeriod.placeholder = 'Ex: P.INTEGRADOR I, PNEUMO, CARDIO...';
+        lblProf.innerText = 'Turno (Manhã / Tarde) ou Professor';
+        renderMedicinaSubjectsChips();
+      } else {
+        medPanel.classList.add('hidden');
+        lblPeriod.innerText = 'Período / Turma';
+        inpPeriod.placeholder = 'Ex: 3° Período A';
+        lblProf.innerText = 'Nome do(a) Professor(a)';
+      }
+      safeCreateIcons();
+    }
+
+    function renderMedicinaSubjectsChips() {
+      const container = document.getElementById('medicinaSubjectsChips');
+      const currentVal = (document.getElementById('inputEditPeriod').value || '').trim();
+
+      container.innerHTML = tvCatalogsData.medicinaSubjects.map(subj => {
+        const isSelected = currentVal.toUpperCase() === subj.toUpperCase();
+        const safeSubj = subj.replace(/'/g, "\\'");
+        return `
+          <button type="button" onclick="selectMedicinaSubjectChip('${safeSubj}')"
+            class="px-2.5 py-1 rounded-lg font-black text-[11px] border transition cursor-pointer ${
+              isSelected
+                ? 'bg-[#7c1d24] text-white border-[#7c1d24]'
+                : 'bg-white text-stone-800 border-[#d6cebe] hover:border-[#7c1d24]'
+            }">
+            ${subj}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectMedicinaSubjectChip(subj) {
+      document.getElementById('inputEditPeriod').value = subj;
+      renderMedicinaSubjectsChips();
+    }
+
+    function setMedicinaShiftValue(shiftStr) {
+      document.getElementById('inputEditProf').value = shiftStr;
+      document.getElementById('profSuggestionsDropdown').classList.add('hidden');
+    }
+
+    function promptAddMedicinaSubject() {
+      const newSubj = prompt('Digite o nome da nova disciplina de Medicina (Ex: ANATOMIA I):');
+      if (!newSubj || !newSubj.trim()) return;
+      const formatted = newSubj.trim().toUpperCase();
+      if (!tvCatalogsData.medicinaSubjects.includes(formatted)) {
+        tvCatalogsData.medicinaSubjects.push(formatted);
+        saveCatalogsToStorage();
+      }
+      document.getElementById('inputEditPeriod').value = formatted;
+      renderMedicinaSubjectsChips();
+    }
+
+    // =========================================================================
+    // 9. EDIÇÃO DE LINHA E SALVAMENTO NO FIREBASE
     // =========================================================================
     function handleRowClick(id) {
       if (!isAdmin) {
-        showToast('Clique em "Admin" no topo para editar professores e horários.');
+        showToast('Clique em "Admin" no topo para editar.');
         return;
       }
       openRowEditModal(id);
@@ -876,15 +1480,20 @@
       if (!item) return;
       editingItem = item;
 
-      document.getElementById('modalTitleText').innerText = 'Professor e Horário de Início';
+      document.getElementById('modalTitleText').innerText = item.course === 'Medicina'
+        ? 'Disciplina e Turno (Medicina)'
+        : 'Professor e Horário de Início';
       document.getElementById('inputEditCourse').value = item.course;
       document.getElementById('inputEditPeriod').value = item.period;
       document.getElementById('inputEditRoom').value = item.room;
       document.getElementById('inputEditProf').value = item.prof || '';
       document.getElementById('inputEditTime').value = item.time || '';
+      document.getElementById('profSuggestionsDropdown').classList.add('hidden');
+
+      handleModalCourseChange();
 
       const delBtn = document.getElementById('btnDeleteRow');
-      if (item.isExtra) {
+      if (item.isExtra || item.course === 'Medicina') {
         delBtn.classList.remove('hidden');
       } else {
         delBtn.classList.add('hidden');
@@ -898,13 +1507,16 @@
     function openNewAllocationModal(defaultCourse = '') {
       if (!isAdmin) return;
       editingItem = null;
-      document.getElementById('modalTitleText').innerText = 'Adicionar Turma Extra na TV';
+      document.getElementById('modalTitleText').innerText = 'Adicionar Nova Linha na TV';
       document.getElementById('inputEditCourse').value = defaultCourse;
       document.getElementById('inputEditPeriod').value = '';
       document.getElementById('inputEditRoom').value = '';
       document.getElementById('inputEditProf').value = '';
       document.getElementById('inputEditTime').value = '';
+      document.getElementById('profSuggestionsDropdown').classList.add('hidden');
       document.getElementById('btnDeleteRow').classList.add('hidden');
+
+      handleModalCourseChange();
 
       document.getElementById('rowEditModal').classList.remove('hidden');
       safeCreateIcons();
@@ -912,6 +1524,7 @@
 
     function closeRowEditModal() {
       document.getElementById('rowEditModal').classList.add('hidden');
+      document.getElementById('profSuggestionsDropdown').classList.add('hidden');
       editingItem = null;
     }
 
@@ -925,6 +1538,18 @@
       const prof = document.getElementById('inputEditProf').value.trim();
       const time = document.getElementById('inputEditTime').value.trim();
 
+      // Guarda automaticamente novos professores digitados para sugerir nas próximas vezes
+      registerNewProfessorsFromInput(prof);
+
+      // Se for Medicina e digitou uma matéria nova, guarda nas matérias de Medicina
+      if (course.toLowerCase() === 'medicina' && period) {
+        const up = period.toUpperCase();
+        if (!tvCatalogsData.medicinaSubjects.includes(up)) {
+          tvCatalogsData.medicinaSubjects.push(up);
+          saveCatalogsToStorage();
+        }
+      }
+
       const tvState = getActiveTvOverrides();
 
       if (editingItem) {
@@ -936,7 +1561,7 @@
         } else {
           const payload = { course, period, room, prof, time };
           tvState.items[editingItem.id] = payload;
-          if (editingItem.fallbackKey) {
+          if (editingItem.fallbackKey && course.toLowerCase() !== 'medicina') {
             tvState.items[editingItem.fallbackKey] = payload;
           }
         }
@@ -959,29 +1584,38 @@
     }
 
     function deleteCurrentRow() {
-      if (!isAdmin || !editingItem || !editingItem.isExtra) return;
+      if (!isAdmin || !editingItem) return;
       const tvState = getActiveTvOverrides();
-      tvState.extras = tvState.extras.filter(x => x.id !== editingItem.id);
+      if (editingItem.isExtra) {
+        tvState.extras = tvState.extras.filter(x => x.id !== editingItem.id);
+      } else {
+        if (!tvState.hiddenKeys.includes(editingItem.id)) {
+          tvState.hiddenKeys.push(editingItem.id);
+        }
+      }
       closeRowEditModal();
       saveTvDataToStorage();
       refreshTvBoard();
     }
 
-    // Sobrescrito pelo firebase-adapter-tv.js para salvar no Firestore
+    // Sobrescritos pelo firebase-adapter-tv.js para salvar no Firestore
     function saveTvDataToStorage() {
       localStorage.setItem('tv_overrides_local_backup_v1', JSON.stringify(tvOverridesData));
+    }
+
+    function saveCatalogsToStorage() {
+      localStorage.setItem('tv_catalogs_backup_v1', JSON.stringify(tvCatalogsData));
     }
 
     function updateAdminUI() {
       const btnAdmin = document.getElementById('btnAdminToggle');
       const roleBadge = document.getElementById('roleStatusBadge');
       const btnAddExtra = document.getElementById('btnAddExtraTurma');
+      const btnProfs = document.getElementById('btnManageProfessors');
 
       if (isAdmin) {
-        if (btnAddExtra) {
-          btnAddExtra.classList.remove('hidden');
-          btnAddExtra.classList.add('inline-flex');
-        }
+        if (btnAddExtra) { btnAddExtra.classList.remove('hidden'); btnAddExtra.classList.add('inline-flex'); }
+        if (btnProfs) { btnProfs.classList.remove('hidden'); btnProfs.classList.add('inline-flex'); }
         if (btnAdmin) {
           btnAdmin.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-black text-emerald-950 bg-emerald-300 hover:bg-emerald-200 rounded-xl transition shrink-0';
           btnAdmin.innerHTML = `<i data-lucide="unlock" class="w-3.5 h-3.5"></i><span>Bloquear</span>`;
@@ -991,10 +1625,8 @@
           roleBadge.innerHTML = `<i data-lucide="shield-check" class="w-3 h-3"></i> Modo Admin`;
         }
       } else {
-        if (btnAddExtra) {
-          btnAddExtra.classList.add('hidden');
-          btnAddExtra.classList.remove('inline-flex');
-        }
+        if (btnAddExtra) { btnAddExtra.classList.add('hidden'); btnAddExtra.classList.remove('inline-flex'); }
+        if (btnProfs) { btnProfs.classList.add('hidden'); btnProfs.classList.remove('inline-flex'); }
         if (btnAdmin) {
           btnAdmin.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-stone-900 bg-stone-100 hover:bg-white rounded-xl transition shrink-0';
           btnAdmin.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-stone-700"></i><span>Admin</span>`;
@@ -1008,7 +1640,7 @@
     }
 
     // =========================================================================
-    // CARROSSEL AUTOMÁTICO E ATALHOS
+    // 10. CARROSSEL AUTOMÁTICO E ATALHOS
     // =========================================================================
     function startAutoCarousel() {
       clearInterval(progressTimer);
@@ -1060,6 +1692,7 @@
     function setupKeyboardNavigation() {
       window.addEventListener('keydown', (e) => {
         if (!document.getElementById('rowEditModal').classList.contains('hidden')) return;
+        if (!document.getElementById('professorsModal').classList.contains('hidden')) return;
         if (!document.getElementById('adminLoginModal').classList.contains('hidden')) return;
         if (e.key === 'ArrowRight') nextSlide();
         if (e.key === 'ArrowLeft') prevSlide();
@@ -1073,6 +1706,7 @@
         clearTimeout(hideBarTimeout);
         hideBarTimeout = setTimeout(() => {
           if (!document.getElementById('rowEditModal').classList.contains('hidden')) return;
+          if (!document.getElementById('professorsModal').classList.contains('hidden')) return;
           if (!document.getElementById('adminLoginModal').classList.contains('hidden')) return;
           bar.classList.add('hidden-bar');
         }, 3200);
