@@ -93,14 +93,27 @@
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
-  <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS (FUNDO BORDÔ TEXTURIZADO SOFISTICADO) ==================== -->
-  <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print">
+  <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS (FUNDO BORDÔ + LOGO EM MARCA D'ÁGUA) ==================== -->
+  <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print relative">
+    
+    <!-- Logo Grande de Plano de Fundo (Marca d'Água Sofisticada) -->
+    <div class="fixed inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-0">
+      <img 
+        src="Univassouras%20Vertical%20Branca.png" 
+        alt="" 
+        class="w-[460px] sm:w-[620px] md:w-[740px] max-w-[90vw] object-contain opacity-[0.07] transform scale-105"
+      >
+    </div>
+
     <!-- Topo Institucional -->
-    <div class="max-w-5xl w-full mx-auto pt-2 flex items-center justify-between border-b border-white/15 pb-5">
-      <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center shadow-lg shadow-black/40 border border-amber-200/60">
-          <i data-lucide="graduation-cap" class="w-7 h-7 text-[#4d0013]"></i>
-        </div>
+    <div class="relative z-10 max-w-5xl w-full mx-auto pt-2 flex items-center justify-between border-b border-white/15 pb-5">
+      <div class="flex items-center gap-4">
+        <img 
+          src="Univassouras%20Vertical%20Branca.png" 
+          alt="Universidade de Vassouras" 
+          class="h-14 sm:h-16 w-auto object-contain drop-shadow-md shrink-0"
+        >
+        <div class="h-10 w-px bg-white/20 hidden sm:block"></div>
         <div>
           <span class="block text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
             SISTEMA ACADÊMICO INTEGRADO
@@ -121,11 +134,11 @@
       </div>
     </div>
 
-    <!-- Centro: Escolha de Campus -->
-    <div class="max-w-4xl w-full mx-auto my-auto py-10 text-center">
+    <!-- Centro: Escolha de Campus Padronizada -->
+    <div class="relative z-10 max-w-4xl w-full mx-auto my-auto py-10 text-center">
       <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-xs font-bold bg-white/10 text-amber-200 border border-amber-300/30 backdrop-blur-xs mb-4 shadow-sm">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
-        Selecione a Unidade Acadêmica
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-300"></i>
+        Selecione o Campus Acadêmico
       </span>
       <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-3">
         Escolha o Campus
@@ -135,7 +148,7 @@
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <!-- Card 1: Maricá -->
+        <!-- Card 1: Campus Maricá -->
         <button 
           type="button"
           onclick="selectCampus('MARICA')"
@@ -143,18 +156,18 @@
           <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
           <div>
             <div class="flex items-center justify-between mb-6 relative z-10">
-              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
-                <i data-lucide="building-2" class="w-8 h-8 text-amber-300"></i>
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] p-2 flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
               </div>
               <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
                 20 Cursos
               </span>
             </div>
             <h3 class="text-xl sm:text-2xl font-black text-stone-900 group-hover:text-[#7a001e] transition-colors mb-2">
-              Unidade Maricá
+              Campus Maricá
             </h3>
             <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
-              Grades horárias dos cursos da <strong>Univassouras Campus Maricá</strong> e dos cursos da <strong>FACMAR</strong>.
+              Grades horárias dos cursos de graduação da <strong>Univassouras Campus Maricá</strong> e <strong>FACMAR</strong> (Campi 1 e 2).
             </p>
           </div>
           <div class="mt-7 pt-4 border-t border-stone-200/80 flex items-center justify-between">
@@ -166,7 +179,7 @@
           </div>
         </button>
 
-        <!-- Card 2: Saquarema -->
+        <!-- Card 2: Campus Saquarema -->
         <button 
           type="button"
           onclick="selectCampus('SAQUAREMA')"
@@ -174,8 +187,8 @@
           <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
           <div>
             <div class="flex items-center justify-between mb-6 relative z-10">
-              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
-                <i data-lucide="landmark" class="w-8 h-8 text-amber-300"></i>
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] p-2 flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
               </div>
               <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
                 15 Cursos
@@ -200,7 +213,7 @@
     </div>
 
     <!-- Rodapé da Tela Inicial -->
-    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-100/70">
+    <div class="relative z-10 max-w-5xl w-full mx-auto pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-100/70">
       <span>Gestão Acadêmica de Grades Horárias • Semestre 2027.1</span>
       <span>Elaborado por <strong class="text-amber-300 font-bold">Jonas Florencio</strong></span>
     </div>
@@ -217,12 +230,12 @@
           <i data-lucide="arrow-left" class="w-4 h-4 text-[#7a001e]"></i>
           <span>Trocar Campus</span>
         </button>
-        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/20">
-          <i data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
+        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] p-1.5 flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
+          <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
         </div>
         <div>
           <span id="courseScreenCampusTag" class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
-            UNIDADE MARICÁ
+            UNIVASSOURAS CAMPUS MARICÁ E FACMAR
           </span>
           <h2 class="text-lg sm:text-xl font-black text-stone-900 tracking-tight">
             Selecione o Curso para Acessar a Grade
@@ -928,7 +941,7 @@
     function selectCampus(campusKey) {
       activeCampus = campusKey;
       const campusScreenTitle = campusKey === 'MARICA'
-        ? 'UNIDADE MARICÁ'
+        ? 'UNIVASSOURAS CAMPUS MARICÁ E FACMAR'
         : 'UNIVASSOURAS CAMPUS SAQUAREMA';
 
       document.getElementById('courseScreenCampusTag').innerText = campusScreenTitle;
