@@ -93,26 +93,24 @@
   <!-- TOAST CONTAINER -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
 
-  <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS (FUNDO BORDÔ + LOGO EM MARCA D'ÁGUA) ==================== -->
-  <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print relative">
-    
-    <!-- Logo Grande de Plano de Fundo (Marca d'Água Sofisticada) -->
-    <div class="fixed inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-0">
-      <img 
-        src="Univassouras%20Vertical%20Branca.png" 
-        alt="" 
-        class="w-[460px] sm:w-[620px] md:w-[740px] max-w-[90vw] object-contain opacity-[0.07] transform scale-105"
-      >
-    </div>
-
-    <!-- Topo Institucional -->
-    <div class="relative z-10 max-w-5xl w-full mx-auto pt-2 flex items-center justify-between border-b border-white/15 pb-5">
+  <!-- ==================== TELA 1: SELEÇÃO DE CAMPUS ==================== -->
+  <div id="campusScreen" class="fixed inset-0 z-40 bordeaux-luxury-bg text-white flex flex-col justify-between p-6 sm:p-8 overflow-y-auto no-print">
+    <!-- Topo Institucional com as Logos Univassouras e FACMAR do Mesmo Tamanho -->
+    <div class="max-w-5xl w-full mx-auto pt-2 flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5">
       <div class="flex items-center gap-4">
-        <img 
-          src="Univassouras%20Vertical%20Branca.png" 
-          alt="Universidade de Vassouras" 
-          class="h-14 sm:h-16 w-auto object-contain drop-shadow-md shrink-0"
-        >
+        <div class="flex items-center gap-3.5 shrink-0">
+          <img 
+            src="Univassouras%20Vertical%20Branca.png" 
+            alt="Universidade de Vassouras" 
+            class="h-14 sm:h-16 w-auto object-contain drop-shadow-md"
+          >
+          <img 
+            src="vetical%20branca%20facmar.png" 
+            onerror="this.onerror=null; this.src='vertical%20branca%20facmar.png';"
+            alt="FACMAR" 
+            class="h-14 sm:h-16 w-auto object-contain drop-shadow-md"
+          >
+        </div>
         <div class="h-10 w-px bg-white/20 hidden sm:block"></div>
         <div>
           <span class="block text-[11px] font-black uppercase tracking-[0.2em] text-amber-300">
@@ -134,10 +132,10 @@
       </div>
     </div>
 
-    <!-- Centro: Escolha de Campus Padronizada -->
-    <div class="relative z-10 max-w-4xl w-full mx-auto my-auto py-10 text-center">
+    <!-- Centro: Escolha de Campus com os Símbolos Originais -->
+    <div class="max-w-4xl w-full mx-auto my-auto py-10 text-center">
       <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-xs font-bold bg-white/10 text-amber-200 border border-amber-300/30 backdrop-blur-xs mb-4 shadow-sm">
-        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-300"></i>
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
         Selecione o Campus Acadêmico
       </span>
       <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-3">
@@ -156,8 +154,8 @@
           <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
           <div>
             <div class="flex items-center justify-between mb-6 relative z-10">
-              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] p-2 flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
-                <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <i data-lucide="building-2" class="w-8 h-8 text-amber-300"></i>
               </div>
               <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
                 20 Cursos
@@ -187,8 +185,8 @@
           <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-amber-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
           <div>
             <div class="flex items-center justify-between mb-6 relative z-10">
-              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] p-2 flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
-                <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
+              <div class="w-16 h-16 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-lg shadow-[#7a001e]/30 border border-amber-300/40 group-hover:scale-105 transition-transform">
+                <i data-lucide="landmark" class="w-8 h-8 text-amber-300"></i>
               </div>
               <span class="text-xs font-black uppercase tracking-wider text-[#7a001e] bg-rose-100 px-3.5 py-1 rounded-full border border-rose-200">
                 15 Cursos
@@ -213,7 +211,7 @@
     </div>
 
     <!-- Rodapé da Tela Inicial -->
-    <div class="relative z-10 max-w-5xl w-full mx-auto pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-100/70">
+    <div class="max-w-5xl w-full mx-auto pt-4 border-t border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs text-rose-100/70">
       <span>Gestão Acadêmica de Grades Horárias • Semestre 2027.1</span>
       <span>Elaborado por <strong class="text-amber-300 font-bold">Jonas Florencio</strong></span>
     </div>
@@ -230,8 +228,8 @@
           <i data-lucide="arrow-left" class="w-4 h-4 text-[#7a001e]"></i>
           <span>Trocar Campus</span>
         </button>
-        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] p-1.5 flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
-          <img src="Univassouras%20Vertical%20Branca.png" alt="Univassouras" class="w-full h-full object-contain">
+        <div class="w-11 h-11 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
+          <i data-lucide="graduation-cap" class="w-6 h-6 text-amber-300"></i>
         </div>
         <div>
           <span id="courseScreenCampusTag" class="block text-xs font-black uppercase tracking-widest text-[#7a001e]">
