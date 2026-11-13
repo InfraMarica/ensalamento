@@ -10,6 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
+  <!-- Firebase SDK Integrado -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
   <script>
     function refreshIcons() {
       if (typeof lucide !== 'undefined' && lucide.createIcons) {
@@ -26,7 +30,6 @@
       color: #0f172a;
     }
 
-    /* Fundo mais escuro (Slate/Cinza contraste) com símbolos de laboratório em bordô */
     .lab-watermark-bg {
       background-color: #cbd5e1;
       background-image:
@@ -59,7 +62,6 @@
 </head>
 <body class="min-h-screen flex flex-col lab-watermark-bg relative">
 
-  <!-- Símbolos de laboratório grandes em marca d'água no fundo escuro -->
   <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none">
     <i data-lucide="microscope" class="w-80 h-80 text-[#7a001e]/[0.05] absolute -top-8 -left-8 -rotate-12"></i>
     <i data-lucide="flask-conical" class="w-80 h-80 text-[#7a001e]/[0.05] absolute top-1/3 -right-14 rotate-12"></i>
@@ -69,10 +71,46 @@
 
   <div id="toastBox" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- ==================== MODAL DE LOGIN ADMIN (PREENCHIDO PELO FIREBASE ADAPTER) ==================== -->
+  <!-- ==================== MODAL DE LOGIN ADMIN (FIXO, SEM DICA E SEM ALTERAÇÃO) ==================== -->
   <div id="adminLoginModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border-2 border-slate-300">
-      <!-- Conteúdo injetado pelo firebase-adapter-labs.js -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-[#7a001e] text-white flex items-center justify-center">
+            <i data-lucide="lock" class="w-4 h-4 text-amber-300"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-[#7a001e]">Acesso Restrito</h3>
+            <p class="text-xs text-slate-500">Informe suas credenciais para editar</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="verifyAdminPassword(event)" class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Login</label>
+          <input type="text" id="customAdminUser" autocomplete="username" required placeholder="Digite o usuário"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Senha</label>
+          <input type="password" id="customAdminPass" autocomplete="current-password" required placeholder="Digite a senha"
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
+        </div>
+        <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600">Usuário ou senha inválidos.</p>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+          <button type="button" onclick="closeAdminLoginModal()" class="px-3.5 py-2 font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer">
+            Cancelar
+          </button>
+          <button type="submit" class="px-5 py-2 font-extrabold text-white bg-[#7a001e] hover:bg-[#580015] rounded-xl shadow-sm cursor-pointer">
+            Entrar
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -193,7 +231,6 @@
   <div id="workspaceScreen" class="hidden flex-1 flex flex-col min-h-screen relative z-10">
     
     <header class="bg-white border-b-2 border-slate-300 sticky top-0 z-30 shadow-md">
-      <!-- Container 90% da largura da tela -->
       <div class="w-[90vw] max-w-[90vw] mx-auto py-3 flex flex-wrap items-center justify-between gap-3">
         
         <div class="flex items-center gap-3">
@@ -219,7 +256,6 @@
 
         <!-- Seletor de Mês e Ano + Alternador Grade Mensal vs Agenda do Dia -->
         <div class="flex flex-wrap items-center gap-2.5">
-          <!-- Navegador de Mês e Ano -->
           <div class="flex items-center gap-1 bg-rose-50 border border-rose-200 rounded-2xl p-1 shadow-2xs">
             <button type="button" onclick="shiftMonth(-1)" title="Mês anterior"
               class="w-7 h-7 rounded-xl hover:bg-[#7a001e] text-[#7a001e] hover:text-white flex items-center justify-center transition cursor-pointer">
@@ -253,7 +289,6 @@
             </button>
           </div>
 
-          <!-- Alternador de Visão -->
           <div class="flex items-center bg-slate-200/80 p-1 rounded-2xl border border-slate-300">
             <button type="button" id="btnViewMonth" onclick="switchViewMode('MONTH')"
               class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer bg-[#7a001e] text-white shadow-xs">
@@ -275,7 +310,6 @@
             <i data-lucide="eye" class="w-3.5 h-3.5"></i> Somente Visualização
           </span>
 
-          <!-- Controles exclusivos do Administrador -->
           <div id="adminHeaderControls" class="hidden items-center gap-2 flex-wrap">
             <button type="button" onclick="openRegistryModal('LABS')"
               class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-800 hover:text-[#7a001e] border border-slate-300 text-xs font-bold transition cursor-pointer">
@@ -310,7 +344,7 @@
         </div>
       </div>
 
-      <!-- BARRA DE FILTROS E LEGENDA EM 90% DA LARGURA -->
+      <!-- BARRA DE FILTROS E LEGENDA -->
       <div class="bg-slate-100 border-t border-slate-300 py-2.5">
         <div class="w-[90vw] max-w-[90vw] mx-auto flex flex-col gap-2">
           
@@ -350,7 +384,6 @@
               </div>
             </div>
 
-            <!-- Seletor de Data Específica para a Agenda Diária -->
             <div class="flex items-center gap-1.5 bg-white border border-slate-300 rounded-xl px-3 py-1.5 shadow-2xs">
               <i data-lucide="calendar-check" class="w-3.5 h-3.5 text-[#7a001e]"></i>
               <span class="text-slate-500 font-bold uppercase text-[10px]">Data da Agenda Diária:</span>
@@ -359,7 +392,6 @@
             </div>
           </div>
 
-          <!-- Barra de Legenda Oficial -->
           <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-300/80 text-[11px]">
             <div class="flex flex-wrap items-center gap-1.5">
               <span class="font-extrabold uppercase tracking-wider text-slate-500 text-[10px] mr-1 flex items-center gap-1">
@@ -376,14 +408,12 @@
       </div>
     </header>
 
-    <!-- ==================== VISÃO 1: GRADE MENSAL COMPLETA (TODAS AS SEMANAS DE SEG A SÁB, 90% LARGURA) ==================== -->
+    <!-- VISÃO 1: GRADE MENSAL COMPLETA -->
     <main id="monthGridView" class="flex-1 w-[90vw] max-w-[90vw] mx-auto py-6 space-y-6 overflow-x-auto">
-      <div id="monthWeeksContainer" class="space-y-6 min-w-[1100px]">
-        <!-- Semanas do mês renderizadas via JS -->
-      </div>
+      <div id="monthWeeksContainer" class="space-y-6 min-w-[1100px]"></div>
     </main>
 
-    <!-- ==================== VISÃO 2: AGENDA DO DIA EM LISTA (MOSTRANDO OS DOIS CAMPI, 90% LARGURA) ==================== -->
+    <!-- VISÃO 2: AGENDA DO DIA EM LISTA -->
     <main id="dailyListView" class="hidden flex-1 w-[90vw] max-w-[90vw] mx-auto py-6">
       <div class="bg-white rounded-3xl border-2 border-slate-300 shadow-lg p-5 sm:p-6">
         <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
@@ -425,7 +455,7 @@
     </footer>
   </div>
 
-  <!-- ==================== MODAL: AGENDAR / EDITAR / MOVER / COPIAR (EXCLUSIVO ADMIN) ==================== -->
+  <!-- ==================== MODAL: AGENDAR / EDITAR / MOVER / COPIAR ==================== -->
   <div id="bookingFormModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 border-2 border-slate-300 my-8">
       <div class="flex items-center justify-between pb-3 border-b border-slate-200">
@@ -445,7 +475,6 @@
         </button>
       </div>
 
-      <!-- Alerta de Colisão no mesmo Laboratório, Data e Horário -->
       <div id="collisionAlert" class="hidden mt-4 p-4 rounded-2xl bg-rose-50 border-2 border-rose-600 text-rose-950 text-xs space-y-1">
         <div class="flex items-center gap-2 font-black text-rose-700 text-sm">
           <i data-lucide="triangle-alert" class="w-5 h-5 shrink-0"></i>
@@ -472,7 +501,6 @@
           </div>
         </div>
 
-        <!-- Atalhos de Turno -->
         <div class="bg-slate-100 p-2.5 rounded-2xl border border-slate-300 flex flex-wrap items-center justify-between gap-2">
           <span class="text-[11px] font-bold text-slate-700 pl-1">Atalhos de horário por turno:</span>
           <div class="flex flex-wrap gap-1.5">
@@ -623,21 +651,21 @@
             Cancelar
           </button>
           <button type="submit" id="btnSaveBooking" class="px-6 py-2.5 rounded-xl bg-[#7a001e] hover:bg-[#580015] text-white font-extrabold shadow-md cursor-pointer">
-            Salvar no Firebase
+            Salvar Agendamento
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- ==================== MODAL: DETALHES AMPLIADOS DA AULA MARCADA / ALERTA ==================== -->
+  <!-- MODAL: DETALHES AMPLIADOS DA AULA MARCADA / ALERTA -->
   <div id="expandedDetailsModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 border-2 border-slate-300">
       <div id="expandedDetailsBody"></div>
     </div>
   </div>
 
-  <!-- ==================== MODAL: GERENCIAR LABORATÓRIOS, TÉCNICOS E PROFESSORES ==================== -->
+  <!-- MODAL: GERENCIAR LABORATÓRIOS, TÉCNICOS E PROFESSORES -->
   <div id="registryModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 border-2 border-slate-300 max-h-[88vh] flex flex-col">
       <div class="flex items-center justify-between pb-3 border-b border-slate-200">
@@ -683,7 +711,32 @@
 
   <script>
     // =========================================================================
-    // 1. LEGENDA OFICIAL E CORES
+    // 1. CONFIGURAÇÃO DO FIREBASE E CREDENCIAIS FIXAS DE ADMIN
+    // =========================================================================
+    const FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyCLpvMrkFDeJp9RWtnliTsVDlcgkIUKwFc',
+      authDomain: 'salas-univassouras-marica.firebaseapp.com',
+      projectId: 'salas-univassouras-marica',
+      storageBucket: 'salas-univassouras-marica.firebasestorage.app',
+      messagingSenderId: '881760866715',
+      appId: '1:881760866715:web:bc3778b5bca1ec8dfe513e',
+      measurementId: 'G-340011RLRW'
+    };
+
+    const DOC_DATA_PATH = 'agendamento_laboratorios/DADOS_GERAIS';
+    const STORAGE_KEY = 'univassouras_lab_monthly_v4';
+    const SESSION_AUTH_KEY = 'univassouras_labs_fixed_auth_v1';
+
+    // Login e Senha fixos
+    const FIXED_ADMIN_LOGIN = 'tecnicos';
+    const FIXED_ADMIN_PASS = '@tecnicosmarica';
+
+    var db = null;
+    var firebaseReady = false;
+    var isAdmin = false;
+
+    // =========================================================================
+    // 2. LEGENDA OFICIAL E DADOS DA PLANILHA
     // =========================================================================
     const LEGEND_CONFIG = [
       { id: 'CONFIRMADO',         label: 'Agendado / Regular',       bg: 'bg-emerald-50', border: 'border-emerald-400', leftBar: 'border-l-emerald-600', badgeBg: 'bg-emerald-600 text-white', dot: 'bg-emerald-500' },
@@ -699,9 +752,6 @@
       return LEGEND_CONFIG.find(s => s.id === statusId) || LEGEND_CONFIG[0];
     }
 
-    // =========================================================================
-    // 2. LABORATÓRIOS, TÉCNICOS E PROFESSORES DA PLANILHA
-    // =========================================================================
     const DEFAULT_LABS = {
       MARICA: [
         { id: 'm_c2_hab_sol',   campus: 'Campus 2', name: 'HABILIDADES E SOLUÇÕES' },
@@ -775,10 +825,7 @@
 
     const WEEKDAY_NAMES = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
     const SHORT_WEEKDAYS = ['DOM', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
-    const STORAGE_KEY = 'univassouras_lab_monthly_v4';
 
-    // Variáveis globais acessadas pelo firebase-adapter-labs.js
-    var isAdmin = false;
     var appState = {
       labs: JSON.parse(JSON.stringify(DEFAULT_LABS)),
       technicians: [...DEFAULT_TECHS],
@@ -799,13 +846,199 @@
     let registryMode = 'LABS';
     let editRegistryIdx = null;
 
+    // =========================================================================
+    // 3. INICIALIZAÇÃO E CONEXÃO FIREBASE + LOGIN FIXO
+    // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
       loadAppState();
       initDefaultDate();
+
+      if (sessionStorage.getItem(SESSION_AUTH_KEY) === 'true') {
+        isAdmin = true;
+      }
+
       updateAdminUI();
+      initFirebaseRealtime();
       refreshIcons();
     });
 
+    function setSyncBadge(text, online) {
+      const badge = document.getElementById('firebaseSyncBadgeHome');
+      if (!badge) return;
+      if (online) {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-300';
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> ${text}`;
+      } else {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300';
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> ${text}`;
+      }
+    }
+
+    function initFirebaseRealtime() {
+      try {
+        if (typeof firebase === 'undefined') {
+          setSyncBadge('Sistema Pronto', true);
+          return;
+        }
+        if (!firebase.apps.length) {
+          firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        db = firebase.firestore();
+
+        const safetyTimer = setTimeout(() => {
+          if (!firebaseReady) {
+            setSyncBadge('Sistema Pronto', true);
+          }
+        }, 2500);
+
+        const dataRef = db.doc(DOC_DATA_PATH);
+        dataRef.onSnapshot(
+          snapshot => {
+            clearTimeout(safetyTimer);
+            firebaseReady = true;
+            setSyncBadge('Sincronizado Online', true);
+
+            if (snapshot.exists) {
+              const data = snapshot.data() || {};
+              if (data.labs) appState.labs = data.labs;
+              if (Array.isArray(data.technicians)) appState.technicians = data.technicians;
+              if (Array.isArray(data.professors)) appState.professors = data.professors;
+              if (data.bookings) appState.bookings = data.bookings;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } else {
+              dataRef.set(JSON.parse(JSON.stringify(appState))).catch(() => {});
+            }
+
+            buildFilterBar();
+            renderWorkspace();
+          },
+          err => {
+            clearTimeout(safetyTimer);
+            console.warn('Aviso Firestore:', err);
+            setSyncBadge('Sistema Pronto', true);
+          }
+        );
+      } catch (e) {
+        console.warn('Erro ao iniciar Firebase:', e);
+        setSyncBadge('Sistema Pronto', true);
+      }
+    }
+
+    function handleAdminButtonClick() {
+      if (isAdmin) {
+        isAdmin = false;
+        sessionStorage.removeItem(SESSION_AUTH_KEY);
+        updateAdminUI();
+        renderWorkspace();
+        notifyToast('Modo Administrador desconectado. Apenas visualização.');
+        return;
+      }
+
+      document.getElementById('customAdminUser').value = '';
+      document.getElementById('customAdminPass').value = '';
+      document.getElementById('adminLoginError').classList.add('hidden');
+      document.getElementById('adminLoginModal').classList.remove('hidden');
+      setTimeout(() => {
+        const inp = document.getElementById('customAdminUser');
+        if (inp) inp.focus();
+      }, 50);
+      refreshIcons();
+    }
+
+    function closeAdminLoginModal() {
+      document.getElementById('adminLoginModal').classList.add('hidden');
+    }
+
+    function verifyAdminPassword(e) {
+      e.preventDefault();
+      const typedUser = (document.getElementById('customAdminUser').value || '').trim();
+      const typedPass = (document.getElementById('customAdminPass').value || '').trim();
+      const errEl = document.getElementById('adminLoginError');
+
+      if (typedUser.toLowerCase() === FIXED_ADMIN_LOGIN && typedPass === FIXED_ADMIN_PASS) {
+        isAdmin = true;
+        sessionStorage.setItem(SESSION_AUTH_KEY, 'true');
+        closeAdminLoginModal();
+        updateAdminUI();
+        renderWorkspace();
+        notifyToast('Modo Administrador ativado!');
+      } else {
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    function updateAdminUI() {
+      const adminHeaderControls = document.getElementById('adminHeaderControls');
+      const roleStatusBadge = document.getElementById('roleStatusBadge');
+      const btnAdminToggle = document.getElementById('btnAdminToggle');
+      const homeAdminBtnLabel = document.getElementById('homeAdminBtnLabel');
+      const btnDailyNewBooking = document.getElementById('btnDailyNewBooking');
+
+      if (isAdmin) {
+        if (adminHeaderControls) {
+          adminHeaderControls.classList.remove('hidden');
+          adminHeaderControls.classList.add('flex');
+        }
+        if (btnDailyNewBooking) {
+          btnDailyNewBooking.classList.remove('hidden');
+          btnDailyNewBooking.classList.add('inline-flex');
+        }
+        if (roleStatusBadge) {
+          roleStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black bg-emerald-100 text-emerald-900 border border-emerald-400';
+          roleStatusBadge.innerHTML = '<i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-700"></i> Modo Admin Ativo';
+        }
+        if (btnAdminToggle) {
+          btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition cursor-pointer shrink-0';
+          btnAdminToggle.innerHTML = '<i data-lucide="unlock" class="w-3.5 h-3.5"></i><span>Sair do Admin</span>';
+        }
+        if (homeAdminBtnLabel) homeAdminBtnLabel.innerText = 'Admin Conectado (Sair)';
+      } else {
+        if (adminHeaderControls) {
+          adminHeaderControls.classList.add('hidden');
+          adminHeaderControls.classList.remove('flex');
+        }
+        if (btnDailyNewBooking) {
+          btnDailyNewBooking.classList.add('hidden');
+          btnDailyNewBooking.classList.remove('inline-flex');
+        }
+        if (roleStatusBadge) {
+          roleStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-slate-100 text-slate-600 border border-slate-300';
+          roleStatusBadge.innerHTML = '<i data-lucide="eye" class="w-3.5 h-3.5"></i> Somente Visualização';
+        }
+        if (btnAdminToggle) {
+          btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold transition cursor-pointer shrink-0';
+          btnAdminToggle.innerHTML = '<i data-lucide="lock" class="w-3.5 h-3.5 text-amber-300"></i><span>Admin</span>';
+        }
+        if (homeAdminBtnLabel) homeAdminBtnLabel.innerText = 'Admin';
+      }
+      refreshIcons();
+    }
+
+    function loadAppState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.labs) appState.labs = parsed.labs;
+          if (Array.isArray(parsed.technicians)) appState.technicians = parsed.technicians;
+          if (Array.isArray(parsed.professors)) appState.professors = parsed.professors;
+          if (parsed.bookings) appState.bookings = parsed.bookings;
+        }
+      } catch (e) {}
+    }
+
+    function saveAppState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      if (isAdmin && db) {
+        db.doc(DOC_DATA_PATH).set(JSON.parse(JSON.stringify(appState))).catch(err => {
+          console.warn('Erro ao sincronizar com Firebase:', err);
+        });
+      }
+    }
+
+    // =========================================================================
+    // 4. DATAS E NAVEGAÇÃO MENSAL
+    // =========================================================================
     function initDefaultDate() {
       const now = new Date();
       selectedMonth = now.getMonth();
@@ -853,7 +1086,6 @@
     function doesAlertMatchDay(alertIsoDate, targetDayIso) {
       if (!alertIsoDate || !targetDayIso) return false;
       if (alertIsoDate === targetDayIso) return true;
-
       const [ay, am, ad] = alertIsoDate.split('-').map(Number);
       const alertDt = new Date(ay, am - 1, ad);
       if (alertDt.getDay() === 0) {
@@ -863,78 +1095,6 @@
       return false;
     }
 
-    function loadAppState() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.labs) appState.labs = parsed.labs;
-          if (Array.isArray(parsed.technicians)) appState.technicians = parsed.technicians;
-          if (Array.isArray(parsed.professors)) appState.professors = parsed.professors;
-          if (parsed.bookings) appState.bookings = parsed.bookings;
-        }
-      } catch (e) {}
-    }
-
-    // Sobrescrito pelo firebase-adapter-labs.js para salvar no Firestore
-    function saveAppState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-    }
-
-    // =========================================================================
-    // CONTROLE VISUAL DO MODO ADMIN vs SOMENTE VISUALIZAÇÃO
-    // =========================================================================
-    function updateAdminUI() {
-      const adminHeaderControls = document.getElementById('adminHeaderControls');
-      const roleStatusBadge = document.getElementById('roleStatusBadge');
-      const btnAdminToggle = document.getElementById('btnAdminToggle');
-      const homeAdminBtnLabel = document.getElementById('homeAdminBtnLabel');
-      const btnDailyNewBooking = document.getElementById('btnDailyNewBooking');
-
-      if (isAdmin) {
-        if (adminHeaderControls) {
-          adminHeaderControls.classList.remove('hidden');
-          adminHeaderControls.classList.add('flex');
-        }
-        if (btnDailyNewBooking) {
-          btnDailyNewBooking.classList.remove('hidden');
-          btnDailyNewBooking.classList.add('inline-flex');
-        }
-        if (roleStatusBadge) {
-          roleStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black bg-emerald-100 text-emerald-900 border border-emerald-400';
-          roleStatusBadge.innerHTML = '<i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-700"></i> Modo Admin Ativo';
-        }
-        if (btnAdminToggle) {
-          btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition cursor-pointer shrink-0';
-          btnAdminToggle.innerHTML = '<i data-lucide="unlock" class="w-3.5 h-3.5"></i><span>Sair do Admin</span>';
-        }
-        if (homeAdminBtnLabel) homeAdminBtnLabel.innerText = 'Admin Conectado (Sair)';
-      } else {
-        if (adminHeaderControls) {
-          adminHeaderControls.classList.add('hidden');
-          adminHeaderControls.classList.remove('flex');
-        }
-        if (btnDailyNewBooking) {
-          btnDailyNewBooking.classList.add('hidden');
-          btnDailyNewBooking.classList.remove('inline-flex');
-        }
-        if (roleStatusBadge) {
-          roleStatusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-slate-100 text-slate-600 border border-slate-300';
-          roleStatusBadge.innerHTML = '<i data-lucide="eye" class="w-3.5 h-3.5"></i> Somente Visualização';
-        }
-        if (btnAdminToggle) {
-          btnAdminToggle.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold transition cursor-pointer shrink-0';
-          btnAdminToggle.innerHTML = '<i data-lucide="lock" class="w-3.5 h-3.5 text-amber-300"></i><span>Admin</span>';
-        }
-        if (homeAdminBtnLabel) homeAdminBtnLabel.innerText = 'Admin';
-      }
-
-      refreshIcons();
-    }
-
-    // =========================================================================
-    // 3. NAVEGAÇÃO DE UNIDADE, MÊS E SEMANAS DO MÊS (SEGUNDA A SÁBADO)
-    // =========================================================================
     function openUnitWorkspace(unitKey) {
       currentUnit = unitKey;
       campusFilter = 'ALL';
@@ -1050,7 +1210,7 @@
     }
 
     // =========================================================================
-    // 4. FILTROS E RENDERIZAÇÃO DA GRADE MENSAL COM ALERTAS EM AMARELO
+    // 5. FILTROS E RENDERIZAÇÃO DA GRADE MENSAL E AGENDA DO DIA
     // =========================================================================
     function getCampusesForActiveUnit() {
       return currentUnit === 'SAQUAREMA' ? ['Campus 1', 'Campus 3'] : ['Campus 1', 'Campus 2'];
@@ -1173,7 +1333,6 @@
 
         return `
           <div class="bg-slate-200/90 rounded-3xl border-2 border-slate-300 shadow-md p-4">
-            <!-- Cabeçalho da Semana do Mês -->
             <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-300">
               <div class="flex items-center gap-2.5">
                 <span class="px-3 py-1 rounded-xl bg-[#7a001e] text-white text-xs font-black uppercase tracking-wider shadow-xs">
@@ -1188,7 +1347,6 @@
               </span>
             </div>
 
-            <!-- 6 Colunas (Segunda a Sábado) com Altura Autoajustável (h-fit) -->
             <div class="grid grid-cols-6 gap-3 items-start">
               ${weekDays.map(dayObj => {
                 const dayBookings = legendFilter === 'ONLY_ALERTS'
@@ -1208,7 +1366,6 @@
                 return `
                   <div class="h-fit rounded-2xl border-2 ${isSelectedDaily ? 'border-[#7a001e] ring-2 ring-[#7a001e]/25 bg-white' : 'border-slate-300 ' + opacityClass} p-2.5 shadow-sm transition-all flex flex-col">
                     
-                    <!-- Topo do Dia: DIA DA SEMANA + DATA AO LADO -->
                     <div class="flex items-center justify-between gap-1 pb-2 mb-2 border-b border-slate-200">
                       <button type="button" onclick="selectDateForDailyView('${dayObj.iso}')"
                         class="text-left group cursor-pointer flex items-center gap-1.5">
@@ -1235,7 +1392,6 @@
                       </div>
                     </div>
 
-                    <!-- Corpo Autoajustável: Mostra Alertas Amarelos do Dia + Agendamentos do Dia -->
                     <div class="space-y-2 h-fit">
                       ${dayAlerts.map(a => renderYellowAlertGridCard(a)).join('')}
                       ${dayBookings.map(b => renderCompactGridCard(b)).join('')}
@@ -1274,7 +1430,7 @@
           
           <div class="hover-card absolute left-0 right-0 bottom-full mb-1.5 z-40 bg-slate-900 text-white rounded-xl p-2.5 shadow-2xl border border-amber-400 text-[10.5px] space-y-1.5">
             <div class="flex items-center justify-between border-b border-white/15 pb-1">
-              <span class="font-extrabold text-yellow-300 uppercase text-[9.5px]">🔔 Alerta de Aula (${b.alertDays} dia(s) antes)</span>
+              <span class="font-extrabold text-yellow-300 uppercase text-[9.5px]">🔔 Alerta (${b.alertDays}d antes)</span>
               <span class="font-mono text-[9.5px] text-amber-200">Aula: ${classBrDate}</span>
             </div>
             <div>
@@ -1321,7 +1477,6 @@
       return `
         <div class="booking-item relative rounded-xl p-2 border ${st.border} ${st.bg} border-l-4 ${st.leftBar} shadow-2xs hover:shadow-md transition-all text-[10.5px]">
           
-          <!-- TOOLTIP AO PASSAR O MOUSE (MATERIAIS E OBSERVAÇÕES) -->
           <div class="hover-card absolute left-0 right-0 bottom-full mb-1.5 z-40 bg-slate-900 text-white rounded-xl p-2.5 shadow-2xl border border-white/15 text-[10.5px] space-y-1.5">
             <div class="flex items-center justify-between border-b border-white/15 pb-1">
               <span class="font-extrabold text-amber-300 uppercase text-[9.5px]">📦 Materiais & Obs</span>
@@ -1339,7 +1494,6 @@
             ` : ''}
           </div>
 
-          <!-- Linha 1: Horário + Campus -->
           <div class="flex items-center justify-between gap-1 pb-1 mb-1 border-b border-black/5">
             <span class="font-mono font-black text-slate-900 text-[10px]">
               ${b.startTime}-${b.endTime}
@@ -1353,7 +1507,6 @@
             </div>
           </div>
 
-          <!-- Dados principais clicáveis para abrir modal maior -->
           <div onclick="showExpandedDetails('${b.id}', false)" class="cursor-pointer space-y-0.5">
             <div class="font-extrabold text-[#7a001e] leading-tight truncate" title="${b.labName}">
               ${b.labName}
@@ -1365,7 +1518,6 @@
             </div>
           </div>
 
-          <!-- Status da Legenda: Editável para Admin, Apenas Visualização para Visitantes -->
           <div class="mt-1.5 pt-1 border-t border-black/10">
             ${isAdmin ? `
               <select onchange="updateCardStatusInline('${b.id}', this.value)"
@@ -1383,7 +1535,6 @@
             `}
           </div>
 
-          <!-- Ações Rápidas (Visíveis apenas em Modo Admin) -->
           ${isAdmin ? `
             <div class="mt-1.5 pt-1 border-t border-black/5 grid grid-cols-4 gap-0.5 text-[9px] font-extrabold">
               <button type="button" onclick="triggerBookingAction('${b.id}', 'MOVE')" class="py-0.5 rounded bg-white/80 hover:bg-white text-slate-700 hover:text-[#7a001e] text-center cursor-pointer" title="Mover">Mover</button>
@@ -1402,9 +1553,6 @@
       switchViewMode('DAILY');
     }
 
-    // =========================================================================
-    // 5. AGENDA DO DIA EM LISTA (MOSTRANDO OS DOIS CAMPI + ALERTAS DO DIA)
-    // =========================================================================
     function renderDailyAgendaList() {
       const weekdayName = getWeekdayNameFromIso(activeDailyDate);
       const brDate = formatBrDayMonth(activeDailyDate);
@@ -1558,11 +1706,9 @@
         <div class="mt-4 space-y-3 text-xs">
           ${b.hasAlert ? `
             <div class="p-4 rounded-2xl bg-yellow-100 border-2 border-amber-400">
-              <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
-                  <i data-lucide="bell-ring" class="w-4 h-4 text-amber-700"></i> Informação do Alerta (${b.alertDays} dia(s) antes — ${formatBrDayMonth(alertIso)})
-                </span>
-              </div>
+              <span class="text-[11px] font-black uppercase tracking-wider text-amber-950 flex items-center gap-1.5 mb-1">
+                <i data-lucide="bell-ring" class="w-4 h-4 text-amber-700"></i> Informação do Alerta (${b.alertDays} dia(s) antes — ${formatBrDayMonth(alertIso)})
+              </span>
               <p class="text-sm font-bold text-amber-950 whitespace-pre-line leading-relaxed">${b.alertText || 'Verificar preparação e materiais para esta aula.'}</p>
             </div>
           ` : ''}
@@ -1698,7 +1844,7 @@
       document.getElementById('bkId').value = '';
       document.getElementById('modalModeTag').innerText = 'Nova Reserva';
       document.getElementById('modalHeaderTitle').innerText = 'Novo Agendamento de Laboratório';
-      document.getElementById('btnSaveBooking').innerText = 'Salvar no Firebase';
+      document.getElementById('btnSaveBooking').innerText = 'Salvar Agendamento';
 
       populateBookingFormSelects();
 
@@ -2051,6 +2197,5 @@
       }, 3000);
     }
   </script>
-  <script src="firebase-adapter-labs.js"></script>
 </body>
 </html>
