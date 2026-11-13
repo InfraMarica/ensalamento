@@ -439,7 +439,7 @@
     </div>
   </div>
 
-  <!-- MODAL DE DISTRIBUIÇÃO AUTOMÁTICA DE TURMAS -->
+  <!-- MODAL DE DISTRIBUIÇÃO AUTOMÁTICA DE TURMAS (COM SELEÇÃO OPCIONAL DE BLOCO) -->
   <div id="autoDistModal" class="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-stone-200 max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
@@ -522,20 +522,10 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <div>
             <label class="block text-xs font-bold text-stone-700 mb-1">Qtd. de Alunos</label>
-            <input type="number" id="distQtdAlunos" required min="1" max="150" placeholder="Ex: 50" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-black text-stone-900">
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-stone-700 mb-1">Campus Desejado</label>
-            <select id="distCampusPref" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold">
-              <option value="ONLY_C2">Apenas Campus 2</option>
-              <option value="ONLY_C1">Apenas Campus 1</option>
-              <option value="PREF_C2">Preferencialmente Campus 2</option>
-              <option value="PREF_C1">Preferencialmente Campus 1</option>
-            </select>
+            <input type="number" id="distQtdAlunos" required min="1" max="150" placeholder="Ex: 50" class="w-full px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-black text-stone-900 h-[34px]">
           </div>
 
           <div>
@@ -544,9 +534,31 @@
               <input type="checkbox" id="distAcessibilidade" class="rounded text-blue-600 focus:ring-blue-500 w-4 h-4">
               <span class="text-xs font-bold text-blue-900 flex items-center gap-1">
                 <i data-lucide="accessibility" class="w-3.5 h-3.5 text-blue-700 shrink-0"></i>
-                <span class="truncate">Aluno PMR</span>
+                <span class="truncate">Aluno PMR (Acessibilidade)</span>
               </span>
             </label>
+          </div>
+        </div>
+
+        <!-- Seleção de Campus e Bloco Específico (Opcional) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">Campus Desejado</label>
+            <select id="distCampusPref" onchange="updateDistBlocoOptions()" required class="w-full px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e] font-semibold h-[34px]">
+              <option value="ONLY_C2">Apenas Campus 2</option>
+              <option value="ONLY_C1">Apenas Campus 1</option>
+              <option value="PREF_C2">Preferencialmente Campus 2</option>
+              <option value="PREF_C1">Preferencialmente Campus 1</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1">
+              Bloco Específico <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
+            </label>
+            <select id="distBlocoPref" class="w-full px-2.5 py-1.5 text-xs bg-amber-50/60 border border-amber-300 rounded-lg focus:outline-none focus:border-[#7a001e] font-bold text-stone-800 h-[34px]">
+              <option value="ANY">Qualquer Bloco (Automático)</option>
+            </select>
           </div>
         </div>
 
@@ -2045,7 +2057,53 @@
       showToast(`Turma "${turmaRemovida}" removida da ${room.sala} (${day})!`);
     }
 
-    // DISTRIBUIÇÃO AUTOMÁTICA
+    // ==================== DISTRIBUIÇÃO AUTOMÁTICA COM SELEÇÃO OPCIONAL DE BLOCO ====================
+    function updateDistBlocoOptions() {
+      const campusPref = document.getElementById('distCampusPref').value;
+      const selectEl = document.getElementById('distBlocoPref');
+      if (!selectEl) return;
+
+      let campusesToList = [];
+      if (campusPref === 'ONLY_C2') campusesToList = ['CAMPUS_2'];
+      else if (campusPref === 'ONLY_C1') campusesToList = ['CAMPUS_1'];
+      else if (campusPref === 'PREF_C2') campusesToList = ['CAMPUS_2', 'CAMPUS_1'];
+      else if (campusPref === 'PREF_C1') campusesToList = ['CAMPUS_1', 'CAMPUS_2'];
+
+      let html = `<option value="ANY">Qualquer Bloco (Automático)</option>`;
+
+      campusesToList.forEach(cKey => {
+        const blocks = multiCampusData[cKey] || [];
+        const cLabel = formatCampusDisplayName(cKey);
+        if (blocks.length === 0) return;
+
+        // Identifica grupos de blocos com múltiplos andares (ex: BLOCO 3)
+        const macroCounts = {};
+        blocks.forEach(b => {
+          const m = (b.bloco || '').match(/^(BLOCO\s*\d+(?:\s*E\s*\d+)?)/i);
+          if (m) {
+            const macroName = m[1].toUpperCase();
+            macroCounts[macroName] = (macroCounts[macroName] || 0) + 1;
+          }
+        });
+
+        html += `<optgroup label="── ${cLabel} ──">`;
+
+        Object.keys(macroCounts).forEach(macroName => {
+          if (macroCounts[macroName] > 1) {
+            html += `<option value="MACRO:${cKey}||${macroName}">Todos do ${macroName} (${cLabel})</option>`;
+          }
+        });
+
+        blocks.forEach(b => {
+          html += `<option value="EXACT:${cKey}||${b.bloco}">${b.bloco}</option>`;
+        });
+
+        html += `</optgroup>`;
+      });
+
+      selectEl.innerHTML = html;
+    }
+
     function openAutoDistModal() {
       if (!isAdmin) return;
       document.getElementById('autoDistErrorBox').classList.add('hidden');
@@ -2053,6 +2111,9 @@
       document.getElementById('distCurso').value = '';
       document.getElementById('distQtdAlunos').value = '';
       document.getElementById('distAcessibilidade').checked = false;
+      document.getElementById('distCampusPref').value = activeCampus === 'CAMPUS_1' ? 'ONLY_C1' : 'ONLY_C2';
+      updateDistBlocoOptions();
+      document.getElementById('distBlocoPref').value = 'ANY';
       
       ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'].forEach(d => {
         document.getElementById(`chkDia${d}`).checked = false;
@@ -2111,6 +2172,7 @@
       const turmaNome = `${turmaBase} (${qtdAlunos})`;
 
       const campusPref = document.getElementById('distCampusPref').value;
+      const blocoPref = document.getElementById('distBlocoPref') ? document.getElementById('distBlocoPref').value : 'ANY';
       const requiresAcessibilidade = document.getElementById('distAcessibilidade').checked;
 
       const daysMap = [
@@ -2140,6 +2202,33 @@
       else if (campusPref === 'PREF_C2') campusOrder = ['CAMPUS_2', 'CAMPUS_1'];
       else if (campusPref === 'PREF_C1') campusOrder = ['CAMPUS_1', 'CAMPUS_2'];
 
+      // Se o utilizador selecionou um bloco específico, direciona para o campus daquele bloco
+      let specificCampusKey = null;
+      let specificBlockRule = null;
+      let specificBlockLabel = '';
+
+      if (blocoPref && blocoPref !== 'ANY') {
+        const [ruleType, rest] = blocoPref.split(':');
+        const [cKey, bTarget] = (rest || '').split('||');
+        if (cKey && bTarget) {
+          specificCampusKey = cKey;
+          specificBlockRule = { type: ruleType, target: bTarget };
+          specificBlockLabel = bTarget;
+          campusOrder = [cKey];
+        }
+      }
+
+      const matchesSelectedBlock = (blockName) => {
+        if (!specificBlockRule) return true;
+        if (specificBlockRule.type === 'EXACT') {
+          return blockName === specificBlockRule.target;
+        }
+        if (specificBlockRule.type === 'MACRO') {
+          return (blockName || '').toUpperCase().startsWith(specificBlockRule.target.toUpperCase());
+        }
+        return true;
+      };
+
       const isLabRoom = (r) => {
         const full = `${r.sala} ${r.subtitulo || ''}`.toLowerCase();
         return full.includes('lab') || full.includes('informática') || full.includes('info');
@@ -2163,9 +2252,15 @@
 
       for (const cKey of campusOrder) {
         const blocks = multiCampusData[cKey] || [];
-        const allRooms = [];
+        const blockFilteredRooms = [];
+        const allCampusRooms = [];
+
         blocks.forEach(b => {
-          b.rooms.forEach(r => allRooms.push(r));
+          const blockMatches = matchesSelectedBlock(b.bloco);
+          b.rooms.forEach(r => {
+            allCampusRooms.push(r);
+            if (blockMatches) blockFilteredRooms.push(r);
+          });
         });
 
         const regularDays = activeDays.filter(d => !d.needsLab).map(d => d.day);
@@ -2174,7 +2269,7 @@
         let candidateRegularRoom = null;
 
         if (regularDays.length > 0) {
-          let eligibleRegularRooms = allRooms.filter(r => !isLabRoom(r) && isAccessibleRoom(r) && hasCapacity(r));
+          let eligibleRegularRooms = blockFilteredRooms.filter(r => !isLabRoom(r) && isAccessibleRoom(r) && hasCapacity(r));
           
           eligibleRegularRooms.sort((a, b) => {
             const capA = parseInt(a.capacidade) || 999;
@@ -2199,7 +2294,11 @@
         let labAllocationPossible = true;
 
         if (labDays.length > 0) {
-          let eligibleLabRooms = allRooms.filter(r => isLabRoom(r) && isAccessibleRoom(r) && hasCapacity(r));
+          // Prioriza laboratórios dentro do bloco selecionado; se o bloco não tiver lab, procura no campus
+          let eligibleLabRooms = blockFilteredRooms.filter(r => isLabRoom(r) && isAccessibleRoom(r) && hasCapacity(r));
+          if (eligibleLabRooms.length === 0) {
+            eligibleLabRooms = allCampusRooms.filter(r => isLabRoom(r) && isAccessibleRoom(r) && hasCapacity(r));
+          }
 
           eligibleLabRooms.sort((a, b) => {
             const capA = parseInt(a.capacidade) || 999;
@@ -2243,7 +2342,9 @@
 
       if (!allocationSuccess) {
         errBox.classList.remove('hidden');
-        let failReason = `Nenhuma sala comporta ${qtdAlunos} alunos atendendo aos critérios solicitados.`;
+        let failReason = specificBlockLabel
+          ? `Nenhuma sala livre em "${specificBlockLabel}" comporta ${qtdAlunos} alunos nos dias selecionados.`
+          : `Nenhuma sala comporta ${qtdAlunos} alunos atendendo aos critérios solicitados.`;
         if (requiresAcessibilidade) {
           failReason += ` Verifique a disponibilidade de salas térreas ou com Acessibilidade que comportem ${qtdAlunos} alunos.`;
         }
@@ -2268,6 +2369,9 @@
       closeAutoDistModal();
       if (activeViewMode === 'ROOMS') {
         switchCampus(chosenCampus);
+        if (specificBlockRule && specificBlockRule.type === 'EXACT') {
+          setFilter(specificBlockRule.target);
+        }
       } else {
         renderActiveView();
       }
