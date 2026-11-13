@@ -1,10 +1,5 @@
-/* firebase-adapter-labs.js para o Sistema de Agendamento de Laboratórios (Maricá & Saquarema)
-
-- Sincroniza em tempo real os agendamentos, alertas, laboratórios, técnicos e professores
-  em "agendamento_laboratorios/DADOS_GERAIS" no projeto salas-univassouras-marica.
-- Sistema próprio de Login e Senha customizáveis salvos online no Firebase em
-  "agendamento_laboratorios/CREDENCIAIS_ADMIN" (Padrão inicial: Login "admin" | Senha "1234").
-- Quem não tem a senha permanece apenas em modo de visualização.
+/* firebase-adapter-labs.js - Versão Corrigida
+   Login e Senha personalizados salvos no Firebase (agendamento_laboratorios/CREDENCIAIS_ADMIN)
 */
 (() => {
   'use strict';
@@ -21,14 +16,14 @@
 
   const DOC_DATA_PATH = 'agendamento_laboratorios/DADOS_GERAIS';
   const DOC_CRED_PATH = 'agendamento_laboratorios/CREDENCIAIS_ADMIN';
-  const SESSION_AUTH_KEY = 'univassouras_labs_admin_session_v1';
-  const LOCAL_CRED_BACKUP = 'univassouras_labs_cred_backup_v1';
+  const SESSION_AUTH_KEY = 'univassouras_labs_admin_session_v2';
+  const LOCAL_CRED_BACKUP = 'univassouras_labs_cred_backup_v2';
 
   let db = null;
   let firebaseReady = false;
   let writeQueue = Promise.resolve();
 
-  // Credenciais padrão caso ainda não tenham sido alteradas no Firebase
+  // Credenciais padrão apenas até você cadastrar a sua própria
   let adminCredentials = {
     login: 'admin',
     password: '1234'
@@ -76,7 +71,7 @@
       const raw = localStorage.getItem(LOCAL_CRED_BACKUP);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed.login && parsed.password) {
+        if (parsed && parsed.login && parsed.password) {
           adminCredentials = {
             login: String(parsed.login).trim(),
             password: String(parsed.password).trim()
@@ -98,16 +93,16 @@
     }
   }
 
-  // Injeta o botão "Login / Senha" na barra do Admin e cria o modal para cadastrar novo Login/Senha
+  // Cria o botão "Login / Senha" na barra do Admin e o modal de alteração
   function injectAdminCredentialControls() {
     const adminControls = document.getElementById('adminHeaderControls');
     if (adminControls && !document.getElementById('btnOpenChangeCredModal')) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.id = 'btnOpenChangeCredModal';
-      btn.onclick = () => window.openChangeCredentialsModal();
+      btn.setAttribute('onclick', 'openChangeCredentialsModal()');
       btn.className = 'inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-extrabold transition cursor-pointer';
-      btn.title = 'Alterar Login e Senha do Administrador';
+      btn.title = 'Cadastrar novo Login e Senha do Administrador';
       btn.innerHTML = '<i data-lucide="key-round" class="w-3.5 h-3.5 text-[#7a001e]"></i><span>Login / Senha</span>';
       adminControls.appendChild(btn);
     }
@@ -125,7 +120,7 @@
               </div>
               <div>
                 <h3 class="text-base font-black text-[#7a001e]">Cadastrar Login e Senha</h3>
-                <p class="text-[11px] text-slate-500">Salvo e sincronizado online no Firebase</p>
+                <p class="text-[11px] text-slate-500">Defina o usuário e a senha que desejar</p>
               </div>
             </div>
             <button type="button" onclick="closeChangeCredentialsModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
@@ -133,35 +128,31 @@
             </button>
           </div>
 
-          <form id="changeCredentialsForm" class="mt-4 space-y-3.5 text-xs">
+          <form id="changeCredentialsForm" onsubmit="saveNewCredentials(event)" class="mt-4 space-y-3.5 text-xs">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Novo Usuário / Login</label>
-              <input type="text" id="newCustomLoginInput" required minlength="2" placeholder="Ex: jonas ou admin"
+              <input type="text" id="newCustomLoginInput" required minlength="2" placeholder="Ex: jonas"
                 class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Nova Senha</label>
-              <div class="relative">
-                <input type="text" id="newCustomPasswordInput" required minlength="3" placeholder="Digite a nova senha..."
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
-              </div>
+              <input type="text" id="newCustomPasswordInput" required minlength="3" placeholder="Digite a nova senha..."
+                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
             </div>
 
             <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
               <button type="button" onclick="closeChangeCredentialsModal()" class="px-3.5 py-2 font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer">
                 Cancelar
               </button>
-              <button type="submit" class="px-5 py-2 font-extrabold text-white bg-[#7a001e] hover:bg-[#580015] rounded-xl shadow-sm cursor-pointer">
-                Salvar no Firebase
+              <button type="submit" id="btnSaveCredSubmit" class="px-5 py-2 font-extrabold text-white bg-[#7a001e] hover:bg-[#580015] rounded-xl shadow-sm cursor-pointer">
+                Salvar Novo Acesso
               </button>
             </div>
           </form>
         </div>
       `;
       document.body.appendChild(modalWrapper);
-
-      document.getElementById('changeCredentialsForm').addEventListener('submit', window.saveNewCredentials);
     }
   }
 
@@ -178,7 +169,6 @@
           if (data.bookings) appState.bookings = data.bookings;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
         } else {
-          // Inicializa o documento no Firestore caso ainda não exista
           dataRef.set(cloneData(appState)).catch(err => console.warn('Aviso ao inicializar dados:', err));
         }
 
@@ -191,12 +181,12 @@
         console.error('Erro ao ler dados de laboratórios no Firestore:', error);
         setSyncBadge(false);
         if (typeof notifyToast === 'function') {
-          notifyToast('Publique a regra de agendamento_laboratorios no Console do Firebase.', 'error');
+          notifyToast('Verifique se publicou a regra de agendamento_laboratorios no Firebase.', 'error');
         }
       }
     );
 
-    // 2. Escuta em tempo real o Login e a Senha personalizados salvos no Firebase
+    // 2. Escuta em tempo real o Login e a Senha salvos no Firebase
     const credRef = db.doc(DOC_CRED_PATH);
     credRef.onSnapshot(
       snapshot => {
@@ -209,16 +199,9 @@
             };
             localStorage.setItem(LOCAL_CRED_BACKUP, JSON.stringify(adminCredentials));
           }
-        } else {
-          // Salva a credencial inicial padrão (admin / 1234) se o documento ainda não existir
-          credRef.set({
-            login: adminCredentials.login,
-            password: adminCredentials.password,
-            updatedAt: Date.now()
-          }).catch(() => {});
         }
       },
-      err => console.warn('Aviso ao sincronizar credenciais:', err)
+      err => console.warn('Aviso ao ler credenciais no Firebase:', err)
     );
   }
 
@@ -250,7 +233,7 @@
           </div>
           <div>
             <h3 class="text-base font-black text-[#7a001e]">Acesso Administrador</h3>
-            <p class="text-xs text-slate-500">Digite seu login e senha para liberar edições</p>
+            <p class="text-xs text-slate-500">Digite seu usuário e senha para editar</p>
           </div>
         </div>
         <button type="button" onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
@@ -258,15 +241,15 @@
         </button>
       </div>
 
-      <form id="customAdminLoginForm" class="mt-4 space-y-3" novalidate>
+      <form id="customAdminLoginForm" onsubmit="verifyAdminPassword(event)" class="mt-4 space-y-3" novalidate>
         <div>
           <label for="customAdminUser" class="block text-xs font-bold text-slate-700 mb-1">Usuário / Login</label>
-          <input type="text" id="customAdminUser" autocomplete="username" required placeholder="Digite o login (Padrão: admin)"
+          <input type="text" id="customAdminUser" autocomplete="username" required placeholder="Digite seu usuário"
             class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
         </div>
         <div>
           <label for="customAdminPass" class="block text-xs font-bold text-slate-700 mb-1">Senha</label>
-          <input type="password" id="customAdminPass" autocomplete="current-password" required placeholder="Digite a senha (Padrão: 1234)"
+          <input type="password" id="customAdminPass" autocomplete="current-password" required placeholder="Digite sua senha"
             class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-slate-900">
         </div>
         <p id="adminLoginError" class="hidden text-[11px] font-bold text-rose-600"></p>
@@ -275,14 +258,11 @@
             Cancelar
           </button>
           <button type="submit" class="px-5 py-2 text-xs font-extrabold text-white bg-[#7a001e] hover:bg-[#580015] rounded-xl shadow-sm cursor-pointer">
-            Desbloquear Edição
+            Entrar
           </button>
         </div>
       </form>
     `;
-
-    const form = document.getElementById('customAdminLoginForm');
-    form.addEventListener('submit', window.verifyAdminPassword);
   }
 
   function installHandlers() {
@@ -313,14 +293,14 @@
     };
 
     window.verifyAdminPassword = function (event) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       clearLoginError();
 
       const typedUser = (document.getElementById('customAdminUser').value || '').trim();
       const typedPass = (document.getElementById('customAdminPass').value || '').trim();
 
       if (!typedUser || !typedPass) {
-        setLoginError('Preencha o login e a senha.');
+        setLoginError('Preencha o usuário e a senha.');
         return;
       }
 
@@ -335,125 +315,4 @@
         if (typeof updateAdminUI === 'function') updateAdminUI();
         if (typeof renderWorkspace === 'function') renderWorkspace();
         if (typeof refreshIcons === 'function') refreshIcons();
-        if (typeof notifyToast === 'function') {
-          notifyToast('Modo Administrador ativado!');
-        }
-      } else {
-        setLoginError('Login ou senha incorretos. Tente novamente.');
-      }
-    };
-
-    window.openChangeCredentialsModal = function () {
-      if (!isAdmin) return;
-      injectAdminCredentialControls();
-      document.getElementById('newCustomLoginInput').value = adminCredentials.login;
-      document.getElementById('newCustomPasswordInput').value = adminCredentials.password;
-      document.getElementById('changeCredentialsModal').classList.remove('hidden');
-      setTimeout(() => document.getElementById('newCustomLoginInput').focus(), 50);
-      if (typeof refreshIcons === 'function') refreshIcons();
-    };
-
-    window.closeChangeCredentialsModal = function () {
-      const modal = document.getElementById('changeCredentialsModal');
-      if (modal) modal.classList.add('hidden');
-    };
-
-    window.saveNewCredentials = function (event) {
-      event.preventDefault();
-      if (!isAdmin) return;
-
-      const newLogin = (document.getElementById('newCustomLoginInput').value || '').trim();
-      const newPassword = (document.getElementById('newCustomPasswordInput').value || '').trim();
-
-      if (!newLogin || !newPassword) return;
-
-      adminCredentials = {
-        login: newLogin,
-        password: newPassword
-      };
-      localStorage.setItem(LOCAL_CRED_BACKUP, JSON.stringify(adminCredentials));
-      window.closeChangeCredentialsModal();
-
-      if (!firebaseReady || !db) {
-        if (typeof notifyToast === 'function') {
-          notifyToast('Login e senha salvos localmente (aguardando conexão com Firebase).');
-        }
-        return;
-      }
-
-      writeQueue = writeQueue
-        .then(() =>
-          db.doc(DOC_CRED_PATH).set({
-            login: newLogin,
-            password: newPassword,
-            updatedAt: Date.now()
-          })
-        )
-        .then(() => {
-          if (typeof notifyToast === 'function') {
-            notifyToast(`Novo login ("${newLogin}") e senha salvos online no Firebase!`);
-          }
-        })
-        .catch(error => {
-          console.error('Erro ao salvar novas credenciais no Firestore:', error);
-          if (typeof notifyToast === 'function') {
-            notifyToast('Erro ao salvar senha no Firebase. Verifique as regras do Firestore.', 'error');
-          }
-        });
-    };
-
-    window.saveAppState = function () {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-
-      if (!firebaseReady || !db) {
-        if (typeof notifyToast === 'function') {
-          notifyToast('Conectando ao Firebase... tente novamente em instantes.', 'error');
-        }
-        return;
-      }
-
-      if (!isAdmin) {
-        if (typeof notifyToast === 'function') {
-          notifyToast('Apenas o administrador pode salvar alterações.', 'error');
-        }
-        return;
-      }
-
-      const payload = cloneData(appState);
-      writeQueue = writeQueue
-        .then(() => db.doc(DOC_DATA_PATH).set(payload))
-        .catch(error => {
-          console.error('Erro ao salvar laboratórios no Firestore:', error);
-          if (typeof notifyToast === 'function') {
-            notifyToast('Falha ao salvar no Firebase. Verifique as regras do Firestore.', 'error');
-          }
-        });
-    };
-  }
-
-  async function start() {
-    loadLocalCredentialsBackup();
-    injectAdminCredentialControls();
-    installHandlers();
-
-    // Restaura sessão se o admin já estava logado nesta aba
-    if (sessionStorage.getItem(SESSION_AUTH_KEY) === 'true') {
-      isAdmin = true;
-      if (typeof updateAdminUI === 'function') updateAdminUI();
-    }
-
-    try {
-      await initializeFirebase();
-      startRealtimeListeners();
-    } catch (error) {
-      console.error('Erro ao iniciar Firebase nos Laboratórios:', error);
-      setSyncBadge(false);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
-  } else {
-    start();
-  }
-})();
+        if (typeof notifyToast === '
