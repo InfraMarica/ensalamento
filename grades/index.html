@@ -308,7 +308,12 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" id="masterUnlockToggleBtn" onclick="handleMasterUnlockButtonClick()" title="Desbloquear todos os cursos de Maricá e Saquarema com a Senha Mestra"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-black rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs transition cursor-pointer shrink-0">
+          <i data-lucide="key-round" class="w-4 h-4 text-[#7a001e]"></i>
+          <span>Senha Mestra</span>
+        </button>
         <button type="button" onclick="openReportPasswordModal()" title="Gerar Relatório Geral por Professor"
           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-black rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-950 border border-purple-300 shadow-2xs transition cursor-pointer shrink-0">
           <i data-lucide="file-text" class="w-4 h-4 text-purple-700"></i>
@@ -368,6 +373,50 @@
           <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-black text-white bg-[#7a001e] hover:bg-[#600017] rounded-xl shadow-md transition-all">
             <i data-lucide="unlock" class="w-3.5 h-3.5 text-amber-300"></i>
             <span>Acessar Grade</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE SENHA MESTRA (DESBLOQUEAR TODOS OS CURSOS) ==================== -->
+  <div id="masterPasswordModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-stone-200">
+      <div class="flex items-center justify-between pb-4 border-b border-stone-100">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/20 shrink-0">
+            <i data-lucide="key-round" class="w-6 h-6 text-amber-300"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-wider text-[#7a001e] block">ACESSO TOTAL • MARICÁ & SAQUAREMA</span>
+            <h3 class="text-base font-black text-stone-900 leading-tight">Desbloquear Todos os Cursos</h3>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('masterPasswordModal')" class="text-stone-400 hover:text-stone-600 p-1 rounded-lg hover:bg-stone-100">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="verifyMasterPassword(event)" class="mt-4 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-stone-700 mb-1.5">Digite a Senha Mestra</label>
+          <input type="password" id="masterPasswordInput" required placeholder="Senha mestra..."
+            class="w-full px-3.5 py-2.5 text-sm bg-stone-50 border border-stone-300 rounded-xl focus:bg-white focus:outline-none focus:border-[#7a001e] font-bold text-stone-900">
+          <p class="text-[11px] text-stone-500 mt-1.5">
+            Libera o acesso direto a todos os cursos de <strong>Maricá</strong> e <strong>Saquarema</strong> sem precisar digitar senha em cada curso.
+          </p>
+          <p id="masterPasswordError" class="hidden text-xs font-bold text-rose-600 mt-1.5">
+            Senha mestra incorreta. Tente novamente.
+          </p>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+          <button type="button" onclick="closeModal('masterPasswordModal')" class="px-4 py-2 text-xs font-bold text-stone-500 hover:bg-stone-100 rounded-xl">
+            Cancelar
+          </button>
+          <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-black text-white bg-[#7a001e] hover:bg-[#600017] rounded-xl shadow-md transition-all cursor-pointer">
+            <i data-lucide="unlock" class="w-3.5 h-3.5 text-amber-300"></i>
+            <span>Desbloquear Todos</span>
           </button>
         </div>
       </form>
@@ -762,8 +811,10 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div>
-              <label class="block font-bold text-stone-700 mb-1">Campus</label>
-              <select id="formCampusUnit" required class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+              <label class="block font-bold text-stone-700 mb-1">
+                Campus <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
+              </label>
+              <select id="formCampusUnit" class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
               </select>
             </div>
 
@@ -779,12 +830,20 @@
 
             <div id="presencialDetalheCol">
               <label id="lblLocationDetail" class="block font-bold text-stone-700 mb-1">
-                Nº da Sala <span class="text-[10px] font-semibold text-stone-400">(Só nº)</span>
+                Nº da Sala <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
               </label>
               <input type="text" id="formLocationDetail" oninput="handleLocationDetailInput(this)" inputmode="numeric" placeholder="Ex: 106"
                 class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
             </div>
           </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-stone-700 mb-1">
+            Observação <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
+          </label>
+          <textarea id="formObservation" rows="2" placeholder="Ex: Aula quinzenal, turma dividida, observações gerais..."
+            class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white resize-y"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-4 border-t border-stone-100">
@@ -1169,7 +1228,62 @@
       safeCreateIcons();
     }
 
+    const MASTER_PASSWORD_CODE = '@admin123';
+    const STORAGE_KEY_MASTER_UNLOCK = 'univassouras_grades_master_unlocked_v1';
+    var isMasterUnlocked = sessionStorage.getItem(STORAGE_KEY_MASTER_UNLOCK) === 'true';
+
+    function setMasterUnlockedState(unlocked) {
+      isMasterUnlocked = Boolean(unlocked);
+      if (isMasterUnlocked) {
+        sessionStorage.setItem(STORAGE_KEY_MASTER_UNLOCK, 'true');
+      } else {
+        sessionStorage.removeItem(STORAGE_KEY_MASTER_UNLOCK);
+      }
+      updateMasterUnlockButtonUI();
+      if (activeCampus && !activeCourseId) {
+        renderCourseSelectionGrid();
+      }
+    }
+
+    function updateMasterUnlockButtonUI() {
+      const btn = document.getElementById('masterUnlockToggleBtn');
+      if (!btn) return;
+      if (isMasterUnlocked) {
+        btn.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-black rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-950 border border-emerald-300 shadow-2xs transition cursor-pointer shrink-0';
+        btn.innerHTML = '<i data-lucide="unlock" class="w-4 h-4 text-emerald-700"></i><span>Todos Desbloqueados (Bloquear)</span>';
+      } else {
+        btn.className = 'inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-black rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs transition cursor-pointer shrink-0';
+        btn.innerHTML = '<i data-lucide="key-round" class="w-4 h-4 text-[#7a001e]"></i><span>Senha Mestra</span>';
+      }
+      safeCreateIcons();
+    }
+
+    function handleMasterUnlockButtonClick() {
+      if (isMasterUnlocked) {
+        setMasterUnlockedState(false);
+        showToast('Cursos bloqueados novamente com senha individual.', 'info');
+        return;
+      }
+      document.getElementById('masterPasswordInput').value = '';
+      document.getElementById('masterPasswordError').classList.add('hidden');
+      openModal('masterPasswordModal');
+      setTimeout(() => document.getElementById('masterPasswordInput').focus(), 50);
+    }
+
+    function verifyMasterPassword(e) {
+      e.preventDefault();
+      const typed = document.getElementById('masterPasswordInput').value.trim();
+      if (typed === MASTER_PASSWORD_CODE) {
+        closeModal('masterPasswordModal');
+        setMasterUnlockedState(true);
+        showToast('🔓 Senha Mestra ativada! Todos os cursos de Maricá e Saquarema estão desbloqueados.', 'success');
+      } else {
+        document.getElementById('masterPasswordError').classList.remove('hidden');
+      }
+    }
+
     function renderCourseSelectionGrid() {
+      updateMasterUnlockButtonUI();
       const container = document.getElementById('courseGridContainer');
       const query = (document.getElementById('courseSearchInput').value || '').toLowerCase().trim();
       const courseIds = activeCampus === 'MARICA' ? MARICA_COURSE_IDS : SAQUAREMA_COURSE_IDS;
@@ -1185,6 +1299,14 @@
         const cCount = (st.classes || []).length;
         const instName = getCourseInstitutionName(activeCampus, course.id);
 
+        const lockBadge = isMasterUnlocked
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+               <i data-lucide="unlock" class="w-3 h-3"></i> Desbloqueado
+             </span>`
+          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-stone-100 text-stone-600 group-hover:bg-[#7a001e]/10 group-hover:text-[#7a001e]">
+               <i data-lucide="lock" class="w-3 h-3"></i> Protegido
+             </span>`;
+
         return `
           <button 
             type="button"
@@ -1194,9 +1316,7 @@
               <div class="w-12 h-12 rounded-2xl bg-[#7a001e] flex items-center justify-center shadow-md shadow-[#7a001e]/25 group-hover:scale-105 transition-transform shrink-0">
                 <i data-lucide="${course.icon}" class="w-6 h-6 text-amber-300"></i>
               </div>
-              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-stone-100 text-stone-600 group-hover:bg-[#7a001e]/10 group-hover:text-[#7a001e]">
-                <i data-lucide="lock" class="w-3 h-3"></i> Protegido
-              </span>
+              ${lockBadge}
             </div>
 
             <div>
@@ -1220,6 +1340,10 @@
     }
 
     function promptCoursePassword(courseId) {
+      if (isMasterUnlocked) {
+        enterCourseSchedule(courseId);
+        return;
+      }
       pendingCourseId = courseId;
       const course = ALL_COURSES_CATALOG[courseId];
       const instName = getCourseInstitutionName(activeCampus, courseId);
@@ -1243,7 +1367,12 @@
       const typed = document.getElementById('coursePasswordInput').value.trim();
       const expected = getCoursePassword(activeCampus, pendingCourseId);
 
-      if (typed === expected || typed === 'admin' || typed === '@inframarica') {
+      if (typed === MASTER_PASSWORD_CODE) {
+        setMasterUnlockedState(true);
+        closeModal('coursePasswordModal');
+        showToast('🔓 Senha Mestra ativada! Todos os cursos de Maricá e Saquarema foram desbloqueados.', 'success');
+        enterCourseSchedule(pendingCourseId);
+      } else if (typed === expected || typed === 'admin' || typed === '@inframarica') {
         closeModal('coursePasswordModal');
         enterCourseSchedule(pendingCourseId);
       } else {
@@ -1580,7 +1709,7 @@
           if (campusUnitFilter !== 'ALL' && c.campusUnit !== campusUnitFilter) return false;
           if (categoryFilter !== 'ALL' && c.type !== categoryFilter) return false;
           if (searchQuery) {
-            const hay = (c.subject + ' ' + c.professor + ' ' + (c.matricula || '') + ' ' + (c.campusUnit || '') + ' ' + (c.time || '') + ' ' + (c.startTime || '') + ' ' + (c.endTime || '') + ' ' + c.type + ' ' + (c.classFormat || '') + ' ' + (c.locationType || '') + ' ' + (c.locationDetail || '')).toLowerCase();
+            const hay = (c.subject + ' ' + c.professor + ' ' + (c.matricula || '') + ' ' + (c.campusUnit || '') + ' ' + (c.time || '') + ' ' + (c.startTime || '') + ' ' + (c.endTime || '') + ' ' + c.type + ' ' + (c.classFormat || '') + ' ' + (c.locationType || '') + ' ' + (c.locationDetail || '') + ' ' + (c.observation || '')).toLowerCase();
             if (!hay.includes(searchQuery)) return false;
           }
           return true;
@@ -1717,6 +1846,13 @@
         </div>
       ` : '';
 
+      const observationBlock = cls.observation ? `
+        <div class="flex items-start gap-1 text-[9.5px] font-semibold text-stone-600 bg-stone-100/80 px-2 py-1 rounded-md border border-stone-200/80 mt-1">
+          <i data-lucide="message-square" class="w-3 h-3 text-[#7a001e] shrink-0 mt-0.5"></i>
+          <span class="break-words leading-tight">${cls.observation}</span>
+        </div>
+      ` : '';
+
       return `
         <div class="rounded-lg p-2 border border-stone-200 bg-white shadow-2xs hover:shadow-sm transition-all ${borderLeft}">
           <div class="flex items-center justify-between gap-1 pb-1 mb-1 border-b border-stone-100">
@@ -1753,6 +1889,7 @@
           </div>
 
           ${locationBlock}
+          ${observationBlock}
 
           <div class="mt-1.5 pt-1 border-t border-stone-100 flex items-center justify-end gap-2 no-print">
             <button onclick="editClass('${cls.id}')" class="text-[9.5px] font-bold text-stone-600 hover:text-[#7a001e] flex items-center gap-0.5 cursor-pointer">
@@ -1793,8 +1930,10 @@
         ? ['Campus 1', 'Campus 3']
         : ['Campus 1', 'Campus 2'];
 
-      const defaultUnit = selectedUnit || (activeCampus === 'SAQUAREMA' ? 'Campus 3' : 'Campus 2');
-      select.innerHTML = units.map(u => '<option value="' + u + '" ' + (u === defaultUnit ? 'selected' : '') + '>' + u + '</option>').join('');
+      const currentVal = selectedUnit || '';
+      select.innerHTML =
+        '<option value="" ' + (currentVal === '' ? 'selected' : '') + '>Opcional (Sem campus)</option>' +
+        units.map(u => '<option value="' + u + '" ' + (u === currentVal ? 'selected' : '') + '>' + u + '</option>').join('');
     }
 
     function updateCourseSpecificModalOptions() {
@@ -2073,6 +2212,8 @@
       document.getElementById('formClassFormat').value = 'Aula Teórica';
       document.getElementById('formLocationType').value = 'Sala de Aula';
       document.getElementById('formLocationDetail').value = '';
+      const obsInput = document.getElementById('formObservation');
+      if (obsInput) obsInput.value = '';
 
       updateCourseSpecificModalOptions();
       handleModalityChange();
@@ -2174,7 +2315,8 @@
         type: modality,
         classFormat: document.getElementById('formClassFormat').value,
         locationType: locationType,
-        locationDetail: locationDetail
+        locationDetail: locationDetail,
+        observation: (document.getElementById('formObservation')?.value || '').trim()
       };
 
       if (id) {
@@ -2228,6 +2370,8 @@
       document.getElementById('formClassFormat').value = cls.classFormat || 'Aula Teórica';
       document.getElementById('formLocationType').value = cls.locationType || 'Sala de Aula';
       document.getElementById('formLocationDetail').value = cls.locationDetail || '';
+      const obsEditInput = document.getElementById('formObservation');
+      if (obsEditInput) obsEditInput.value = cls.observation || '';
 
       handleModalityChange();
       handleLocationTypeChange();
@@ -2251,6 +2395,10 @@
     }
 
     function openReportPasswordModal() {
+      if (isMasterUnlocked) {
+        openProfReportModal();
+        return;
+      }
       const input = document.getElementById('reportAccessPassword');
       const error = document.getElementById('reportAccessError');
       if (input) input.value = '';
@@ -2263,7 +2411,14 @@
       event.preventDefault();
       const input = document.getElementById('reportAccessPassword');
       const error = document.getElementById('reportAccessError');
-      if (!input || input.value.trim() !== '@inframarica') {
+      const val = input ? input.value.trim() : '';
+      if (val === MASTER_PASSWORD_CODE) {
+        setMasterUnlockedState(true);
+        closeModal('reportAccessModal');
+        openProfReportModal();
+        return;
+      }
+      if (val !== '@inframarica') {
         if (error) error.classList.remove('hidden');
         return;
       }
@@ -2598,7 +2753,7 @@
       const st = getActiveCourseState();
       const course = ALL_COURSES_CATALOG[activeCourseId];
       const instName = getCourseInstitutionName(activeCampus, activeCourseId);
-      const headers = ['Instituicao', 'Campus_Aula', 'Curso', 'Periodo', 'Dia', 'Inicio', 'Fim', 'Carga_Horaria', 'Disciplina', 'Professor', 'Matricula', 'Modalidade', 'Natureza_Aula', 'Ambiente', 'Sala_ou_Laboratorio'];
+      const headers = ['Instituicao', 'Campus_Aula', 'Curso', 'Periodo', 'Dia', 'Inicio', 'Fim', 'Carga_Horaria', 'Disciplina', 'Professor', 'Matricula', 'Modalidade', 'Natureza_Aula', 'Ambiente', 'Sala_ou_Laboratorio', 'Observacao'];
       const rows = st.classes.map(c => [
         '"' + instName + '"',
         '"' + (c.campusUnit || '') + '"',
@@ -2614,7 +2769,8 @@
         '"' + c.type + '"',
         '"' + (c.classFormat || '') + '"',
         '"' + (c.locationType || '') + '"',
-        '"' + (c.locationDetail || '') + '"'
+        '"' + (c.locationDetail || '') + '"',
+        '"' + (c.observation || '').replace(/"/g, '""') + '"'
       ]);
       const csv = '﻿' + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -2906,6 +3062,7 @@
                       <li><strong>Natureza:</strong> ${escapeReportHtml(cls.classFormat || 'Não informada')}</li>
                       ${location ? `<li><strong>Local:</strong> ${escapeReportHtml(location)}</li>` : ''}
                       ${cls.matricula ? `<li><strong>Matrícula:</strong> ${escapeReportHtml(cls.matricula)}</li>` : ''}
+                      ${cls.observation ? `<li class="sm:col-span-2"><strong>Observação:</strong> ${escapeReportHtml(cls.observation)}</li>` : ''}
                     </ul>
                   </li>
                 `;
@@ -2952,6 +3109,7 @@
               <span><b>Natureza:</b> ${escape(cls.classFormat || 'Não informada')}</span>
               ${location ? `<span><b>Local:</b> ${escape(location)}</span>` : ''}
               ${cls.matricula ? `<span><b>Matrícula:</b> ${escape(cls.matricula)}</span>` : ''}
+              ${cls.observation ? `<span><b>Observação:</b> ${escape(cls.observation)}</span>` : ''}
             </div>
           </li>
         `;
