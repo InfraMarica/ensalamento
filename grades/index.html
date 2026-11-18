@@ -530,6 +530,8 @@
                 <option value="Presencial">Presencial</option>
                 <option value="Estágio Supervisionado">Estágio Supervisionado</option>
                 <option value="EAD">EAD</option>
+                <option value="Extra Gestão">Extra Gestão</option>
+                <option value="Remoto">Remoto</option>
               </select>
             </div>
 
@@ -723,11 +725,13 @@
             </select>
           </div>
           <div>
-            <label class="block font-bold text-stone-700 mb-1">Modalidade (Presencial, Estágio, EAD)</label>
+            <label class="block font-bold text-stone-700 mb-1">Modalidade</label>
             <select id="formType" onchange="handleModalityChange()" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
               <option value="Presencial" selected>Presencial</option>
               <option value="Estágio Supervisionado">Estágio Supervisionado</option>
               <option value="EAD">EAD</option>
+              <option value="Extra Gestão">Extra Gestão</option>
+              <option value="Remoto">Remoto</option>
             </select>
           </div>
         </div>
@@ -789,14 +793,50 @@
         <div id="profWorkloadWarningBox" class="hidden rounded-xl border px-3.5 py-2.5 text-xs font-bold leading-relaxed"></div>
         <div id="profTimeConflictBox" class="hidden rounded-xl border border-rose-300 bg-rose-50 px-3.5 py-2.5 text-xs font-bold text-rose-800 leading-relaxed"></div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-1 gap-3">
-          <div>
-            <label class="block font-bold text-stone-700 mb-1">Natureza da Aula</label>
-            <select id="formClassFormat" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
-              <option value="Aula Teórica">Aula Teórica</option>
-              <option value="Aula Prática">Aula Prática</option>
-              <option value="Fazenda Escola" id="optFazendaEscola" class="hidden">Fazenda Escola (Med. Veterinária)</option>
-            </select>
+        <div class="space-y-2">
+          <label class="block font-bold text-stone-700">Natureza da Aula</label>
+          <p class="text-[10px] text-stone-500">Marque uma ou mais opções. Se marcar duas ou mais, informe as horas de cada uma.</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div class="rounded-xl border border-stone-200 bg-stone-50 p-3">
+              <label class="flex items-center gap-2 font-bold text-stone-800">
+                <input type="checkbox" name="classNature" id="naturePractical" value="Aula Prática" onchange="updateNatureHoursUI()" class="accent-[#7a001e]">
+                Prático
+              </label>
+              <label for="natureHoursPractical" class="block mt-2 text-[10px] font-semibold text-stone-500">Horas</label>
+              <select id="natureHoursPractical" onchange="updateNatureHoursUI()" disabled class="w-full mt-1 rounded-lg bg-white border border-stone-300 px-2 py-2 text-stone-900 font-bold">
+                <option value="">Selecione</option><option value="15h">15h</option><option value="30h">30h</option><option value="45h">45h</option><option value="60h">60h</option>
+              </select>
+            </div>
+
+            <div class="rounded-xl border border-stone-200 bg-stone-50 p-3">
+              <label class="flex items-center gap-2 font-bold text-stone-800">
+                <input type="checkbox" name="classNature" id="natureTheoretical" value="Aula Teórica" onchange="updateNatureHoursUI()" class="accent-[#7a001e]">
+                Teórico
+              </label>
+              <label for="natureHoursTheoretical" class="block mt-2 text-[10px] font-semibold text-stone-500">Horas</label>
+              <select id="natureHoursTheoretical" onchange="updateNatureHoursUI()" disabled class="w-full mt-1 rounded-lg bg-white border border-stone-300 px-2 py-2 text-stone-900 font-bold">
+                <option value="">Selecione</option><option value="15h">15h</option><option value="30h">30h</option><option value="45h">45h</option><option value="60h">60h</option>
+              </select>
+            </div>
+
+            <div class="rounded-xl border border-stone-200 bg-stone-50 p-3">
+              <label class="flex items-center gap-2 font-bold text-stone-800">
+                <input type="checkbox" name="classNature" id="natureExtensionist" value="Extensionista" onchange="updateNatureHoursUI()" class="accent-[#7a001e]">
+                Extensionista
+              </label>
+              <label for="natureHoursExtensionist" class="block mt-2 text-[10px] font-semibold text-stone-500">Horas</label>
+              <select id="natureHoursExtensionist" onchange="updateNatureHoursUI()" disabled class="w-full mt-1 rounded-lg bg-white border border-stone-300 px-2 py-2 text-stone-900 font-bold">
+                <option value="">Selecione</option><option value="15h">15h</option><option value="30h">30h</option><option value="45h">45h</option><option value="60h">60h</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="farmNatureWrapper" class="hidden rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+            <label class="flex items-center gap-2 font-bold text-emerald-900">
+              <input type="checkbox" id="formFarmSchool" value="Fazenda Escola" onchange="updateNatureHoursUI()" class="accent-[#7a001e]">
+              Fazenda Escola (Med. Veterinária)
+            </label>
           </div>
         </div>
 
@@ -1800,6 +1840,12 @@
       } else if (cls.type === 'EAD') {
         badgeStyle = 'bg-emerald-50 text-emerald-900 border-emerald-200';
         borderLeft = 'border-l-4 border-l-emerald-600';
+      } else if (cls.type === 'Extra Gestão') {
+        badgeStyle = 'bg-purple-50 text-purple-900 border-purple-200';
+        borderLeft = 'border-l-4 border-l-purple-600';
+      } else if (cls.type === 'Remoto') {
+        badgeStyle = 'bg-sky-50 text-sky-900 border-sky-200';
+        borderLeft = 'border-l-4 border-l-sky-600';
       }
 
       const displayTime = (cls.startTime && cls.endTime)
@@ -1936,19 +1982,36 @@
         units.map(u => '<option value="' + u + '" ' + (u === currentVal ? 'selected' : '') + '>' + u + '</option>').join('');
     }
 
+    function updateNatureHoursUI() {
+      const natureIds = [
+        ['naturePractical', 'natureHoursPractical'],
+        ['natureTheoretical', 'natureHoursTheoretical'],
+        ['natureExtensionist', 'natureHoursExtensionist']
+      ];
+      const selectedCount = natureIds.filter(([checkId]) => {
+        const check = document.getElementById(checkId);
+        return check && check.checked;
+      }).length;
+
+      natureIds.forEach(([checkId, hoursId]) => {
+        const check = document.getElementById(checkId);
+        const hours = document.getElementById(hoursId);
+        if (!check || !hours) return;
+        hours.disabled = !check.checked;
+        hours.required = check.checked && selectedCount >= 2;
+        if (!check.checked) hours.value = '';
+      });
+    }
+
     function updateCourseSpecificModalOptions() {
-      const optFazenda = document.getElementById('optFazendaEscola');
-      const formatSelect = document.getElementById('formClassFormat');
-      if (activeCourseId === 'veterinaria') {
-        optFazenda.classList.remove('hidden');
-        optFazenda.disabled = false;
-      } else {
-        optFazenda.classList.add('hidden');
-        optFazenda.disabled = true;
-        if (formatSelect.value === 'Fazenda Escola') {
-          formatSelect.value = 'Aula Teórica';
-        }
-      }
+      const farmWrapper = document.getElementById('farmNatureWrapper');
+      const farmCheck = document.getElementById('formFarmSchool');
+      if (!farmWrapper || !farmCheck) return;
+
+      const isVeterinary = activeCourseId === 'veterinaria';
+      farmWrapper.classList.toggle('hidden', !isVeterinary);
+      if (!isVeterinary) farmCheck.checked = false;
+      updateNatureHoursUI();
     }
 
     function handleModalityChange() {
@@ -2209,7 +2272,13 @@
 
       document.getElementById('formWorkload').value = '6h';
       document.getElementById('formType').value = 'Presencial';
-      document.getElementById('formClassFormat').value = 'Aula Teórica';
+      document.querySelectorAll('input[name="classNature"]').forEach(input => { input.checked = false; });
+      ['natureHoursPractical', 'natureHoursTheoretical', 'natureHoursExtensionist'].forEach(id => {
+        const select = document.getElementById(id);
+        if (select) select.value = '';
+      });
+      document.getElementById('formFarmSchool').checked = false;
+      updateNatureHoursUI();
       document.getElementById('formLocationType').value = 'Sala de Aula';
       document.getElementById('formLocationDetail').value = '';
       const obsInput = document.getElementById('formObservation');
@@ -2277,6 +2346,41 @@
         return;
       }
 
+      const selectedNature = Array.from(document.querySelectorAll('input[name="classNature"]:checked')).map(input => input.value);
+      const farmSchoolSelected = document.getElementById('formFarmSchool').checked;
+
+      if (selectedNature.length === 0 && !farmSchoolSelected) {
+        showToast('Marque pelo menos uma natureza da aula.', 'error');
+        return;
+      }
+
+      const natureHourFields = {
+        'Aula Prática': 'natureHoursPractical',
+        'Aula Teórica': 'natureHoursTheoretical',
+        'Extensionista': 'natureHoursExtensionist'
+      };
+      const natureHours = {};
+      if (selectedNature.length >= 2) {
+        for (const nature of selectedNature) {
+          const field = document.getElementById(natureHourFields[nature]);
+          if (!field || !field.value) {
+            showToast('Informe as horas para cada natureza selecionada.', 'error');
+            if (field) field.focus();
+            return;
+          }
+          natureHours[nature] = field.value;
+        }
+      } else {
+        selectedNature.forEach(nature => {
+          const field = document.getElementById(natureHourFields[nature]);
+          if (field && field.value) natureHours[nature] = field.value;
+        });
+      }
+
+      const classFormats = [...selectedNature];
+      if (farmSchoolSelected) classFormats.push('Fazenda Escola');
+      const classFormat = classFormats.join(', ');
+
       const workloadVal = document.getElementById('formWorkload').value;
       const summary = getProfessorScheduleSummary(matchedProf, id);
       const newHours = parseWorkloadHours(workloadVal);
@@ -2313,7 +2417,9 @@
         endTime: endTime,
         time: startTime + ' às ' + endTime,
         type: modality,
-        classFormat: document.getElementById('formClassFormat').value,
+        classFormat: classFormat,
+        classFormats: classFormats,
+        natureHours: natureHours,
         locationType: locationType,
         locationDetail: locationDetail,
         observation: (document.getElementById('formObservation')?.value || '').trim()
@@ -2367,7 +2473,23 @@
       document.getElementById('formEndTime').value = eTime;
 
       document.getElementById('formType').value = cls.type || 'Presencial';
-      document.getElementById('formClassFormat').value = cls.classFormat || 'Aula Teórica';
+      const savedFormats = Array.isArray(cls.classFormats)
+        ? cls.classFormats
+        : String(cls.classFormat || 'Aula Teórica').split(',').map(value => value.trim()).filter(Boolean);
+      document.querySelectorAll('input[name="classNature"]').forEach(input => {
+        input.checked = savedFormats.includes(input.value);
+      });
+      document.getElementById('formFarmSchool').checked = savedFormats.includes('Fazenda Escola');
+      const savedNatureHours = cls.natureHours || {};
+      const savedHourFields = {
+        'Aula Prática': 'natureHoursPractical',
+        'Aula Teórica': 'natureHoursTheoretical',
+        'Extensionista': 'natureHoursExtensionist'
+      };
+      Object.entries(savedHourFields).forEach(([nature, fieldId]) => {
+        document.getElementById(fieldId).value = savedNatureHours[nature] || '';
+      });
+      updateNatureHoursUI();
       document.getElementById('formLocationType').value = cls.locationType || 'Sala de Aula';
       document.getElementById('formLocationDetail').value = cls.locationDetail || '';
       const obsEditInput = document.getElementById('formObservation');
@@ -3004,6 +3126,22 @@
       const campusCounts = countBy('institution');
       const courseCounts = countBy('courseTitle');
       const modalityCounts = countBy('type');
+      const modalityHours = allFound.reduce((acc, cls) => {
+        const label = cls.type || 'Não informado';
+        acc[label] = (acc[label] || 0) + parseWorkloadHours(cls.workload);
+        return acc;
+      }, {});
+
+      const modalityBadgeClass = label => {
+        const styles = {
+          'Presencial': 'bg-rose-50 text-[#7a001e] border-rose-200',
+          'Estágio Supervisionado': 'bg-amber-50 text-amber-900 border-amber-200',
+          'EAD': 'bg-emerald-50 text-emerald-900 border-emerald-200',
+          'Extra Gestão': 'bg-purple-50 text-purple-900 border-purple-200',
+          'Remoto': 'bg-sky-50 text-sky-900 border-sky-200'
+        };
+        return styles[label] || 'bg-stone-100 text-stone-700 border-stone-200';
+      };
 
       const summaryList = (title, data) => `
         <section class="rounded-xl border border-stone-200 bg-white p-3">
@@ -3011,6 +3149,20 @@
           <ul class="space-y-1">
             ${Object.entries(data).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([name, count]) =>
               `<li class="flex justify-between gap-3 text-stone-600"><span>${escapeReportHtml(name)}</span><strong class="text-stone-900">${count}</strong></li>`
+            ).join('')}
+          </ul>
+        </section>
+      `;
+
+      const modalitySummary = `
+        <section class="rounded-xl border border-stone-200 bg-white p-3">
+          <h5 class="mb-2 font-black text-stone-800">Por modalidade</h5>
+          <ul class="space-y-1">
+            ${Object.entries(modalityCounts).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([name, count]) =>
+              `<li class="flex flex-wrap items-center justify-between gap-2 text-stone-600">
+                <span class="inline-flex rounded border px-2 py-0.5 font-bold ${modalityBadgeClass(name)}">${escapeReportHtml(name)}</span>
+                <strong class="text-stone-900">${modalityHours[name] || 0}h • ${count} aula(s)</strong>
+              </li>`
             ).join('')}
           </ul>
         </section>
@@ -3034,7 +3186,7 @@
           <section class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             ${summaryList('Por instituição / campus', campusCounts)}
             ${summaryList('Por curso', courseCounts)}
-            ${summaryList('Por modalidade', modalityCounts)}
+            ${modalitySummary}
           </section>
 
           <section class="rounded-xl border border-stone-200 bg-white p-3">
@@ -3058,7 +3210,7 @@
                       <li><strong>Instituição:</strong> ${escapeReportHtml(cls.institution)}</li>
                       <li><strong>Curso / período:</strong> ${escapeReportHtml(cls.courseTitle)} / ${escapeReportHtml(cls.period || 'Não informado')}</li>
                       <li><strong>Campus da aula:</strong> ${escapeReportHtml(cls.campusUnit || 'Não informado')}</li>
-                      <li><strong>Modalidade:</strong> ${escapeReportHtml(cls.type || 'Não informada')}</li>
+                      <li><strong>Modalidade:</strong> <span class="inline-flex rounded border px-2 py-0.5 font-bold ${modalityBadgeClass(cls.type || '')}">${escapeReportHtml(cls.type || 'Não informada')}</span></li>
                       <li><strong>Natureza:</strong> ${escapeReportHtml(cls.classFormat || 'Não informada')}</li>
                       ${location ? `<li><strong>Local:</strong> ${escapeReportHtml(location)}</li>` : ''}
                       ${cls.matricula ? `<li><strong>Matrícula:</strong> ${escapeReportHtml(cls.matricula)}</li>` : ''}
@@ -3089,6 +3241,22 @@
       }
 
       const escape = escapeReportHtml;
+      const modalityColors = {
+        'Presencial': ['#fff1f2', '#7a001e', '#fecdd3'],
+        'Estágio Supervisionado': ['#fffbeb', '#78350f', '#fde68a'],
+        'EAD': ['#ecfdf5', '#065f46', '#a7f3d0'],
+        'Extra Gestão': ['#faf5ff', '#6b21a8', '#e9d5ff'],
+        'Remoto': ['#f0f9ff', '#075985', '#bae6fd']
+      };
+      const modalityHours = allFound.reduce((totals, cls) => {
+        const modality = cls.type || 'Não informada';
+        totals[modality] = (totals[modality] || 0) + parseWorkloadHours(cls.workload);
+        return totals;
+      }, {});
+      const modalitySummary = Object.entries(modalityHours).sort((a, b) => a[0].localeCompare(b[0], 'pt-BR')).map(([name, hours]) => {
+        const colors = modalityColors[name] || ['#f5f5f4', '#44403c', '#d6d3d1'];
+        return `<div class="total modality-total" style="background:${colors[0]};color:${colors[1]};border-color:${colors[2]}">Horas em ${escape(name)}<strong>${hours}h</strong></div>`;
+      }).join('');
       const rows = allFound.map((cls, index) => {
         const time = cls.startTime && cls.endTime
           ? `${cls.startTime} às ${cls.endTime}`
@@ -3105,7 +3273,7 @@
               <span><b>Instituição:</b> ${escape(cls.institution)}</span>
               <span><b>Curso / período:</b> ${escape(cls.courseTitle)} / ${escape(cls.period || 'Não informado')}</span>
               <span><b>Campus da aula:</b> ${escape(cls.campusUnit || 'Não informado')}</span>
-              <span><b>Modalidade:</b> ${escape(cls.type || 'Não informada')}</span>
+              <span><b>Modalidade:</b> <strong style="display:inline-block;padding:2px 7px;border-radius:5px;background:${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[0]};color:${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[1]};border:1px solid ${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[2]}">${escape(cls.type || 'Não informada')}</strong></span>
               <span><b>Natureza:</b> ${escape(cls.classFormat || 'Não informada')}</span>
               ${location ? `<span><b>Local:</b> ${escape(location)}</span>` : ''}
               ${cls.matricula ? `<span><b>Matrícula:</b> ${escape(cls.matricula)}</span>` : ''}
@@ -3153,6 +3321,7 @@
     <div class="total">Carga horária total<strong>${totalHours}h</strong></div>
     <div class="total">Instituições / campi<strong>${new Set(allFound.map(cls => cls.institution)).size}</strong></div>
     <div class="total">Cursos<strong>${new Set(allFound.map(cls => cls.courseTitle)).size}</strong></div>
+    ${modalitySummary}
   </div>
   <ol>${rows}</ol>
   <script>window.onload=function(){window.focus();window.print();};<\/script>
