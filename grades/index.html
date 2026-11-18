@@ -737,6 +737,8 @@
         <p id="timeFormatError" class="hidden text-[11px] font-bold text-rose-600 -mt-1">
           ⚠️ O horário de início e fim deve estar exatamente no formato HH:MM (ex: 18:50 ou 20:00).
         </p>
+        <div id="profWorkloadWarningBox" class="hidden rounded-xl border px-3.5 py-2.5 text-xs font-bold leading-relaxed"></div>
+        <div id="profTimeConflictBox" class="hidden rounded-xl border border-rose-300 bg-rose-50 px-3.5 py-2.5 text-xs font-bold text-rose-800 leading-relaxed"></div>
 
         <div class="grid grid-cols-1 sm:grid-cols-1 gap-3">
           <div>
@@ -1738,8 +1740,14 @@
 
           <div class="flex items-start gap-1 text-[10px] font-bold text-stone-700 bg-stone-50 px-1.5 py-1 rounded border border-stone-100">
             <i data-lucide="user" class="w-3 h-3 text-[#7a001e] shrink-0 mt-0.5"></i>
-            <div class="break-words leading-tight">
+            <div class="break-words leading-tight flex-1">
               <span>${cls.professor}</span>
+              ${(() => {
+                const profSum = typeof getProfessorScheduleSummary === 'function' ? getProfessorScheduleSummary(cls.professor) : { totalHours: 0 };
+                return profSum.totalHours > MAX_PROFESSOR_WORKLOAD_HOURS
+                  ? '<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300 text-[8.5px] font-black" title="Professor ultrapassou 48h somando Maricá e Saquarema">⚠️ ' + profSum.totalHours + 'h/48h</span>'
+                  : '';
+              })()}
               ${cls.matricula ? '<span class="block text-[9px] font-semibold text-stone-400">Mat: ' + cls.matricula + '</span>' : ''}
             </div>
           </div>
@@ -1862,6 +1870,184 @@
       if (subjInput) subjInput.value = selectedSubj;
     }
 
+    const MAX_PROFESSOR_WORKLOAD_HOURS = 48;
+
+    function parseHHMMToMinutes(hhmm) {
+      if (!hhmm || typeof hhmm !== 'string') return null;
+      const m = hhmm.trim().match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+      if (!m) return null;
+      return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+    }
+
+    function extractClassStartEndMinutes(cls) {
+      let s = (cls.startTime || '').trim();
+      let e = (cls.endTime || '').trim();
+      if ((!s || !e) && cls.time) {
+        const m = String(cls.time).match(/(\d{2}:\d{2}).*?(\d{2}:\d{2})/);
+        if (m) {
+          s = m[1];
+          e = m[2];
+        }
+      }
+      const startMin = parseHHMMToMinutes(s);
+      const endMin = parseHHMMToMinutes(e);
+      if (startMin === null || endMin === null) return null;
+      return { startMin, endMin, startTime: s, endTime: e };
+    }
+
+    function parseWorkloadHours(workloadVal) {
+      const h = parseInt(String(workloadVal || '6h').replace(/[^\d]/g, ''), 10);
+      return Number.isFinite(h) && h > 0 ? h : 6;
+    }
+
+    function getProfessorScheduleSummary(profName, excludeClassId = '') {
+      const normalizedProf = (profName || '').trim().toLocaleLowerCase('pt-BR');
+      if (!normalizedProf) {
+        return { classes: [], totalHours: 0, maricaHours: 0, saquaremaHours: 0 };
+      }
+
+      const classes = [];
+      let totalHours = 0;
+      let maricaHours = 0;
+      let saquaremaHours = 0;
+
+      const searchGroups = [
+        { campusKey: 'MARICA', courseIds: MARICA_COURSE_IDS },
+        { campusKey: 'SAQUAREMA', courseIds: SAQUAREMA_COURSE_IDS }
+      ];
+
+      searchGroups.forEach(group => {
+        group.courseIds.forEach(courseId => {
+          const state = appData[group.campusKey] && appData[group.campusKey][courseId];
+          if (!state || !Array.isArray(state.classes)) return;
+
+          state.classes.forEach(cls => {
+            if (excludeClassId && cls.id === excludeClassId) return;
+            if ((cls.professor || '').trim().toLocaleLowerCase('pt-BR') !== normalizedProf) return;
+
+            const course = ALL_COURSES_CATALOG[courseId];
+            const hours = parseWorkloadHours(cls.workload);
+            totalHours += hours;
+            if (group.campusKey === 'MARICA') maricaHours += hours;
+            if (group.campusKey === 'SAQUAREMA') saquaremaHours += hours;
+
+            classes.push({
+              ...cls,
+              campusKey: group.campusKey,
+              courseId,
+              courseTitle: course ? course.title : courseId,
+              institution: getCourseInstitutionName(group.campusKey, courseId),
+              hours
+            });
+          });
+        });
+      });
+
+      return { classes, totalHours, maricaHours, saquaremaHours };
+    }
+
+    function findProfessorTimeConflict(profName, day, startTime, endTime, excludeClassId = '') {
+      const newStart = parseHHMMToMinutes(startTime);
+      const newEnd = parseHHMMToMinutes(endTime);
+      if (newStart === null || newEnd === null || newEnd <= newStart) return null;
+
+      const { classes } = getProfessorScheduleSummary(profName, excludeClassId);
+      for (const cls of classes) {
+        if (cls.day !== day) continue;
+        const range = extractClassStartEndMinutes(cls);
+        if (!range) continue;
+
+        // Permite horários seguidos (ex: 17:10-18:00 e 18:00-21:20)
+        // Bloqueia sobreposição (ex: 20:30-22:10 com 18:00-21:20)
+        if (newStart < range.endMin && range.startMin < newEnd) {
+          return {
+            ...cls,
+            conflictStart: range.startTime,
+            conflictEnd: range.endTime
+          };
+        }
+      }
+      return null;
+    }
+
+    function updateLiveClassValidation() {
+      const workloadBox = document.getElementById('profWorkloadWarningBox');
+      const conflictBox = document.getElementById('profTimeConflictBox');
+      if (!workloadBox || !conflictBox) return;
+
+      const id = document.getElementById('editClassId').value;
+      const typedProf = (document.getElementById('formProfessor').value || '').trim();
+      const dayVal = document.getElementById('formDay').value;
+      const workloadVal = document.getElementById('formWorkload').value;
+      const startTime = (document.getElementById('formStartTime').value || '').trim();
+      const endTime = (document.getElementById('formEndTime').value || '').trim();
+
+      const matchedProf = (globalProfessors || []).find(
+        p => p.trim().toLocaleLowerCase('pt-BR') === typedProf.toLocaleLowerCase('pt-BR')
+      );
+
+      if (matchedProf) {
+        const summary = getProfessorScheduleSummary(matchedProf, id);
+        const newHours = parseWorkloadHours(workloadVal);
+        const projectedHours = summary.totalHours + newHours;
+
+        workloadBox.classList.remove('hidden');
+        if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
+          workloadBox.className = 'rounded-xl border border-amber-400 bg-amber-50 px-3.5 py-2.5 text-xs font-bold text-amber-950 leading-relaxed';
+          workloadBox.innerHTML =
+            '⚠️ <strong>AVISO DE LIMITE DE 48H:</strong> O(a) professor(a) <strong>' + matchedProf +
+            '</strong> já possui <strong>' + summary.totalHours + 'h</strong> cadastradas (Maricá: ' +
+            summary.maricaHours + 'h • Saquarema: ' + summary.saquaremaHours + 'h). Com esta aula (+' +
+            newHours + 'h), atingirá <strong>' + projectedHours + 'h</strong>, ultrapassando o limite de ' +
+            MAX_PROFESSOR_WORKLOAD_HOURS + 'h em <strong>' + (projectedHours - MAX_PROFESSOR_WORKLOAD_HOURS) + 'h</strong>!';
+        } else {
+          workloadBox.className = 'rounded-xl border border-stone-200 bg-stone-50 px-3.5 py-2 text-[11px] font-semibold text-stone-700 leading-relaxed';
+          workloadBox.innerHTML =
+            '📊 Carga horária de <strong>' + matchedProf + '</strong> (Maricá + Saquarema): Atual <strong>' +
+            summary.totalHours + 'h</strong> + <strong>' + newHours + 'h</strong> desta aula = <strong>' +
+            projectedHours + 'h / ' + MAX_PROFESSOR_WORKLOAD_HOURS + 'h</strong>.';
+        }
+      } else {
+        workloadBox.classList.add('hidden');
+      }
+
+      if (isValidHHMM(startTime) && isValidHHMM(endTime)) {
+        const sMin = parseHHMMToMinutes(startTime);
+        const eMin = parseHHMMToMinutes(endTime);
+        if (eMin <= sMin) {
+          conflictBox.classList.remove('hidden');
+          conflictBox.innerHTML = '🚫 <strong>Horário inválido:</strong> O horário de fim (' + endTime + ') deve ser maior que o horário de início (' + startTime + ').';
+          return;
+        }
+
+        if (matchedProf) {
+          const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id);
+          if (conflict) {
+            conflictBox.classList.remove('hidden');
+            conflictBox.innerHTML =
+              '🚫 <strong>Conflito de Horário Bloqueado:</strong> <strong>' + matchedProf +
+              '</strong> já está alocado(a) na <strong>' + dayVal + '</strong> das <strong>' +
+              conflict.conflictStart + ' às ' + conflict.conflictEnd + '</strong> na disciplina "<strong>' +
+              conflict.subject + '</strong>" (' + conflict.courseTitle + ' • ' + conflict.period + ' • ' +
+              conflict.institution + ').';
+            return;
+          }
+        }
+      }
+
+      conflictBox.classList.add('hidden');
+    }
+
+    function bindLiveValidationListeners() {
+      ['formProfessor', 'formWorkload', 'formDay', 'formStartTime', 'formEndTime'].forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (!el || el.dataset.validationBound === 'true') return;
+        el.addEventListener('input', updateLiveClassValidation);
+        el.addEventListener('change', updateLiveClassValidation);
+        el.dataset.validationBound = 'true';
+      });
+    }
+
     function openNewClassModal(defaultPeriod = '', defaultDay = 'Segunda-feira') {
       const st = getActiveCourseState();
       if (st.periods.length === 0) {
@@ -1881,7 +2067,6 @@
       document.getElementById('formDay').value = defaultDay;
       populateCampusUnitDropdown();
       populateModalSelects();
-      populateModalSelects();
 
       document.getElementById('formWorkload').value = '6h';
       document.getElementById('formType').value = 'Presencial';
@@ -1892,6 +2077,8 @@
       updateCourseSpecificModalOptions();
       handleModalityChange();
       handleLocationTypeChange();
+      bindLiveValidationListeners();
+      updateLiveClassValidation();
 
       openModal('addClassModal');
     }
@@ -1902,13 +2089,19 @@
       const id = document.getElementById('editClassId').value;
 
       const profVal = document.getElementById('formProfessor').value.trim();
-      if (!globalProfessors.map(p => p.toLowerCase()).includes(profVal.toLowerCase())) {
+      const matchedProf = (globalProfessors || []).find(
+        p => p.trim().toLocaleLowerCase('pt-BR') === profVal.toLocaleLowerCase('pt-BR')
+      );
+      if (!matchedProf) {
         showToast('Selecione um professor válido cadastrado na lista.', 'error');
         return;
       }
 
       const subjVal = document.getElementById('formSubject').value.trim();
-      if (!globalSubjects.map(s => s.toLowerCase()).includes(subjVal.toLowerCase())) {
+      const matchedSubj = (globalSubjects || []).find(
+        s => s.trim().toLocaleLowerCase('pt-BR') === subjVal.toLocaleLowerCase('pt-BR')
+      );
+      if (!matchedSubj) {
         showToast('Selecione uma disciplina válida cadastrada na lista.', 'error');
         return;
       }
@@ -1922,6 +2115,45 @@
         return;
       }
 
+      const startMin = parseHHMMToMinutes(startTime);
+      const endMin = parseHHMMToMinutes(endTime);
+      if (endMin <= startMin) {
+        updateLiveClassValidation();
+        showToast('O horário de fim deve ser maior que o horário de início.', 'error');
+        return;
+      }
+
+      const dayVal = document.getElementById('formDay').value;
+      const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id);
+      if (conflict) {
+        updateLiveClassValidation();
+        showToast(
+          '🚫 Conflito de horário! ' + matchedProf + ' já está em aula na ' + dayVal +
+          ' das ' + conflict.conflictStart + ' às ' + conflict.conflictEnd +
+          ' (' + conflict.courseTitle + ' - ' + conflict.period + ').',
+          'error'
+        );
+        return;
+      }
+
+      const workloadVal = document.getElementById('formWorkload').value;
+      const summary = getProfessorScheduleSummary(matchedProf, id);
+      const newHours = parseWorkloadHours(workloadVal);
+      const projectedHours = summary.totalHours + newHours;
+
+      if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
+        const msgAviso =
+          '⚠️ AVISO DE LIMITE DE 48 HORAS:\n\n' +
+          'O(a) professor(a) ' + matchedProf + ' já possui ' + summary.totalHours + 'h cadastradas ' +
+          '(Maricá: ' + summary.maricaHours + 'h | Saquarema: ' + summary.saquaremaHours + 'h).\n\n' +
+          'Com esta aula (+' + newHours + 'h), o total será de ' + projectedHours + 'h, ' +
+          'ultrapassando o limite de ' + MAX_PROFESSOR_WORKLOAD_HOURS + 'h.\n\n' +
+          'Deseja continuar e salvar mesmo assim?';
+        if (!window.confirm(msgAviso)) {
+          return;
+        }
+      }
+
       const modality = document.getElementById('formType').value;
       const hasLocation = (modality === 'Presencial' || modality === 'Estágio Supervisionado');
       const locationType = hasLocation ? document.getElementById('formLocationType').value : '';
@@ -1930,11 +2162,11 @@
       const entry = {
         id: id || ('cls_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)),
         period: document.getElementById('formPeriodSelect').value,
-        day: document.getElementById('formDay').value,
+        day: dayVal,
         campusUnit: document.getElementById('formCampusUnit').value,
-        subject: document.getElementById('formSubject').value,
-        workload: document.getElementById('formWorkload').value,
-        professor: document.getElementById('formProfessor').value,
+        subject: matchedSubj,
+        workload: workloadVal,
+        professor: matchedProf,
         matricula: document.getElementById('formMatricula').value.trim(),
         startTime: startTime,
         endTime: endTime,
@@ -1948,15 +2180,19 @@
       if (id) {
         const idx = st.classes.findIndex(c => c.id === id);
         if (idx !== -1) st.classes[idx] = entry;
-        showToast('Aula atualizada!', 'success');
       } else {
         st.classes.push(entry);
-        showToast('Aula adicionada na grade!', 'success');
       }
 
       saveStateToStorage();
       closeModal('addClassModal');
       renderCourseSchedule();
+
+      if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
+        showToast('⚠️ Aula salva! Atenção: ' + matchedProf + ' está com ' + projectedHours + 'h (>48h).', 'error');
+      } else {
+        showToast(id ? 'Aula atualizada!' : 'Aula adicionada na grade!', 'success');
+      }
     }
 
     function editClass(id) {
@@ -1995,6 +2231,8 @@
 
       handleModalityChange();
       handleLocationTypeChange();
+      bindLiveValidationListeners();
+      updateLiveClassValidation();
 
       openModal('addClassModal');
     }
@@ -2622,12 +2860,19 @@
         </section>
       `;
 
+      const overLimitWarning = totalHours > MAX_PROFESSOR_WORKLOAD_HOURS ? `
+        <div class="rounded-xl border border-rose-300 bg-rose-50 px-4 py-3 text-xs font-bold text-rose-800 flex items-center gap-2">
+          <span>⚠️ <strong>Limite de 48h ultrapassado:</strong> Este(a) professor(a) está com <strong>${totalHours}h</strong> somando Maricá e Saquarema (<strong>+${totalHours - MAX_PROFESSOR_WORKLOAD_HOURS}h</strong> acima do limite de ${MAX_PROFESSOR_WORKLOAD_HOURS}h).</span>
+        </div>
+      ` : '';
+
       container.innerHTML = `
         <div class="space-y-4 text-xs">
+          ${overLimitWarning}
           <section class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <div class="rounded-xl bg-white border border-stone-200 p-3"><span class="block text-stone-500">Professor</span><strong class="text-sm text-stone-900">${escapeReportHtml(profName)}</strong></div>
             <div class="rounded-xl bg-white border border-stone-200 p-3"><span class="block text-stone-500">Total de aulas</span><strong class="text-sm text-stone-900">${allFound.length}</strong></div>
-            <div class="rounded-xl bg-white border border-stone-200 p-3 col-span-2 sm:col-span-1"><span class="block text-stone-500">Carga horária total</span><strong class="text-sm text-stone-900">${totalHours}h</strong></div>
+            <div class="rounded-xl ${totalHours > MAX_PROFESSOR_WORKLOAD_HOURS ? 'bg-rose-50 border-rose-300 text-rose-900' : 'bg-white border-stone-200'} border p-3 col-span-2 sm:col-span-1"><span class="block ${totalHours > MAX_PROFESSOR_WORKLOAD_HOURS ? 'text-rose-700 font-bold' : 'text-stone-500'}">Carga horária total (Limite: 48h)</span><strong class="text-sm ${totalHours > MAX_PROFESSOR_WORKLOAD_HOURS ? 'text-rose-800' : 'text-stone-900'}">${totalHours}h / 48h</strong></div>
           </section>
 
           <section class="grid grid-cols-1 sm:grid-cols-3 gap-2">
