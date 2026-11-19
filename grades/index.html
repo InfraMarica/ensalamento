@@ -1956,10 +1956,19 @@
             <div class="break-words leading-tight flex-1">
               <span>${cls.professor}</span>
               ${(() => {
+                if (!cls.professor || cls.awaitingHire || cls.professor === 'Aguardando contratação') return '';
+                const badges = [];
                 const profSum = typeof getProfessorScheduleSummary === 'function' ? getProfessorScheduleSummary(cls.professor) : { totalHours: 0 };
-                return profSum.totalHours > MAX_PROFESSOR_WORKLOAD_HOURS
-                  ? '<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300 text-[8.5px] font-black" title="Professor ultrapassou 48h somando Maricá e Saquarema">⚠️ ' + profSum.totalHours + 'h/48h</span>'
-                  : '';
+                if (profSum.totalHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
+                  badges.push('<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300 text-[8.5px] font-black" title="Professor ultrapassou 48h somando Maricá e Saquarema">⚠️ ' + profSum.totalHours + 'h/48h</span>');
+                }
+                if (!cls.timeUndefined && cls.startTime && cls.endTime && typeof findProfessorTimeConflict === 'function') {
+                  const cardConflict = findProfessorTimeConflict(cls.professor, cls.day, cls.startTime, cls.endTime, cls.id, cls.weekPattern || 'ALL');
+                  if (cardConflict) {
+                    badges.push('<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-600 text-white text-[8.5px] font-black" title="Choque de horário com ' + cardConflict.subject + ' (' + cardConflict.courseTitle + ' - ' + cardConflict.period + ')">⚠️ Choque Horário</span>');
+                  }
+                }
+                return badges.join('');
               })()}
               ${cls.matricula ? '<span class="block text-[9px] font-semibold text-stone-400">Mat: ' + cls.matricula + '</span>' : ''}
             </div>
@@ -2354,15 +2363,18 @@
         }
 
         if (matchedProf) {
-          const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id);
+          const weekPattern = document.getElementById('formWeekPattern')?.value || 'ALL';
+          const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern);
           if (conflict) {
+            const existingWeekLabel = (conflict.weekPattern && conflict.weekPattern !== 'ALL') ? ' (Semana ' + conflict.weekPattern + ')' : ' (Todas as semanas)';
+            conflictBox.className = 'rounded-xl border border-rose-400 bg-rose-50 px-3.5 py-2.5 text-xs font-bold text-rose-700 leading-relaxed';
             conflictBox.classList.remove('hidden');
             conflictBox.innerHTML =
-              '🚫 <strong>Conflito de Horário Bloqueado:</strong> <strong>' + matchedProf +
-              '</strong> já está alocado(a) na <strong>' + dayVal + '</strong> das <strong>' +
+              '⚠️ <strong>Aviso de Choque de Horário:</strong> <strong>' + matchedProf +
+              '</strong> já está alocado(a) na <strong>' + dayVal + '</strong>' + existingWeekLabel + ' das <strong>' +
               conflict.conflictStart + ' às ' + conflict.conflictEnd + '</strong> na disciplina "<strong>' +
               conflict.subject + '</strong>" (' + conflict.courseTitle + ' • ' + conflict.period + ' • ' +
-              conflict.institution + ').';
+              conflict.institution + '). <em>Você ainda pode salvar esta aula se desejar.</em>';
             return;
           }
         }
@@ -2474,19 +2486,9 @@
 
       const dayVal = document.getElementById('formDay').value;
       const weekPattern = document.getElementById('formWeekPattern').value || 'ALL';
-      const conflict = matchedProf
+      const conflict = (!timeUndefined && matchedProf)
         ? findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern)
         : null;
-      if (conflict) {
-        updateLiveClassValidation();
-        showToast(
-          '🚫 Conflito de horário! ' + matchedProf + ' já está em aula na ' + dayVal +
-          ' das ' + conflict.conflictStart + ' às ' + conflict.conflictEnd +
-          ' (' + conflict.courseTitle + ' - ' + conflict.period + ').',
-          'error'
-        );
-        return;
-      }
 
       const selectedNature = Array.from(document.querySelectorAll('input[name="classNature"]:checked')).map(input => input.value);
       const farmSchoolSelected = document.getElementById('formFarmSchool').checked;
@@ -2582,7 +2584,13 @@
       closeModal('addClassModal');
       renderCourseSchedule();
 
-      if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
+      if (conflict) {
+        showToast(
+          '⚠️ Aula salva com aviso: ' + matchedProf + ' possui choque de horário na ' + dayVal +
+          ' (' + conflict.conflictStart + ' às ' + conflict.conflictEnd + ' - ' + conflict.courseTitle + ').',
+          'error'
+        );
+      } else if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
         showToast('⚠️ Aula salva! Atenção: ' + matchedProf + ' está com ' + projectedHours + 'h (>48h).', 'error');
       } else {
         showToast(id ? 'Aula atualizada!' : 'Aula adicionada na grade!', 'success');
