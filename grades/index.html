@@ -753,6 +753,10 @@
               placeholder="Digite para pesquisar o professor..."
               class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
             <datalist id="professorsDatalist"></datalist>
+            <label class="mt-2 inline-flex items-center gap-2 font-semibold text-stone-700">
+              <input type="checkbox" id="formAwaitingHire" onchange="handleAwaitingHireChange()" class="accent-[#7a001e]">
+              Aguardando contratação
+            </label>
           </div>
           <div>
             <label class="block font-bold text-stone-700 mb-1">
@@ -2172,10 +2176,31 @@
       return null;
     }
 
+    function handleAwaitingHireChange() {
+      const checkbox = document.getElementById('formAwaitingHire');
+      const professorInput = document.getElementById('formProfessor');
+      if (!checkbox || !professorInput) return;
+
+      professorInput.required = !checkbox.checked;
+      professorInput.disabled = checkbox.checked;
+      professorInput.placeholder = checkbox.checked
+        ? 'Professor dispensado: aguardando contratação'
+        : 'Digite para pesquisar o professor...';
+      if (checkbox.checked) professorInput.value = '';
+      updateLiveClassValidation();
+    }
+
     function updateLiveClassValidation() {
       const workloadBox = document.getElementById('profWorkloadWarningBox');
       const conflictBox = document.getElementById('profTimeConflictBox');
       if (!workloadBox || !conflictBox) return;
+
+      const awaitingHire = document.getElementById('formAwaitingHire')?.checked || false;
+      if (awaitingHire) {
+        workloadBox.classList.add('hidden');
+        conflictBox.classList.add('hidden');
+        return;
+      }
 
       const id = document.getElementById('editClassId').value;
       const typedProf = (document.getElementById('formProfessor').value || '').trim();
@@ -2269,6 +2294,8 @@
       document.getElementById('formDay').value = defaultDay;
       populateCampusUnitDropdown();
       populateModalSelects();
+      document.getElementById('formAwaitingHire').checked = false;
+      handleAwaitingHireChange();
 
       document.getElementById('formWorkload').value = '6h';
       document.getElementById('formType').value = 'Presencial';
@@ -2298,12 +2325,13 @@
       const st = getActiveCourseState();
       const id = document.getElementById('editClassId').value;
 
+      const awaitingHire = document.getElementById('formAwaitingHire').checked;
       const profVal = document.getElementById('formProfessor').value.trim();
-      const matchedProf = (globalProfessors || []).find(
+      const matchedProf = awaitingHire ? null : (globalProfessors || []).find(
         p => p.trim().toLocaleLowerCase('pt-BR') === profVal.toLocaleLowerCase('pt-BR')
       );
-      if (!matchedProf) {
-        showToast('Selecione um professor válido cadastrado na lista.', 'error');
+      if (!awaitingHire && !matchedProf) {
+        showToast('Selecione um professor válido cadastrado na lista ou marque “Aguardando contratação”.', 'error');
         return;
       }
 
@@ -2334,7 +2362,9 @@
       }
 
       const dayVal = document.getElementById('formDay').value;
-      const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id);
+      const conflict = matchedProf
+        ? findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id)
+        : null;
       if (conflict) {
         updateLiveClassValidation();
         showToast(
@@ -2382,9 +2412,9 @@
       const classFormat = classFormats.join(', ');
 
       const workloadVal = document.getElementById('formWorkload').value;
-      const summary = getProfessorScheduleSummary(matchedProf, id);
+      const summary = matchedProf ? getProfessorScheduleSummary(matchedProf, id) : { totalHours: 0, maricaHours: 0, saquaremaHours: 0 };
       const newHours = parseWorkloadHours(workloadVal);
-      const projectedHours = summary.totalHours + newHours;
+      const projectedHours = matchedProf ? summary.totalHours + newHours : 0;
 
       if (projectedHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
         const msgAviso =
@@ -2411,7 +2441,8 @@
         campusUnit: document.getElementById('formCampusUnit').value,
         subject: matchedSubj,
         workload: workloadVal,
-        professor: matchedProf,
+        professor: matchedProf || 'Aguardando contratação',
+        awaitingHire: awaitingHire,
         matricula: document.getElementById('formMatricula').value.trim(),
         startTime: startTime,
         endTime: endTime,
@@ -2473,6 +2504,9 @@
       document.getElementById('formEndTime').value = eTime;
 
       document.getElementById('formType').value = cls.type || 'Presencial';
+      const awaitingHire = Boolean(cls.awaitingHire || cls.professor === 'Aguardando contratação');
+      document.getElementById('formAwaitingHire').checked = awaitingHire;
+      handleAwaitingHireChange();
       const savedFormats = Array.isArray(cls.classFormats)
         ? cls.classFormats
         : String(cls.classFormat || 'Aula Teórica').split(',').map(value => value.trim()).filter(Boolean);
