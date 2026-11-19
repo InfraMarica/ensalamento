@@ -676,7 +676,7 @@
 
   <!-- ==================== MODAL: ADICIONAR / EDITAR AULA ==================== -->
   <div id="addClassModal" class="fixed inset-0 z-50 hidden bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto no-print">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-xl w-full p-6 border border-stone-200 my-8">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-5xl w-full p-4 border border-stone-200 my-3 max-h-[calc(100vh-1.5rem)] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 border-b border-stone-100">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-[#7a001e] flex items-center justify-center">
@@ -689,13 +689,13 @@
         </button>
       </div>
 
-      <form id="classForm" onsubmit="handleSaveClass(event)" class="mt-4 space-y-3.5 text-xs">
+      <form id="classForm" onsubmit="handleSaveClass(event)" class="mt-3 space-y-2.5 text-xs">
         <input type="hidden" id="editClassId" value="">
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-stone-700 mb-1">Período / Turma</label>
-            <select id="formPeriodSelect" required class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+            <select id="formPeriodSelect" required onchange="updateJoinedTurmasOptions()" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
             </select>
           </div>
           <div>
@@ -708,6 +708,26 @@
               <option value="Sexta-feira">Sexta-feira</option>
               <option value="Sábado">Sábado</option>
             </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Semanas Alternadas</label>
+            <select id="formWeekPattern" onchange="updateLiveClassValidation()" class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3 py-2.5 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e] focus:bg-white">
+              <option value="ALL">Todas as semanas</option>
+              <option value="A">Semana A</option>
+              <option value="B">Semana B</option>
+              <option value="C">Semana C</option>
+              <option value="D">Semana D</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-stone-700 mb-1">Turma Junta</label>
+            <div id="joinedTurmasOptions" class="max-h-28 overflow-y-auto rounded-xl bg-stone-50 border border-stone-300 px-3 py-2 space-y-1">
+              <span class="text-stone-500">Selecione o campus e as turmas disponíveis.</span>
+            </div>
+            <p class="mt-1 text-[10px] text-stone-500">Marque até 2 outras turmas, 3 no total contando a turma atual.</p>
           </div>
         </div>
 
@@ -767,7 +787,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div id="timeFieldsWrapper" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block font-bold text-stone-700 mb-1">
               Horário de Início <span class="text-[10px] font-semibold text-[#7a001e]">(Formato 18:50)</span>
@@ -791,6 +811,10 @@
               class="w-full rounded-xl bg-stone-50 border border-stone-300 px-3.5 py-2.5 text-stone-900 font-mono font-black focus:outline-none focus:border-[#7a001e] focus:bg-white">
           </div>
         </div>
+        <label class="inline-flex items-center gap-2 font-semibold text-stone-700">
+          <input type="checkbox" id="formTimeUndefined" onchange="updateTimeUndefinedUI()" class="accent-[#7a001e]">
+          Horário não definido
+        </label>
         <p id="timeFormatError" class="hidden text-[11px] font-bold text-rose-600 -mt-1">
           ⚠️ O horário de início e fim deve estar exatamente no formato HH:MM (ex: 18:50 ou 20:00).
         </p>
@@ -858,7 +882,7 @@
               <label class="block font-bold text-stone-700 mb-1">
                 Campus <span class="text-[10px] font-semibold text-stone-400">(Opcional)</span>
               </label>
-              <select id="formCampusUnit" class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
+              <select id="formCampusUnit" onchange="updateJoinedTurmasOptions()" class="w-full rounded-xl bg-white border border-stone-300 px-3 py-2 text-stone-900 font-bold focus:outline-none focus:border-[#7a001e]">
               </select>
             </div>
 
@@ -1749,7 +1773,7 @@
 
       container.innerHTML = periodsToShow.map(periodName => {
         const periodClasses = st.classes.filter(c => {
-          if (c.period !== periodName) return false;
+          if (c.period !== periodName && !(Array.isArray(c.joinedTurmas) && c.joinedTurmas.includes(periodName))) return false;
           if (campusUnitFilter !== 'ALL' && c.campusUnit !== campusUnitFilter) return false;
           if (categoryFilter !== 'ALL' && c.type !== categoryFilter) return false;
           if (searchQuery) {
@@ -1909,6 +1933,7 @@
             <span class="inline-flex items-center gap-1 text-[10.5px] font-black text-[#7a001e] whitespace-nowrap tracking-tight">
               <i data-lucide="clock" class="w-2.5 h-2.5 text-[#7a001e] shrink-0"></i>
               <span>${displayTime}</span>
+              ${cls.weekPattern && cls.weekPattern !== 'ALL' ? '<span class="text-[9px] rounded bg-indigo-100 text-indigo-900 px-1 py-0.5">' + cls.weekPattern + '</span>' : ''}
             </span>
             ${workloadBadge}
           </div>
@@ -1923,6 +1948,8 @@
           <h4 class="text-[11px] font-bold text-stone-900 leading-tight break-words mb-1.5">
             ${cls.subject}
           </h4>
+
+          ${Array.isArray(cls.joinedTurmas) && cls.joinedTurmas.length ? '<div class="mb-1 rounded-md bg-indigo-50 border border-indigo-200 px-2 py-1 text-[9px] font-bold text-indigo-900">Turmas juntas: ' + cls.joinedTurmas.join(', ') + '</div>' : ''}
 
           <div class="flex items-start gap-1 text-[10px] font-bold text-stone-700 bg-stone-50 px-1.5 py-1 rounded border border-stone-100">
             <i data-lucide="user" class="w-3 h-3 text-[#7a001e] shrink-0 mt-0.5"></i>
@@ -1965,6 +1992,28 @@
 
     function isValidHHMM(val) {
       return /^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(val);
+    }
+
+    function updateTimeUndefinedUI() {
+      const checkbox = document.getElementById('formTimeUndefined');
+      const wrapper = document.getElementById('timeFieldsWrapper');
+      const startInput = document.getElementById('formStartTime');
+      const endInput = document.getElementById('formEndTime');
+      if (!checkbox || !wrapper || !startInput || !endInput) return;
+
+      const undefinedTime = checkbox.checked;
+      wrapper.classList.toggle('hidden', undefinedTime);
+      startInput.required = !undefinedTime;
+      endInput.required = !undefinedTime;
+      startInput.disabled = undefinedTime;
+      endInput.disabled = undefinedTime;
+
+      if (undefinedTime) {
+        startInput.value = '';
+        endInput.value = '';
+        document.getElementById('timeFormatError').classList.add('hidden');
+      }
+      if (typeof updateLiveClassValidation === 'function') updateLiveClassValidation();
     }
 
     function handleLocationDetailInput(input) {
@@ -2152,7 +2201,61 @@
       return { classes, totalHours, maricaHours, saquaremaHours };
     }
 
-    function findProfessorTimeConflict(profName, day, startTime, endTime, excludeClassId = '') {
+    function updateJoinedTurmasOptions(selectedValues = null) {
+      const container = document.getElementById('joinedTurmasOptions');
+      if (!container) return;
+
+      const selected = selectedValues === null
+        ? new Set([...container.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value))
+        : new Set(selectedValues);
+
+      const st = getActiveCourseState();
+      const currentPeriod = document.getElementById('formPeriodSelect')?.value || '';
+      const campusUnit = document.getElementById('formCampusUnit')?.value || '';
+      const candidates = (st.periods || []).filter(period =>
+        period !== currentPeriod &&
+        (selected.has(period) || !campusUnit || (st.classes || []).some(cls =>
+          cls.period === period && (cls.campusUnit || '') === campusUnit
+        ))
+      );
+
+      container.replaceChildren();
+      if (!candidates.length) {
+        const empty = document.createElement('span');
+        empty.className = 'text-stone-500';
+        empty.textContent = 'Não há outras turmas cadastradas nesta unidade.';
+        container.appendChild(empty);
+        return;
+      }
+
+      candidates.forEach(period => {
+        const label = document.createElement('label');
+        label.className = 'flex items-center gap-2 text-stone-700 font-semibold';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = period;
+        checkbox.checked = selected.has(period);
+        checkbox.className = 'accent-[#7a001e]';
+        checkbox.addEventListener('change', () => limitJoinedTurmas(checkbox));
+
+        const text = document.createElement('span');
+        text.textContent = period;
+        label.append(checkbox, text);
+        container.appendChild(label);
+      });
+    }
+
+    function limitJoinedTurmas(changedCheckbox) {
+      const container = document.getElementById('joinedTurmasOptions');
+      const checked = container ? container.querySelectorAll('input[type="checkbox"]:checked') : [];
+      if (checked.length > 2) {
+        changedCheckbox.checked = false;
+        showToast('A turma atual pode ser juntada a, no máximo, outras 2 turmas.', 'error');
+      }
+    }
+
+    function findProfessorTimeConflict(profName, day, startTime, endTime, excludeClassId = '', weekPattern = 'ALL') {
       const newStart = parseHHMMToMinutes(startTime);
       const newEnd = parseHHMMToMinutes(endTime);
       if (newStart === null || newEnd === null || newEnd <= newStart) return null;
@@ -2160,11 +2263,14 @@
       const { classes } = getProfessorScheduleSummary(profName, excludeClassId);
       for (const cls of classes) {
         if (cls.day !== day) continue;
+
+        const existingWeek = cls.weekPattern || 'ALL';
+        const currentWeek = weekPattern || 'ALL';
+        if (existingWeek !== 'ALL' && currentWeek !== 'ALL' && existingWeek !== currentWeek) continue;
+
         const range = extractClassStartEndMinutes(cls);
         if (!range) continue;
 
-        // Permite horários seguidos (ex: 17:10-18:00 e 18:00-21:20)
-        // Bloqueia sobreposição (ex: 20:30-22:10 com 18:00-21:20)
         if (newStart < range.endMin && range.startMin < newEnd) {
           return {
             ...cls,
@@ -2238,7 +2344,7 @@
         workloadBox.classList.add('hidden');
       }
 
-      if (isValidHHMM(startTime) && isValidHHMM(endTime)) {
+      if (!document.getElementById('formTimeUndefined').checked && isValidHHMM(startTime) && isValidHHMM(endTime)) {
         const sMin = parseHHMMToMinutes(startTime);
         const eMin = parseHHMMToMinutes(endTime);
         if (eMin <= sMin) {
@@ -2266,7 +2372,7 @@
     }
 
     function bindLiveValidationListeners() {
-      ['formProfessor', 'formWorkload', 'formDay', 'formStartTime', 'formEndTime'].forEach(fieldId => {
+      ['formProfessor', 'formWorkload', 'formDay', 'formWeekPattern', 'formStartTime', 'formEndTime'].forEach(fieldId => {
         const el = document.getElementById(fieldId);
         if (!el || el.dataset.validationBound === 'true') return;
         el.addEventListener('input', updateLiveClassValidation);
@@ -2286,6 +2392,8 @@
       document.getElementById('modalFormTitle').innerText = 'Cadastrar Aula na Grade';
       document.getElementById('classForm').reset();
       document.getElementById('editClassId').value = '';
+      document.getElementById('formTimeUndefined').checked = false;
+      updateTimeUndefinedUI();
       document.getElementById('timeFormatError').classList.add('hidden');
 
       const periodSelect = document.getElementById('formPeriodSelect');
@@ -2294,6 +2402,8 @@
       document.getElementById('formDay').value = defaultDay;
       populateCampusUnitDropdown();
       populateModalSelects();
+      updateJoinedTurmasOptions([]);
+      document.getElementById('formWeekPattern').value = 'ALL';
       document.getElementById('formAwaitingHire').checked = false;
       handleAwaitingHireChange();
 
@@ -2347,23 +2457,25 @@
       const startTime = document.getElementById('formStartTime').value.trim();
       const endTime = document.getElementById('formEndTime').value.trim();
 
-      if (!isValidHHMM(startTime) || !isValidHHMM(endTime)) {
+      const timeUndefined = document.getElementById('formTimeUndefined').checked;
+      if (!timeUndefined && (!isValidHHMM(startTime) || !isValidHHMM(endTime))) {
         document.getElementById('timeFormatError').classList.remove('hidden');
         showToast('Use o formato exato HH:MM (ex: 18:50 ou 20:00).', 'error');
         return;
       }
 
-      const startMin = parseHHMMToMinutes(startTime);
-      const endMin = parseHHMMToMinutes(endTime);
-      if (endMin <= startMin) {
+      const startMin = timeUndefined ? null : parseHHMMToMinutes(startTime);
+      const endMin = timeUndefined ? null : parseHHMMToMinutes(endTime);
+      if (!timeUndefined && endMin <= startMin) {
         updateLiveClassValidation();
         showToast('O horário de fim deve ser maior que o horário de início.', 'error');
         return;
       }
 
       const dayVal = document.getElementById('formDay').value;
+      const weekPattern = document.getElementById('formWeekPattern').value || 'ALL';
       const conflict = matchedProf
-        ? findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id)
+        ? findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern)
         : null;
       if (conflict) {
         updateLiveClassValidation();
@@ -2438,6 +2550,8 @@
         id: id || ('cls_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)),
         period: document.getElementById('formPeriodSelect').value,
         day: dayVal,
+        weekPattern: weekPattern,
+        joinedTurmas: [...document.querySelectorAll('#joinedTurmasOptions input[type="checkbox"]:checked')].map(input => input.value),
         campusUnit: document.getElementById('formCampusUnit').value,
         subject: matchedSubj,
         workload: workloadVal,
@@ -2446,7 +2560,8 @@
         matricula: document.getElementById('formMatricula').value.trim(),
         startTime: startTime,
         endTime: endTime,
-        time: startTime + ' às ' + endTime,
+        time: timeUndefined ? 'Horário não definido' : startTime + ' às ' + endTime,
+        timeUndefined: timeUndefined,
         type: modality,
         classFormat: classFormat,
         classFormats: classFormats,
@@ -2491,6 +2606,8 @@
       populateModalSelects(cls.professor || '', cls.subject || '');
 
       document.getElementById('formDay').value = cls.day;
+      document.getElementById('formWeekPattern').value = cls.weekPattern || 'ALL';
+      updateJoinedTurmasOptions(cls.joinedTurmas || []);
       document.getElementById('formWorkload').value = cls.workload || '6h';
       document.getElementById('formMatricula').value = cls.matricula || '';
 
@@ -2502,6 +2619,8 @@
       }
       document.getElementById('formStartTime').value = sTime;
       document.getElementById('formEndTime').value = eTime;
+      document.getElementById('formTimeUndefined').checked = Boolean(cls.timeUndefined);
+      updateTimeUndefinedUI();
 
       document.getElementById('formType').value = cls.type || 'Presencial';
       const awaitingHire = Boolean(cls.awaitingHire || cls.professor === 'Aguardando contratação');
