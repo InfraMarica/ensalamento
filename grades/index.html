@@ -820,6 +820,11 @@
         </p>
         <div id="profWorkloadWarningBox" class="hidden rounded-xl border px-3.5 py-2.5 text-xs font-bold leading-relaxed"></div>
         <div id="profTimeConflictBox" class="hidden rounded-xl border border-rose-300 bg-rose-50 px-3.5 py-2.5 text-xs font-bold text-rose-800 leading-relaxed"></div>
+        <label class="inline-flex items-start gap-2 font-semibold text-stone-700">
+          <input type="checkbox" id="formSharedClass" onchange="updateLiveClassValidation()" class="mt-0.5 accent-[#7a001e]">
+          <span>Juntar turma: mesma disciplina, professor e horário em outro curso ou campus</span>
+        </label>
+        <p class="text-[10px] text-stone-500 -mt-2">Marcando esta opção, o sistema aceita a coincidência exata de disciplina e horário. Outros choques continuam sendo avisados.</p>
 
         <div class="space-y-2">
           <label class="block font-bold text-stone-700">Natureza da Aula</label>
@@ -1858,6 +1863,70 @@
       safeCreateIcons();
     }
 
+    function getSharedClassDescription(cls) {
+      const normalize = value => String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toLocaleLowerCase('pt-BR');
+
+      const currentTime = extractClassStartEndMinutes(cls);
+      const partners = [];
+      const groups = [
+        { campusKey: 'MARICA', courseIds: MARICA_COURSE_IDS },
+        { campusKey: 'SAQUAREMA', courseIds: SAQUAREMA_COURSE_IDS }
+      ];
+
+      groups.forEach(group => {
+        group.courseIds.forEach(courseId => {
+          const state = appData[group.campusKey] && appData[group.campusKey][courseId];
+          if (!state || !Array.isArray(state.classes)) return;
+
+          state.classes.forEach(candidate => {
+            if (candidate === cls || (candidate.id && candidate.id === cls.id)) return;
+            if (normalize(candidate.professor) !== normalize(cls.professor)) return;
+            if (normalize(candidate.subject) !== normalize(cls.subject)) return;
+            if (candidate.day !== cls.day) return;
+
+            const currentWeek = cls.weekPattern || 'ALL';
+            const candidateWeek = candidate.weekPattern || 'ALL';
+            if (currentWeek !== 'ALL' && candidateWeek !== 'ALL' && currentWeek !== candidateWeek) return;
+
+            const candidateTime = extractClassStartEndMinutes(candidate);
+            if (!currentTime || !candidateTime) return;
+            if (candidateTime.startMin !== currentTime.startMin || candidateTime.endMin !== currentTime.endMin) return;
+
+            const course = ALL_COURSES_CATALOG[courseId];
+            const rawPeriod = String(candidate.period || '').trim();
+            const periodLabel = rawPeriod.replace(
+              /^(\d+)[º°]?\s*Período(?:\s*-\s*(?:Turma\s*)?(.+))?$/i,
+              (_, number, turma) => `${number}°P${turma ? '-' + turma.replace(/^Turma\s*/i, '').trim() : ''}`
+            );
+            const courseLabel = course ? course.title : courseId;
+            const differentCampus = group.campusKey !== activeCampus;
+            const campusLabel = differentCampus
+              ? (group.campusKey === 'SAQUAREMA' ? 'Saquarema' : 'Maricá')
+              : '';
+
+            const label = [
+              periodLabel || rawPeriod,
+              courseLabel + (campusLabel ? ' - ' + campusLabel : '')
+            ].filter(Boolean).join(' ');
+            if (label && !partners.includes(label)) partners.push(label);
+          });
+        });
+      });
+
+      const description = partners.length
+        ? 'Compartilhado com ' + partners.join(' | ')
+        : 'Compartilhada: não encontrei outra grade correspondente';
+
+      return '<div class="mb-1 rounded-md bg-indigo-50 border border-indigo-200 px-2 py-1 text-[9px] font-bold text-indigo-900">' +
+        escapeReportHtml(description) +
+        '</div>';
+    }
+
     function renderCleanClassCard(cls) {
       let badgeStyle = 'bg-rose-50 text-[#7a001e] border-rose-200';
       let borderLeft = 'border-l-4 border-l-[#7a001e]';
@@ -1949,6 +2018,7 @@
             ${cls.subject}
           </h4>
 
+          ${cls.sharedClass ? getSharedClassDescription(cls) : ''}
           ${Array.isArray(cls.joinedTurmas) && cls.joinedTurmas.length ? '<div class="mb-1 rounded-md bg-indigo-50 border border-indigo-200 px-2 py-1 text-[9px] font-bold text-indigo-900">Turmas juntas: ' + cls.joinedTurmas.join(', ') + '</div>' : ''}
 
           <div class="flex items-start gap-1 text-[10px] font-bold text-stone-700 bg-stone-50 px-1.5 py-1 rounded border border-stone-100">
@@ -1962,8 +2032,8 @@
                 if (profSum.totalHours > MAX_PROFESSOR_WORKLOAD_HOURS) {
                   badges.push('<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300 text-[8.5px] font-black" title="Professor ultrapassou 48h somando Maricá e Saquarema">⚠️ ' + profSum.totalHours + 'h/48h</span>');
                 }
-                if (!cls.timeUndefined && cls.startTime && cls.endTime && typeof findProfessorTimeConflict === 'function') {
-                  const cardConflict = findProfessorTimeConflict(cls.professor, cls.day, cls.startTime, cls.endTime, cls.id, cls.weekPattern || 'ALL');
+                if (!cls.sharedClass && !cls.timeUndefined && cls.startTime && cls.endTime && typeof findProfessorTimeConflict === 'function') {
+                  const cardConflict = findProfessorTimeConflict(cls.professor, cls.day, cls.startTime, cls.endTime, cls.id, cls.weekPattern || 'ALL', Boolean(cls.sharedClass), cls.subject);
                   if (cardConflict) {
                     badges.push('<span class="inline-block ml-1 px-1 py-0.2 rounded bg-rose-600 text-white text-[8.5px] font-black" title="Choque de horário com ' + cardConflict.subject + ' (' + cardConflict.courseTitle + ' - ' + cardConflict.period + ')">⚠️ Choque Horário</span>');
                   }
@@ -2291,6 +2361,50 @@
       return null;
     }
 
+    function findProfessorTimeConflict(profName, day, startTime, endTime, excludeClassId = '', weekPattern = 'ALL', allowSharedClass = false, subject = '') {
+      const newStart = parseHHMMToMinutes(startTime);
+      const newEnd = parseHHMMToMinutes(endTime);
+      if (newStart === null || newEnd === null || newEnd <= newStart) return null;
+
+      const normalize = value => String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toLocaleLowerCase('pt-BR');
+      const normalizedSubject = normalize(subject);
+      const { classes } = getProfessorScheduleSummary(profName, excludeClassId);
+
+      for (const cls of classes) {
+        if (cls.day !== day) continue;
+
+        const existingWeek = cls.weekPattern || 'ALL';
+        const currentWeek = weekPattern || 'ALL';
+        if (existingWeek !== 'ALL' && currentWeek !== 'ALL' && existingWeek !== currentWeek) continue;
+
+        const range = extractClassStartEndMinutes(cls);
+        if (!range) continue;
+
+        const isSharedMatch =
+          Boolean(allowSharedClass || cls.sharedClass) &&
+          Boolean(normalizedSubject) &&
+          normalize(cls.subject) === normalizedSubject &&
+          range.startMin === newStart &&
+          range.endMin === newEnd;
+
+        if (isSharedMatch) continue;
+
+        if (newStart < range.endMin && range.startMin < newEnd) {
+          return {
+            ...cls,
+            conflictStart: range.startTime,
+            conflictEnd: range.endTime
+          };
+        }
+      }
+      return null;
+    }
+
     function handleAwaitingHireChange() {
       const checkbox = document.getElementById('formAwaitingHire');
       const professorInput = document.getElementById('formProfessor');
@@ -2364,7 +2478,11 @@
 
         if (matchedProf) {
           const weekPattern = document.getElementById('formWeekPattern')?.value || 'ALL';
-          const conflict = findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern);
+          const sharedClass = document.getElementById('formSharedClass')?.checked || false;
+          const subject = document.getElementById('formSubject')?.value.trim() || '';
+          const conflict = sharedClass
+            ? null
+            : findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern, sharedClass, subject);
           if (conflict) {
             const existingWeekLabel = (conflict.weekPattern && conflict.weekPattern !== 'ALL') ? ' (Semana ' + conflict.weekPattern + ')' : ' (Todas as semanas)';
             conflictBox.className = 'rounded-xl border border-rose-400 bg-rose-50 px-3.5 py-2.5 text-xs font-bold text-rose-700 leading-relaxed';
@@ -2486,8 +2604,18 @@
 
       const dayVal = document.getElementById('formDay').value;
       const weekPattern = document.getElementById('formWeekPattern').value || 'ALL';
-      const conflict = (!timeUndefined && matchedProf)
-        ? findProfessorTimeConflict(matchedProf, dayVal, startTime, endTime, id, weekPattern)
+      const sharedClass = document.getElementById('formSharedClass')?.checked || false;
+      const conflict = (!timeUndefined && matchedProf && !sharedClass)
+        ? findProfessorTimeConflict(
+            matchedProf,
+            dayVal,
+            startTime,
+            endTime,
+            id,
+            weekPattern,
+            sharedClass,
+            matchedSubj
+          )
         : null;
 
       const selectedNature = Array.from(document.querySelectorAll('input[name="classNature"]:checked')).map(input => input.value);
@@ -2553,6 +2681,7 @@
         period: document.getElementById('formPeriodSelect').value,
         day: dayVal,
         weekPattern: weekPattern,
+        sharedClass: document.getElementById('formSharedClass').checked,
         joinedTurmas: [...document.querySelectorAll('#joinedTurmasOptions input[type="checkbox"]:checked')].map(input => input.value),
         campusUnit: document.getElementById('formCampusUnit').value,
         subject: matchedSubj,
@@ -2615,6 +2744,7 @@
 
       document.getElementById('formDay').value = cls.day;
       document.getElementById('formWeekPattern').value = cls.weekPattern || 'ALL';
+      document.getElementById('formSharedClass').checked = Boolean(cls.sharedClass);
       updateJoinedTurmasOptions(cls.joinedTurmas || []);
       document.getElementById('formWorkload').value = cls.workload || '6h';
       document.getElementById('formMatricula').value = cls.matricula || '';
