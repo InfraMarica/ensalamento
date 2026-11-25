@@ -2621,6 +2621,49 @@
     showToast('Ordem das salas atualizada com sucesso!');
   }
 
+  function moveBlock(blockIdx, delta) {
+    if (!isAdmin) return;
+    const blocks = getActiveCampusBlocks();
+    const targetIdx = blockIdx + delta;
+    if (blockIdx < 0 || blockIdx >= blocks.length || targetIdx < 0 || targetIdx >= blocks.length) return;
+    const [block] = blocks.splice(blockIdx, 1);
+    blocks.splice(targetIdx, 0, block);
+    saveToStorage();
+    renderTabs();
+    renderActiveView();
+    safeCreateIcons();
+    showToast(`Bloco "${block.bloco}" reordenado.`);
+  }
+
+  function toggleBlockRows(blockIdx) {
+    if (!isAdmin) return;
+    const blocks = getActiveCampusBlocks();
+    const block = blocks[blockIdx];
+    if (!block) return;
+    block.dividirFileiras = !block.dividirFileiras;
+    saveToStorage();
+    renderActiveView();
+    safeCreateIcons();
+    showToast(block.dividirFileiras ? 'Bloco dividido em duas fileiras.' : 'Fileiras unidas.');
+  }
+
+  function deleteBlock(blockIdx) {
+    if (!isAdmin) return;
+    const blocks = getActiveCampusBlocks();
+    const block = blocks[blockIdx];
+    if (!block) return;
+    const roomCount = (block.rooms || []).length;
+    const message = `Excluir o bloco "${block.bloco}" e suas ${roomCount} salas? Esta ação não pode ser desfeita.`;
+    if (!window.confirm(message)) return;
+    blocks.splice(blockIdx, 1);
+    selectedBlockFilter = 'ALL';
+    saveToStorage();
+    renderTabs();
+    renderActiveView();
+    safeCreateIcons();
+    showToast(`Bloco "${block.bloco}" excluído.`);
+  }
+
   function getActiveCampusBlocks() {
     return multiCampusData[activeCampus] || [];
   }
@@ -2805,15 +2848,28 @@
               <h3 class="text-sm sm:text-base font-black tracking-wide">${block.bloco}</h3>
               <span class="text-xs text-amber-100/90 font-medium">• ${block.rooms.length} Salas Alocadas</span>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-wrap justify-end">
               ${isAdmin ? `
+                <button onclick="moveBlock(${originalBlockIdx}, -1)" ${originalBlockIdx === 0 ? 'disabled' : ''} title="Mover bloco para a esquerda na ordem" class="inline-flex items-center justify-center w-7 h-7 rounded-md border border-white/20 transition-all ${originalBlockIdx === 0 ? 'text-white/30 cursor-not-allowed' : 'text-white hover:bg-white/20'}">
+                  <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                <button onclick="moveBlock(${originalBlockIdx}, 1)" ${originalBlockIdx === blocks.length - 1 ? 'disabled' : ''} title="Mover bloco para a direita na ordem" class="inline-flex items-center justify-center w-7 h-7 rounded-md border border-white/20 transition-all ${originalBlockIdx === blocks.length - 1 ? 'text-white/30 cursor-not-allowed' : 'text-white hover:bg-white/20'}">
+                  <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleBlockRows(${originalBlockIdx})" title="${block.dividirFileiras ? 'Unir as fileiras deste bloco' : 'Dividir o bloco em duas fileiras'}" class="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
+                  <i data-lucide="${block.dividirFileiras ? 'rows-3' : 'rows-2'}" class="w-3.5 h-3.5 text-amber-300"></i>
+                  <span>${block.dividirFileiras ? 'Unir fileiras' : '2 fileiras'}</span>
+                </button>
                 <button onclick="openReorderModal(${originalBlockIdx})" title="Alterar a ordem das salas deste bloco" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white rounded-md border border-white/20 transition-all">
                   <i data-lucide="arrow-up-down" class="w-3.5 h-3.5 text-amber-300"></i>
-                  <span class="hidden sm:inline">Reordenar</span>
+                  <span class="hidden sm:inline">Salas</span>
                 </button>
                 <button onclick="openNewRoomModal(${originalBlockIdx})" class="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-stone-900 rounded-md transition-all shadow-xs">
                   <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                   <span>Nova Sala</span>
+                </button>
+                <button onclick="deleteBlock(${originalBlockIdx})" title="Excluir este bloco e todas as salas dele" class="inline-flex items-center justify-center w-7 h-7 rounded-md border border-rose-200/40 text-rose-100 hover:bg-rose-600 hover:text-white transition-all">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
               ` : ''}
               <span class="text-[10px] uppercase font-bold tracking-wider bg-black/20 px-2 py-1 rounded text-amber-200">${campusBadge} • ${getShiftDisplayName()}</span>
@@ -2821,7 +2877,14 @@
           </div>
       `;
 
-      if (isBlock3Floor4) {
+      if (block.dividirFileiras) {
+        const splitIndex = Math.ceil(block.rooms.length / 2);
+        const firstRow = block.rooms.slice(0, splitIndex);
+        const secondRow = block.rooms.slice(splitIndex);
+        html += renderTableSegment(block, originalBlockIdx, firstRow, 0, days, 'Fileira 1');
+        html += `<div class="h-3 bg-stone-100 border-t border-b border-stone-200"></div>`;
+        html += renderTableSegment(block, originalBlockIdx, secondRow, splitIndex, days, 'Fileira 2');
+      } else if (isBlock3Floor4) {
         const slice1 = block.rooms.slice(0, 7);
         const slice2 = block.rooms.slice(7);
         html += renderTableSegment(block, originalBlockIdx, slice1, 0, days, 'Parte 1 (Salas 400 a 406)');
