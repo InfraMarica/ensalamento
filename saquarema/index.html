@@ -522,6 +522,18 @@
           </div>
         </div>
 
+        <div id="autoDistTimeFields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-amber-50/70 border border-amber-200 rounded-xl">
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1" for="distHorarioInicio">Horário de início</label>
+            <input type="time" id="distHorarioInicio" class="w-full px-3 py-1.5 text-xs bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e]">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-stone-700 mb-1" for="distHorarioTermino">Horário de término</label>
+            <input type="time" id="distHorarioTermino" class="w-full px-3 py-1.5 text-xs bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-[#7a001e]">
+          </div>
+          <p class="sm:col-span-2 text-[11px] text-stone-600">A sala poderá receber outra turma no mesmo dia se os horários não se sobrepuserem.</p>
+        </div>
+
         <!-- Seleção de Campus e Bloco Específico (Opcional) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <div>
@@ -1368,6 +1380,7 @@
   }
 
   function parseTurmaAllocationString(rawLine) {
+    rawLine = String(rawLine || '').replace(/\s*\[HORÁRIO\s+\d{2}:\d{2}-\d{2}:\d{2}\]\s*$/i, '').trim();
     const countMatch = rawLine.match(/\(\s*(\d+)\s*(?:alunos?)?\s*\)/i);
     const studentCount = countMatch ? countMatch[1] : null;
     const inlinePMR = /\[PMR\]/i.test(rawLine);
@@ -1958,18 +1971,24 @@
 
   function formatTurmaCardContent(rawContent) {
     if (!rawContent) return '';
-    const normalized = normalizeTurmaText(rawContent.trim());
-    const match = normalized.match(/^(.*?)\s*\((\d+)\s*(?:alunos?)?\)\s*$/i);
     const paddingRight = isAdmin ? 'pr-3' : '';
-    if (match) {
-      const turmaTitle = match[1].trim().replace(/\n/g, '<br>');
-      const qtd = match[2];
+
+    return normalizeTurmaText(rawContent.trim()).split(/\n+/).map(line => {
+      const timeMatch = line.match(/\s*\[HORÁRIO\s+(\d{2}:\d{2})-(\d{2}:\d{2})\]\s*$/i);
+      const timeLabel = timeMatch ? `${timeMatch[1]}–${timeMatch[2]}` : '';
+      const turmaText = line.replace(/\s*\[HORÁRIO\s+\d{2}:\d{2}-\d{2}:\d{2}\]\s*$/i, '').trim();
+      const match = turmaText.match(/^(.*?)\s*\((\d+)\s*(?:alunos?)?\)\s*$/i);
+      const turmaTitle = match ? match[1].trim() : turmaText;
+      const qtd = match ? match[2] : '';
+
       return `
-        <span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${turmaTitle}</span>
-        <span class="inline-block text-[9.5px] font-bold text-stone-600 bg-stone-100 border border-stone-200/80 px-1.5 py-0.2 rounded-md mt-0.5">${qtd} alunos</span>
+        <div class="w-full flex flex-col items-center">
+          <span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${turmaTitle.replace(/\n/g, '<br>')}</span>
+          ${qtd ? `<span class="inline-block text-[9.5px] font-bold text-stone-600 bg-stone-100 border border-stone-200/80 px-1.5 py-0.2 rounded-md mt-0.5">${qtd} alunos</span>` : ''}
+          ${timeLabel ? `<span class="inline-block text-[9.5px] font-black text-amber-900 bg-amber-100 border border-amber-200 px-1.5 py-0.2 rounded-md mt-0.5">${timeLabel}</span>` : ''}
+        </div>
       `;
-    }
-    return `<span class="font-bold text-[11px] text-stone-800 leading-tight block w-full ${paddingRight}">${normalized.replace(/\n/g, '<br>')}</span>`;
+    }).join('');
   }
 
   function openTurmaActionMenu(event, blockIdx, roomIdx, day) {
@@ -2102,6 +2121,15 @@
     document.getElementById('autoDistErrorBox').classList.add('hidden');
     document.getElementById('autoDistErrorMsg').innerText = '';
     document.getElementById('distCurso').value = '';
+    const timeFields = document.getElementById('autoDistTimeFields');
+    const startTimeInput = document.getElementById('distHorarioInicio');
+    const endTimeInput = document.getElementById('distHorarioTermino');
+    const useTimeFields = activeShift === 'MANHA';
+    timeFields.classList.toggle('hidden', !useTimeFields);
+    startTimeInput.required = useTimeFields;
+    endTimeInput.required = useTimeFields;
+    startTimeInput.value = '';
+    endTimeInput.value = '';
     document.getElementById('distQtdAlunos').value = '';
     document.getElementById('distAcessibilidade').checked = false;
     document.getElementById('distCampusPref').value = activeCampus === 'CAMPUS_1' ? 'ONLY_C1' : 'ONLY_C2';
@@ -2135,6 +2163,42 @@
     }
   }
 
+  function timeToMinutes(value) {
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(value || '')) return null;
+    const [hours, minutes] = value.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  function getScheduleLineTimeRange(line) {
+    const match = String(line || '').match(/\[HORÁRIO\s+(\d{2}:\d{2})-(\d{2}:\d{2})\]\s*$/i);
+    if (!match) return null;
+    const start = timeToMinutes(match[1]);
+    const end = timeToMinutes(match[2]);
+    return start !== null && end !== null && end > start ? { start, end } : null;
+  }
+
+  function isRoomAvailableAtTime(room, day, startTime, endTime) {
+    const current = room.schedule && room.schedule[day] ? room.schedule[day].trim() : '';
+    if (!current) return true;
+    if (activeShift !== 'MANHA' || !startTime || !endTime) return false;
+
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
+    if (start === null || end === null || end <= start) return false;
+
+    return current.split(/\n+/).map(line => line.trim()).filter(Boolean).every(line => {
+      const range = getScheduleLineTimeRange(line);
+      if (!range) return false;
+      return end <= range.start || start >= range.end;
+    });
+  }
+
+  function appendScheduledTurma(room, day, turmaNome, timeLabel) {
+    const line = timeLabel ? `${turmaNome} [HORÁRIO ${timeLabel}]` : turmaNome;
+    const current = room.schedule[day] || '';
+    room.schedule[day] = current.trim() ? `${current.trim()}\n${line}` : line;
+  }
+
   function executeAutoDistribution(e) {
     e.preventDefault();
     if (!isAdmin) return;
@@ -2159,6 +2223,22 @@
       errMsg.innerText = 'Informe a quantidade válida de alunos da turma.';
       safeCreateIcons();
       return;
+    }
+
+    const horarioInicio = document.getElementById('distHorarioInicio').value;
+    const horarioTermino = document.getElementById('distHorarioTermino').value;
+    let horarioLabel = '';
+
+    if (activeShift === 'MANHA') {
+      const inicioMinutos = timeToMinutes(horarioInicio);
+      const terminoMinutos = timeToMinutes(horarioTermino);
+      if (inicioMinutos === null || terminoMinutos === null || terminoMinutos <= inicioMinutos) {
+        errBox.classList.remove('hidden');
+        errMsg.innerText = 'Informe horários válidos: o término deve ser depois do início.';
+        safeCreateIcons();
+        return;
+      }
+      horarioLabel = `${horarioInicio}-${horarioTermino}`;
     }
 
     const turmaBase = letra ? `${periodo} ${cursoSelecionado} ${letra}` : `${periodo} ${cursoSelecionado}`;
@@ -2271,7 +2351,7 @@
         });
 
         for (const room of eligibleRegularRooms) {
-          const allDaysFree = regularDays.every(d => !room.schedule[d] || room.schedule[d].trim() === '');
+          const allDaysFree = regularDays.every(d => isRoomAvailableAtTime(room, d, horarioInicio, horarioTermino));
           if (allDaysFree) {
             candidateRegularRoom = room;
             break;
@@ -2301,7 +2381,7 @@
 
         let singleLab = null;
         for (const lRoom of eligibleLabRooms) {
-          if (labDays.every(d => !lRoom.schedule[d] || lRoom.schedule[d].trim() === '')) {
+          if (labDays.every(d => isRoomAvailableAtTime(lRoom, d, horarioInicio, horarioTermino))) {
             singleLab = lRoom;
             break;
           }
@@ -2311,7 +2391,7 @@
           labDays.forEach(d => candidateLabRoomsByDay[d] = singleLab);
         } else {
           for (const d of labDays) {
-            const freeLab = eligibleLabRooms.find(lRoom => !lRoom.schedule[d] || lRoom.schedule[d].trim() === '');
+            const freeLab = eligibleLabRooms.find(lRoom => isRoomAvailableAtTime(lRoom, d, horarioInicio, horarioTermino));
             if (freeLab) {
               candidateLabRoomsByDay[d] = freeLab;
             } else {
@@ -2351,7 +2431,7 @@
 
     Object.keys(dayAllocations).forEach(d => {
       const room = dayAllocations[d];
-      room.schedule[d] = turmaNome;
+      appendScheduledTurma(room, d, turmaNome, horarioLabel);
       if (requiresAcessibilidade) {
         room.pmr = room.pmr || {};
         room.pmr[d] = true;
