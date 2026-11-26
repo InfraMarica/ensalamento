@@ -880,7 +880,7 @@
             <div id="joinedTurmasOptions" class="max-h-28 overflow-y-auto rounded-xl bg-stone-50 border border-stone-300 px-3 py-2 space-y-1">
               <span class="text-stone-500">Selecione o campus e as turmas disponíveis.</span>
             </div>
-            <p class="mt-1 text-[10px] text-stone-500">Marque até 2 outras turmas, 3 no total contando a turma atual.</p>
+            <p class="mt-1 text-[10px] text-stone-500">Marque até 4 outras turmas, 5 no total contando a turma atual.</p>
           </div>
         </div>
 
@@ -2011,7 +2011,7 @@
                             class="w-full h-16 rounded-lg border border-dashed border-stone-200 hover:border-[#7a001e]/40 hover:bg-rose-50/20 flex flex-col items-center justify-center text-stone-300 hover:text-[#7a001e] transition cursor-pointer">
                             <span class="text-[10px] font-semibold">Livre</span>
                           </button>
-                        ` : dayClasses.map(cls => renderCleanClassCard(cls)).join('')}
+                        ` : dayClasses.map(cls => renderCleanClassCard(cls, periodName)).join('')}
                       </div>
                     </div>
                   `;
@@ -2089,7 +2089,14 @@
         '</div>';
     }
 
-    function renderCleanClassCard(cls) {
+    function getJoinedTurmaPeriodLabels(cls) {
+      return [...new Set([
+        cls && cls.period,
+        ...(Array.isArray(cls && cls.joinedTurmas) ? cls.joinedTurmas : [])
+      ].map(period => String(period || '').trim()).filter(Boolean))];
+    }
+
+    function renderCleanClassCard(cls, displayedPeriod = '') {
       let badgeStyle = 'bg-rose-50 text-[#7a001e] border-rose-200';
       let borderLeft = 'border-l-4 border-l-[#7a001e]';
 
@@ -2181,7 +2188,7 @@
           </h4>
 
           ${cls.sharedClass ? getSharedClassDescription(cls) : ''}
-          ${Array.isArray(cls.joinedTurmas) && cls.joinedTurmas.length ? '<div class="mb-1 rounded-md bg-indigo-50 border border-indigo-200 px-2 py-1 text-[9px] font-bold text-indigo-900">Turmas juntas: ' + cls.joinedTurmas.join(', ') + '</div>' : ''}
+          ${getJoinedTurmaPeriodLabels(cls).length > 1 ? '<div class="mb-1 rounded-md bg-indigo-50 border border-indigo-200 px-2 py-1 text-[9px] font-bold text-indigo-900">Aula conjunta entre: ' + getJoinedTurmaPeriodLabels(cls).map(escapeReportHtml).join(' • ') + '</div>' : ''}
 
           <div class="flex items-start gap-1 text-[10px] font-bold text-stone-700 bg-stone-50 px-1.5 py-1 rounded border border-stone-100">
             <i data-lucide="user" class="w-3 h-3 text-[#7a001e] shrink-0 mt-0.5"></i>
@@ -2490,9 +2497,9 @@
     function limitJoinedTurmas(changedCheckbox) {
       const container = document.getElementById('joinedTurmasOptions');
       const checked = container ? container.querySelectorAll('input[type="checkbox"]:checked') : [];
-      if (checked.length > 2) {
+      if (checked.length > 4) {
         changedCheckbox.checked = false;
-        showToast('A turma atual pode ser juntada a, no máximo, outras 2 turmas.', 'error');
+        showToast('A turma atual pode ser juntada a, no máximo, outras 4 turmas (5 no total).', 'error');
       }
     }
 
@@ -3498,7 +3505,7 @@
 
 */
     function getProfessorReportData(profName) {
-      const allFound = [];
+      const records = [];
       const searchKeys = [
         { campusKey: 'MARICA', courseIds: MARICA_COURSE_IDS },
         { campusKey: 'SAQUAREMA', courseIds: SAQUAREMA_COURSE_IDS }
@@ -3512,7 +3519,7 @@
           state.classes.forEach(cls => {
             if ((cls.professor || '').trim().toLocaleLowerCase('pt-BR') !== profName.trim().toLocaleLowerCase('pt-BR')) return;
             const course = ALL_COURSES_CATALOG[courseId];
-            allFound.push({
+            records.push({
               ...cls,
               campusKey: group.campusKey,
               institution: getCourseInstitutionName(group.campusKey, courseId),
@@ -3520,6 +3527,83 @@
             });
           });
         });
+      });
+
+      const normalize = value => String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .toLocaleLowerCase('pt-BR');
+
+      const parent = records.map((_, index) => index);
+      const findRoot = index => {
+        while (parent[index] !== index) {
+          parent[index] = parent[parent[index]];
+          index = parent[index];
+        }
+        return index;
+      };
+      const joinGroups = (a, b) => {
+        const rootA = findRoot(a);
+        const rootB = findRoot(b);
+        if (rootA !== rootB) parent[rootB] = rootA;
+      };
+
+      for (let i = 0; i < records.length; i++) {
+        for (let j = i + 1; j < records.length; j++) {
+          const a = records[i];
+          const b = records[j];
+          if (!a.sharedClass && !b.sharedClass) continue;
+          if (normalize(a.subject) !== normalize(b.subject)) continue;
+          if (normalize(a.professor) !== normalize(b.professor)) continue;
+          if (a.day !== b.day) continue;
+
+          const rangeA = extractClassStartEndMinutes(a);
+          const rangeB = extractClassStartEndMinutes(b);
+          if (!rangeA || !rangeB) continue;
+          if (rangeA.startMin !== rangeB.startMin || rangeA.endMin !== rangeB.endMin) continue;
+          if ((a.weekPattern || 'ALL') !== (b.weekPattern || 'ALL')) continue;
+
+          joinGroups(i, j);
+        }
+      }
+
+      const grouped = new Map();
+      records.forEach((record, index) => {
+        const root = findRoot(index);
+        if (!grouped.has(root)) grouped.set(root, []);
+        grouped.get(root).push(record);
+      });
+
+      const contextLabel = record => [
+        record.institution,
+        record.campusUnit,
+        record.courseTitle,
+        record.period
+      ].filter(Boolean).join(' • ');
+
+      const allFound = [...grouped.values()].map(group => {
+        group.sort((a, b) =>
+          a.courseTitle.localeCompare(b.courseTitle, 'pt-BR') ||
+          (a.period || '').localeCompare(b.period || '', 'pt-BR')
+        );
+
+        const primary = group.find(record => record.sharedClass) || group[0];
+        const sharedContexts = group
+          .filter(record => record !== primary)
+          .map(record => ({
+            institution: record.institution,
+            campusUnit: record.campusUnit || '',
+            courseTitle: record.courseTitle,
+            period: record.period || ''
+          }));
+
+        return {
+          ...primary,
+          sharedClass: group.length > 1 || Boolean(primary.sharedClass),
+          sharedContexts
+        };
       });
 
       const dayOrder = DAYS_ORDER;
@@ -3530,11 +3614,7 @@
         (a.period || '').localeCompare(b.period || '', 'pt-BR')
       );
 
-      const totalHours = allFound.reduce((sum, cls) => {
-        const hours = parseInt(String(cls.workload || '6h').replace(/[^\d]/g, ''), 10);
-        return sum + (Number.isFinite(hours) ? hours : 6);
-      }, 0);
-
+      const totalHours = allFound.reduce((sum, cls) => sum + parseWorkloadHours(cls.workload), 0);
       return { allFound, totalHours };
     }
 
@@ -3665,8 +3745,10 @@
                       <li><strong>Campus da aula:</strong> ${escapeReportHtml(cls.campusUnit || 'Não informado')}</li>
                       <li><strong>Modalidade:</strong> <span class="inline-flex rounded border px-2 py-0.5 font-bold ${modalityBadgeClass(cls.type || '')}">${escapeReportHtml(cls.type || 'Não informada')}</span></li>
                       <li><strong>Natureza:</strong> ${escapeReportHtml(cls.classFormat || 'Não informada')}</li>
+                      ${getJoinedTurmaPeriodLabels(cls).length > 1 ? `<li class="sm:col-span-2"><strong>Turma conjunta, contabilizada como uma aula:</strong> ${getJoinedTurmaPeriodLabels(cls).map(escapeReportHtml).join(' • ')}</li>` : ''}
                       ${location ? `<li><strong>Local:</strong> ${escapeReportHtml(location)}</li>` : ''}
                       ${cls.matricula ? `<li><strong>Matrícula:</strong> ${escapeReportHtml(cls.matricula)}</li>` : ''}
+                      ${cls.sharedClass ? `<li class="sm:col-span-2"><strong>Turma junta:</strong> ${cls.sharedContexts && cls.sharedContexts.length ? cls.sharedContexts.map(context => escapeReportHtml([context.institution, context.campusUnit, context.courseTitle, context.period].filter(Boolean).join(' • '))).join(' | ') : 'Marcada como compartilhada; não encontrei outro cadastro correspondente.'}</li>` : ''}
                       ${cls.observation ? `<li class="sm:col-span-2"><strong>Observação:</strong> ${escapeReportHtml(cls.observation)}</li>` : ''}
                     </ul>
                   </li>
@@ -3728,8 +3810,10 @@
               <span><b>Campus da aula:</b> ${escape(cls.campusUnit || 'Não informado')}</span>
               <span><b>Modalidade:</b> <strong style="display:inline-block;padding:2px 7px;border-radius:5px;background:${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[0]};color:${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[1]};border:1px solid ${(modalityColors[cls.type] || ['#f5f5f4', '#44403c', '#d6d3d1'])[2]}">${escape(cls.type || 'Não informada')}</strong></span>
               <span><b>Natureza:</b> ${escape(cls.classFormat || 'Não informada')}</span>
+              ${getJoinedTurmaPeriodLabels(cls).length > 1 ? `<span><b>Turma conjunta, contabilizada como uma aula:</b> ${getJoinedTurmaPeriodLabels(cls).map(escape).join(' • ')}</span>` : ''}
               ${location ? `<span><b>Local:</b> ${escape(location)}</span>` : ''}
               ${cls.matricula ? `<span><b>Matrícula:</b> ${escape(cls.matricula)}</span>` : ''}
+              ${cls.sharedClass ? `<span><b>Turma junta:</b> ${cls.sharedContexts && cls.sharedContexts.length ? cls.sharedContexts.map(context => escape([context.institution, context.campusUnit, context.courseTitle, context.period].filter(Boolean).join(' • '))).join(' | ') : 'Marcada como compartilhada; não encontrei outro cadastro correspondente.'}</span>` : ''}
               ${cls.observation ? `<span><b>Observação:</b> ${escape(cls.observation)}</span>` : ''}
             </div>
           </li>
